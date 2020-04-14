@@ -1,7 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-ini_set('error_reporting', E_ALL);
 error_reporting(E_ALL);
 
 class Task{
@@ -15,24 +12,37 @@ class Task{
 	const ACTION_DONE = 'done';
 	const ACTION_CANCEL = 'cancel';
 	const ACTION_DENY = 'deny';
-	const ACTION_MESSAGE = 'write_message';
 
 	const CUSTOMER = 'costomer';
 	const EXECUTER = 'executer';
 
-	public $id = 0;
 	public $executer_id = 0;
 	public $customer_id = 0;
-	public $status = 'new';
+	private $status = self::STATUS_NEW;
+
+	private $status_array = [
+		self::STATUS_NEW => 'Новое',
+		self::STATUS_EXECUTE => 'В работе',
+		self::STATUS_DONE => 'Выполнено',
+		self::STATUS_FAIL => 'Провалено',
+		self::STATUS_CANCEL => 'Отменено'
+	];
+
+	private $actions_array = [
+		self::ACTION_EXECUTE => 'Откликнуться',
+		self::ACTION_DONE => 'Завершить',
+		self::ACTION_CANCEL => 'Отменить',
+		self::ACTION_DENY => 'Отказаться',
+	];
 
 	private $actions_map = [
-		'customer' => array( 
+		self::CUSTOMER => array( 
 			self::STATUS_NEW => self::ACTION_CANCEL,
 			self::STATUS_EXECUTE => self::ACTION_DONE
 		),
-		'executer' => array(
-			self::STATUS_NEW => array(self::ACTION_EXECUTE, self::ACTION_MESSAGE),
-			self::STATUS_EXECUTE => array(self::ACTION_DENY, self::ACTION_MESSAGE)),
+		self::EXECUTER => array(
+			self::STATUS_NEW => array(self::ACTION_EXECUTE),
+			self::STATUS_EXECUTE => array(self::ACTION_DENY)),
 	];
 
 	private $status_map = [
@@ -50,16 +60,28 @@ class Task{
 	
 	public function get_actions ($user_type) {
 		if(in_array($user_type, array_keys( $this->actions_map ))) {
-			return $this->actions_map[$user_type][$this->status];
+			
+			$action = $this->actions_map[$user_type][$this->status];
+			return $this->actions_array[$action];
+
 		} else {
-			return self::ACTION_MESSAGE;
+			return false;
 		}
 	}
 
 	public function next_status ($action) {
 		if(in_array($action, array_keys( $this->status_map ))){
-			$this->status = $this->status_map[$action];
+			
+			$status = $this->status_map[$action];
+			return $this->status_array[$status];
+		
+		} else{
+			return $this->status_array[$this->status];
 		}
-		return $this->status;
 	}
 }
+
+$myTask = new Task('vasya','petya');
+echo $myTask->customer_id.'<br>';
+echo $myTask->get_actions('executor').'<br>';
+echo $myTask->next_status('execute').'<br>';
