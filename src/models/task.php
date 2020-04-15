@@ -1,4 +1,5 @@
 <?php
+namespace task_force\models;
 error_reporting(E_ALL);
 
 class Task{
