@@ -14,11 +14,11 @@ class Task{
 	const ACTION_CANCEL = 'cancel';
 	const ACTION_DENY = 'deny';
 
-	const CUSTOMER = 'costomer';
+	const CUSTOMER = 'customer';
 	const EXECUTER = 'executer';
 
-	public $executer_id = 0;
-	public $customer_id = 0;
+	private $executer_id;
+	private $customer_id;
 	private $status = self::STATUS_NEW;
 
 	private $status_array = [
@@ -43,19 +43,20 @@ class Task{
 		),
 		self::EXECUTER => array(
 			self::STATUS_NEW => array(self::ACTION_EXECUTE),
-			self::STATUS_EXECUTE => array(self::ACTION_DENY)),
+			self::STATUS_EXECUTE => array(self::ACTION_DENY)
+		)
 	];
 
 	private $status_map = [
-			self::ACTION_EXECUTE => self::STATUS_EXECUTE,
-			self::ACTION_DONE => self::STATUS_DONE,
-			self::ACTION_CANCEL => self::STATUS_CANCEL,
-			self::ACTION_DENY => self::STATUS_FAIL
+		self::ACTION_EXECUTE => self::STATUS_EXECUTE,
+		self::ACTION_DONE => self::STATUS_DONE,
+		self::ACTION_CANCEL => self::STATUS_CANCEL,
+		self::ACTION_DENY => self::STATUS_FAIL
 	];
 
 	public function __construct($customer_id = null, $executer_id = null){
-			$this->customer_id = $customer_id;
-			$this->executer_id = $executer_id;
+		$this->customer_id = $customer_id;
+		$this->executer_id = $executer_id;
 
 	}
 	
@@ -73,16 +74,23 @@ class Task{
 	public function next_status ($action) {
 		if(in_array($action, array_keys( $this->status_map ))){
 			
-			$status = $this->status_map[$action];
-			return $this->status_array[$status];
+			$stmap = $this->status_map[$action];
+			return $this->status_array[$stmap];
 		
 		} else{
 			return $this->status_array[$this->status];
 		}
 	}
-}
 
-$myTask = new Task('vasya','petya');
-echo $myTask->customer_id.'<br>';
-echo $myTask->get_actions('executor').'<br>';
-echo $myTask->next_status('execute').'<br>';
+	public function get_status(){
+		return $this->status;
+	}
+
+	public function get_customer(){
+		return $this->customer_id;
+	}
+
+	public function get_executer(){
+		return $this->executer_id;
+	}
+}
