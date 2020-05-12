@@ -3,8 +3,8 @@ namespace task_force\models;
 use task_force\models\ci_action;
 
 class Act_execute extends CI_action {
-	private $inner_name = 'execute';
-	private $public_name = 'Откликнуться';
+	protected $inner_name = 'execute';
+	protected $public_name = 'Откликнуться';
 
 	function check_user ($idcustomer, $idexecuter, $iduser){
 		if($iduser == $idexecuter){
@@ -12,13 +12,5 @@ class Act_execute extends CI_action {
 		} else {
 			return false;
 		}
-	}
-
-	function get_inner_name () {
-		return $this->inner_name;
-	}
-
-	function get_public_name () {
-		return $this->public_name;
 	}
 }
