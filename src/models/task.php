@@ -1,5 +1,11 @@
 <?php
+declare(strict_types=1);
 namespace task_force\models;
+use task_force\models\act_done;
+use task_force\models\act_execute;
+use task_force\models\act_cancel;
+use task_force\models\act_deny;
+use task_force\ex\CallNameException;
 error_reporting(E_ALL);
 
 class Task{
@@ -14,9 +20,6 @@ class Task{
 	const ACTION_CANCEL = 'cancel';
 	const ACTION_DENY = 'deny';
 
-	const CUSTOMER = 'customer';
-	const EXECUTER = 'executer';
-
 	private $executer_id;
 	private $customer_id;
 	private $status = self::STATUS_NEW;
@@ -27,24 +30,6 @@ class Task{
 		self::STATUS_DONE => 'Выполнено',
 		self::STATUS_FAIL => 'Провалено',
 		self::STATUS_CANCEL => 'Отменено'
-	];
-
-	private $actions_array = [
-		self::ACTION_EXECUTE => 'Откликнуться',
-		self::ACTION_DONE => 'Завершить',
-		self::ACTION_CANCEL => 'Отменить',
-		self::ACTION_DENY => 'Отказаться',
-	];
-
-	private $actions_map = [
-		self::CUSTOMER => array( 
-			self::STATUS_NEW => self::ACTION_CANCEL,
-			self::STATUS_EXECUTE => self::ACTION_DONE
-		),
-		self::EXECUTER => array(
-			self::STATUS_NEW => array(self::ACTION_EXECUTE),
-			self::STATUS_EXECUTE => array(self::ACTION_DENY)
-		)
 	];
 
 	private $status_map = [
@@ -59,27 +44,33 @@ class Task{
 		$this->executer_id = $executer_id;
 
 	}
-	
-	public function get_actions ($user_type) {
-		if(in_array($user_type, array_keys( $this->actions_map ))) {
-			
-			$action = $this->actions_map[$user_type][$this->status];
-			return $this->actions_array[$action];
 
-		} else {
-			return false;
+	public function get_actions(string $status, int $idcustomer, int $idexecuter, int $iduser){
+		$array = [self::STATUS_NEW => [new Act_execute(), new Act_cancel()],
+				  self::STATUS_EXECUTE => [new Act_done(), new Act_deny()]
+				];
+
+		if(!in_array($status, array_keys($array))) {
+			throw new CallNameException("Given status does not exist.");
+		} 
+		$actions = $array[$status];
+
+		foreach($actions as $action){
+			if($action->check_user($idcustomer, $idexecuter, $iduser)){
+				return $action;
+			} 
 		}
+		return false;
 	}
 
-	public function next_status ($action) {
-		if(in_array($action, array_keys( $this->status_map ))){
-			
-			$stmap = $this->status_map[$action];
-			return $this->status_array[$stmap];
-		
-		} else{
-			return $this->status_array[$this->status];
+	public function next_status (string $action):string {
+
+		if(!in_array($action, array_keys( $this->status_map ))){
+			throw new CallNameException("Given action does not exist.");
 		}
+
+		$stmap = $this->status_map[$action];
+		return $this->status_array[$stmap];
 	}
 
 	public function get_status(){
