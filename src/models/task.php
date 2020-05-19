@@ -6,6 +6,7 @@ use task_force\models\act_execute;
 use task_force\models\act_cancel;
 use task_force\models\act_deny;
 use task_force\ex\CallNameException;
+
 error_reporting(E_ALL);
 
 class Task{
@@ -45,7 +46,7 @@ class Task{
 
 	}
 
-	public function get_actions(string $status, int $idcustomer, int $idexecuter, int $iduser){
+public function get_actions(string $status, int $idcustomer, int $idexecuter, int $iduser){
 		$array = [self::STATUS_NEW => [new Act_execute(), new Act_cancel()],
 				  self::STATUS_EXECUTE => [new Act_done(), new Act_deny()]
 				];

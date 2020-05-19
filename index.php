@@ -42,7 +42,6 @@ if(isset($inprog_custumer)){
 	echo '<br/>';
 }
 
-
 try{
 	$inprog_exec = $myTask->get_actions('in_progres', 1111,2222,2222);
 } catch(CallNameException $e){
@@ -60,6 +59,7 @@ try{
 } catch(CallNameException $e){
 	error_log("Cannot get next action: " . $e->getMessage());
 }
+
 if(!$inprog_other){
 	echo 'Status - in_progress, user - other: <br/>';
 	var_dump($inprog_other);

@@ -7,7 +7,7 @@ class Act_done extends CI_action {
 	protected $inner_name = 'done';
 	protected $public_name = 'Завершить';
 
-	function check_user (int $idcustomer, int $idexecuter, int $iduser){
+function check_user (int $idcustomer, int $idexecuter, int $iduser){
 		if($iduser == $idcustomer){
 			return true;
 		} else {

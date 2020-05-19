@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace task_force\models;
 use task_force\models\ci_action;
 
