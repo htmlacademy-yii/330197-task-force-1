@@ -3,6 +3,7 @@ use task_force\models\task;
 use task_force\models\act_done;
 use task_force\models\act_execute;
 use task_force\ex\CallNameException;
+use task_force\models\sql_insert;
 require_once 'vendor/autoload.php';
 
 $myTask = new Task(11111,22222);
@@ -88,6 +89,45 @@ if(isset($new_executer)){
 	echo $new_executer->get_inner_name().'<br/>';
 	echo $new_executer->get_public_name().'<br/>';
 	echo '<br/>';
+}
+
+/*Создаём файлы с инструкциями для заполнения таблиц база данных*/
+$dir = "data/csv_files";
+/*Обрабатываем один файл*/
+$file_name = 'tasсks.csv';
+$file_convert = new SQL_insert($dir,$file_name);
+
+try {
+	$answer = $file_convert->get_sqlfile();
+} catch (CallNameException $e){
+	error_log("File converted was not succsess: " . $e->getMessage());
+}
+if(isset($answer)){
+	echo "Обработан одиночный файл <br/>";
+	echo $answer."<br/>";
+} else {
+	echo "Возникла ошибка при конвертации файла. <br/>";
+}
+
+$iterator = new \FilesystemIterator($dir);
+
+// Выполняем последовательно следующие операции с каждым найденным файлом формата .csv
+while($iterator->valid()) {
+    $file = $iterator->current();
+    // Записываем имя файла
+    $file_name = $file->getFilename();
+
+    $file_convert = new SQL_insert($dir,$file_name);
+    try {
+		$answer = $file_convert->get_sqlfile();
+	} catch (CallNameException $e){
+		error_log("File converted was not succsess: " . $e->getMessage());
+	}
+	if(isset($answer)){
+		echo $answer;
+	} 
+
+	$iterator->next();
 }
 
 /*
