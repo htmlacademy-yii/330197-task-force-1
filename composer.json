@@ -1,7 +1,7 @@
 {
-	"autoload": {
-        "psr-4": {
-            "task_force\\": "src/"
-        }
-    }
+    "autoload": {
+		"psr-4": {
+			"task_force\\": "src/"
+		}
+	}
 }

@@ -2,6 +2,8 @@
 use task_force\models\task;
 use task_force\models\act_done;
 use task_force\models\act_execute;
+use task_force\ex\CallNameException;
+use task_force\models\sql_insert;
 require_once 'vendor/autoload.php';
 
 $myTask = new Task(11111,22222);
@@ -9,43 +11,123 @@ echo $myTask->get_status().'<br/>';
 echo $myTask->get_customer().'<br/>';
 echo '<br/>';
 
-$inprog_custumer = $myTask->get_actions('in_progress', 1111,2222,1111);
-if($inprog_custumer){
+$act = 'done';
+try{
+	$status_next = $myTask->next_status($act);
+} catch (CallNameException $e){
+	error_log("Cannot get next status: ".$e->getMessage());
+}
+if(isset($status_next)){
+	echo "Action - $act, next status: ".$status_next.'<br/><br/>';
+}
+
+$act = 'gone';
+try{
+	$st_next = $myTask->next_status($act);
+} catch (CallNameException $e){
+	error_log("Cannot get next status: ".$e->getMessage());
+}
+if(isset($st_next)){
+	echo "Action - $act, next status: ".$st_next.'<br/><br/>';
+}
+
+try{
+	$inprog_custumer = $myTask->get_actions('in_progress', 1111,2222,1111);
+} catch(CallNameException $e){
+	error_log("Cannot get next action: " . $e->getMessage());
+}
+if(isset($inprog_custumer)){
 	echo 'Status - in_progress, user - customer: <br/>';
 	echo $inprog_custumer->get_inner_name().'<br/>';
 	echo $inprog_custumer->get_public_name().'<br/>';
 	echo '<br/>';
 }
 
-$inprog_exec = $myTask->get_actions('in_progress', 1111,2222,2222);
-if($inprog_exec){
+try{
+	$inprog_exec = $myTask->get_actions('in_progres', 1111,2222,2222);
+} catch(CallNameException $e){
+	error_log("Cannot get next action: " . $e->getMessage());
+}
+if(isset($inprog_exec)){
 	echo 'Status - in_progress, user - executer: <br/>';
 	echo $inprog_exec->get_inner_name().'<br/>';
 	echo $inprog_exec->get_public_name().'<br/>';
 	echo '<br/>';
 }
 
-$inprog_other = $myTask->get_actions('in_progress', 1111,2222,3333);
+try{
+	$inprog_other = $myTask->get_actions('in_progress', 1111,2222,3333);
+} catch(CallNameException $e){
+	error_log("Cannot get next action: " . $e->getMessage());
+}
+
 if(!$inprog_other){
 	echo 'Status - in_progress, user - other: <br/>';
 	var_dump($inprog_other);
 	echo "<br/>";
 }
 
-$new_custumer = $myTask->get_actions('new', 1111,2222,1111);
-if($new_custumer){
-	echo 'Status - new, user - customer: <br/>';
+try{
+	$new_custumer = $myTask->get_actions('new', 1111,2222,1111);
+} catch(CallNameException $e){
+	error_log("Cannot get next action: " . $e->getMessage());
+}
+if(isset($new_custumer)){
+	echo '<br/>Status - new, user - customer: <br/>';
 	echo $new_custumer->get_inner_name().'<br/>';
 	echo $new_custumer->get_public_name().'<br/>';
 	echo '<br/>';
 }
 
-$new_executer = $myTask->get_actions('new', 1111,2222,2222);
-if($new_executer){
+try{
+	$new_executer = $myTask->get_actions('new', 1111,2222,2222);
+} catch(CallNameException $e){
+	error_log("Cannot get next action: " . $e->getMessage());
+}
+if(isset($new_executer)){
 	echo 'Status - new, user - executer: <br/>';
 	echo $new_executer->get_inner_name().'<br/>';
 	echo $new_executer->get_public_name().'<br/>';
 	echo '<br/>';
+}
+
+/*Создаём файлы с инструкциями для заполнения таблиц база данных*/
+$dir = "data/csv_files";
+/*Обрабатываем один файл*/
+$file_name = 'tasсks.csv';
+$file_convert = new SQL_insert($dir,$file_name);
+
+try {
+	$answer = $file_convert->get_sqlfile();
+} catch (CallNameException $e){
+	error_log("File converted was not succsess: " . $e->getMessage());
+}
+if(isset($answer)){
+	echo "Обработан одиночный файл <br/>";
+	echo $answer."<br/>";
+} else {
+	echo "Возникла ошибка при конвертации файла. <br/>";
+}
+
+$iterator = new \FilesystemIterator($dir);
+
+// Выполняем последовательно следующие операции с каждым найденным файлом формата .csv
+while($iterator->valid()) {
+    $file = $iterator->current();
+    // Записываем имя файла
+    $file_name = $file->getFilename();
+
+    $file_convert = new SQL_insert($dir,$file_name);
+    try {
+		$answer = $file_convert->get_sqlfile();
+	} catch (CallNameException $e){
+		error_log("File converted was not succsess: " . $e->getMessage());
+	}
+	if(isset($answer)){
+		echo $answer;
+	} 
+
+	$iterator->next();
 }
 
 /*
