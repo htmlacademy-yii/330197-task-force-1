@@ -5,7 +5,7 @@ use task_force\ex\CallNameException;
 
 class SQL_insert{
 	private $dir_csv;
-	private $dir_sql = "data/sql_files/";
+	private $dir_sql = "../../data/sql_files/";
 	private $file_name;
 	private $table_name;
 	private $file_path;
