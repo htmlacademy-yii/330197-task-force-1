@@ -25,7 +25,11 @@ CREATE OR REPLACE TABLE tasks (
   file_1 varchar(255),
   file_2 varchar(255),
   file_3 varchar(255),
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  FOREIGN KEY (idcustomer) REFERENCES users (id),
+  FOREIGN KEY (idexecuter) REFERENCES users (id),
+  FOREIGN KEY (idcategory) REFERENCES categories (id),
+  FOREIGN KEY (idcity) REFERENCES cities (id)
 ) DEFAULT CHARSET=utf8;
 
 CREATE OR REPLACE TABLE user_profile (
@@ -36,7 +40,8 @@ CREATE OR REPLACE TABLE user_profile (
   avatar varchar(255),
   phone varchar(255),
   skype varchar(255),
-  telegram varchar(255)
+  telegram varchar(255),
+  FOREIGN KEY (iduser) REFERENCES users (id)
 ) DEFAULT CHARSET=UTF8;
 
 CREATE OR REPLACE TABLE users (
@@ -57,7 +62,9 @@ CREATE OR REPLACE TABLE person_notice (
 
 CREATE OR REPLACE TABLE user_personality (
   iduser MEDIUMINT NOT NULL,
-  idnotice MEDIUMINT NOT NULL
+  idnotice MEDIUMINT NOT NULL,
+  FOREIGN KEY (iduser) REFERENCES users (id),
+  FOREIGN KEY (idnotice) REFERENCES person_notice (id)
 ) DEFAULT CHARSET=utf8;
 
 CREATE OR REPLACE TABLE categories (
@@ -69,33 +76,40 @@ CREATE OR REPLACE TABLE categories (
 
 CREATE OR REPLACE TABLE executers_category (
   idexecuter MEDIUMINT NOT NULL,
-  idcategory MEDIUMINT NOT NULL
+  idcategory MEDIUMINT NOT NULL,
+  FOREIGN KEY (idexecuter) REFERENCES users (id),
+  FOREIGN KEY (idcategory) REFERENCES categories (id)
 ) DEFAULT CHARSET=utf8;
 
 CREATE OR REPLACE TABLE responds (
   idtask MEDIUMINT NOT NULL,
   idexecuter MEDIUMINT,
   dt_add date,
-  notetext text
+  notetext TEXT,
+  FOREIGN KEY (idtask) REFERENCES tasks (id),
+  FOREIGN KEY (idexecuter) REFERENCES users (id)
 ) DEFAULT CHARSET=utf8;
 
 CREATE OR REPLACE TABLE comments (
   idtask MEDIUMINT,
   dt_add DATE,
   rate SMALLINT(2),
-  notetext text
+  notetext TEXT,
+  FOREIGN KEY (idtask) REFERENCES tasks (id)
 ) DEFAULT CHARSET=utf8;
 
 CREATE OR REPLACE TABLE feadback (
   idtask MEDIUMINT,
   rate SMALLINT(2),
   dt_add DATE,
-  description text
+  description TEXT,
+  FOREIGN KEY (idtask) REFERENCES tasks (id)
 ) DEFAULT CHARSET=utf8;
 
 CREATE OR REPLACE TABLE portfolio (
   idexecuter MEDIUMINT,
-  photo varchar(255)
+  photo varchar(255),
+  FOREIGN KEY (idexecuter) REFERENCES users (id)
 ) DEFAULT CHARSET=UTF8;
 
 CREATE OR REPLACE TABLE cities (
