@@ -16,14 +16,14 @@ $this->title = 'Task Force';
 <div class="site-index" style="display:block; min-height: 63vh">
     <?php
         $task = new Tasks();
-        $query = $task->find()->select(['t.title','t.description','t.budget','t.dt_add','t.deadline','c.*'])->from(['tasks t','categories c'])->where('t.idcategory = c.id')->orderBy(['c.id' => SORT_ASC])->limit(10);
+        $query = $task->find()->select(['t.title','t.description','t.budget','t.dt_add','t.deadline','t.idcategory as id'])->from(['tasks t'])->orderBy(['id' => SORT_ASC])->limit(10);
         $rows = $query->all();
 
         $categ = new Categories();
 
         foreach($rows as $row){
             $i= $row['id'];
-            $catgory[$i] = $categ->find()->select(['c.category'])->from('categories c')->where("c.id = $i")->one();
+            $catgory[$i] = $categ->find()->select(['c.category'])->from('categories c')->where("c.id = $i")->groupBy('c.category')->one();
         }
     ?>
     <table style='border: solid 1px lightgrey; font-size: 10pt'>
