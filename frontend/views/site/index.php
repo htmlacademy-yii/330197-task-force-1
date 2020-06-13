@@ -17,6 +17,7 @@ $this->title = 'Task Force';
     <?php
         $task = new Tasks();
         $query = $task->find()->select(['t.title','t.description','t.budget','t.dt_add','t.deadline','current_status','t.idcategory as id'])->from(['tasks t'])->orderBy(['t.idcategory' => SORT_ASC])->limit(10);
+
         $rows = $query->all();
 
         // $query = $task->find()->select(['t.title','t.description','t.budget','t.dt_add','t.deadline','t.idcategory as id', 'current_status','c.category','c.icon','c.id'])->from(['tasks t','categories c'])->where('t.idcategory = c.id')->orderBy(['t.idcategory' => SORT_ASC])->limit(10);
