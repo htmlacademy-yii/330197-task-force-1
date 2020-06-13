@@ -17,7 +17,7 @@ CREATE OR REPLACE TABLE tasks (
   budget MEDIUMINT,
   dt_add date,
   deadline date,
-  satatus varchar(100),
+  current_status varchar(100),
   idcity MEDIUMINT,
   address varchar(255),
   latitude DOUBLE PRECISION(10,7),
@@ -32,8 +32,13 @@ CREATE OR REPLACE TABLE tasks (
   FOREIGN KEY (idcity) REFERENCES cities (id)
 ) DEFAULT CHARSET=utf8;
 
-CREATE OR REPLACE TABLE user_profile (
-  iduser MEDIUMINT,
+CREATE OR REPLACE TABLE users (
+  id MEDIUMINT NOT NULL AUTO_INCREMENT,
+  fio varchar(255),
+  email varchar(255),
+  pass varchar(255),
+  dt_add DATE,
+  role SMALLINT,
   address varchar(255),
   birthday date,
   about text,
@@ -41,15 +46,7 @@ CREATE OR REPLACE TABLE user_profile (
   phone varchar(255),
   skype varchar(255),
   telegram varchar(255),
-  FOREIGN KEY (iduser) REFERENCES users (id)
-) DEFAULT CHARSET=UTF8;
-
-CREATE OR REPLACE TABLE users (
-  id MEDIUMINT NOT NULL AUTO_INCREMENT,
-  fio varchar(255),
-  email varchar(255),
-  pass varchar(255),
-  dt_add DATE,
+  last_update DATETIME,
   PRIMARY KEY (id)
 ) DEFAULT CHARSET=utf8;
 
@@ -100,10 +97,14 @@ CREATE OR REPLACE TABLE comments (
 
 CREATE OR REPLACE TABLE feadback (
   idtask MEDIUMINT,
+  idexecuter MEDIUMINT,
+  idcustomer MEDIUMINT,
   rate SMALLINT(2),
   dt_add DATE,
   description TEXT,
-  FOREIGN KEY (idtask) REFERENCES tasks (id)
+  FOREIGN KEY (idtask) REFERENCES tasks (id),
+  FOREIGN KEY (idexecuter) REFERENCES users (id),
+  FOREIGN KEY (idcustomer) REFERENCES users (id)
 ) DEFAULT CHARSET=utf8;
 
 CREATE OR REPLACE TABLE portfolio (
