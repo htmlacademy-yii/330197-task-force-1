@@ -11,7 +11,7 @@ class UsersController extends Controller
     {	
     	$user = new UsersModule('users');
     	$data['data'] = $user->getData();
-        return $this->render('..\site\users',$data);
+        return $this->render('/site/users',$data);
     }
 
 }
