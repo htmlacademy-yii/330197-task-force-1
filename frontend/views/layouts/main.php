@@ -59,10 +59,10 @@ AppAsset::register($this);
             <div class="header__nav">
                 <ul class="header-nav__list site-list">
                     <li class="site-list__item">
-                        <a href="index.php?r=site/browse">Задания</a>
+                        <a href="index.php?r=tasks">Задания</a>
                     </li>
                     <li class="site-list__item">
-                        <a href="#">Исполнители</a>
+                        <a href="index.php?r=users">Исполнители</a>
                     </li>
                     <li class="site-list__item">
                         <a href="#">Создать задание</a>
@@ -130,15 +130,6 @@ AppAsset::register($this);
         <?= Alert::widget() ?>
         <?= $content ?>
     </div>
-<!-- </div> -->
-
-<!-- <footer class="footer">
-    <div class="container">
-        <p class="pull-left">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p>
-
-        <p class="pull-right"><?= Yii::powered() ?></p>
-    </div>
-</footer> -->
 
 <footer class="page-footer">
     <div class="main-container page-footer__container">
@@ -155,13 +146,13 @@ AppAsset::register($this);
         <div class="page-footer__links">
             <ul class="links__list">
                 <li class="links__item">
-                    <a href="index.php?r=site/browse">Задания</a>
+                    <a href="index.php?r=tasks">Задания</a>
                 </li>
                 <li class="links__item">
                     <a href="index.php?r=site/login">Мой профиль</a>
                 </li>
                 <li class="links__item">
-                    <a href="index.php?r=site/login">Исполнители</a>
+                    <a href="index.php?r=users">Исполнители</a>
                 </li>
                 <li class="links__item">
                     <a href="index.php?r=site/signup">Регистрация</a>

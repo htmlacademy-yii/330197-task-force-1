@@ -17,51 +17,21 @@ $this->params['breadcrumbs'][] = $this->title;
             <section class="new-task">
                 <div class="new-task__wrapper">
                     <h1>Новые задания</h1>
+                    <?php foreach($data as $value): ?>
                     <div class="new-task__card">
                         <div class="new-task__title">
-                            <a href="#" class="link-regular"><h2>Перевести войну и мир на клингонский</h2></a>
-                            <a  class="new-task__type link-regular" href="#"><p>Переводы</p></a>
+                            <a href="#" class="link-regular"><h2><?php echo $value['title'] ?></h2></a>
+                            <a  class="new-task__type link-regular" href="#"><p><?php echo $value['category'] ?></p></a>
                         </div>
-                        <div class="new-task__icon new-task__icon--translation"></div>
+                        <div class="new-task__icon new-task__icon--<?php echo $value['icon']?>"></div>
                         <p class="new-task_description">
-                            Значимость этих проблем настолько очевидна, что начало
-                            повседневной работы по формированию позиции
-                            требуют определения и уточнения позиций…
+                            <?php echo $value['description'] ?>
                         </p>
-                        <b class="new-task__price new-task__price--translation">3400<b> ₽</b></b>
-                        <p class="new-task__place">Санкт-Петербург, Центральный район</p>
-                        <span class="new-task__time">4 часа назад</span>
+                        <b class="new-task__price new-task__price--<?php echo $value['icon']?>"><?php echo $value['budget'] ?><b> ₽</b></b>
+                        <p class="new-task__place"><?php echo $value['address'] ?></p>
+                        <span class="new-task__time"><?php echo $value['date_diff'] ?></span>
                     </div>
-                    <div class="new-task__card">
-                        <div class="new-task__title">
-                            <a href="#" class="link-regular"><h2>Убраться в квартире после вписки</h2></a>
-                            <a class="new-task__type link-regular" href="#"><p>Уборка</p></a>
-                        </div>
-                        <div class="new-task__icon new-task__icon--clean"></div>
-                        <p class="new-task_description">
-                            Значимость этих проблем настолько очевидна, что начало
-                            повседневной работы по формированию позиции
-                            требуют определения и уточнения позиций…
-                        </p>
-                        <b class="new-task__price new-task__price--clean">1500<b> ₽</b></b>
-                        <p class="new-task__place">Санкт-Петербург, Центральный район</p>
-                        <span class="new-task__time">5 часов назад</span>
-                    </div>
-                    <div class="new-task__card">
-                        <div class="new-task__title">
-                            <a href="#" class="link-regular"><h2>Перевезти груз на новое место</h2></a>
-                            <a class="new-task__type link-regular" href="#"><p>Грузоперевозки</p></a>
-                        </div>
-                        <div class="new-task__icon new-task__icon--cargo"></div>
-                        <p class="new-task_description">
-                            Значимость этих проблем настолько очевидна, что начало
-                            повседневной работы по формированию позиции
-                            требуют определения и уточнения позиций…
-                        </p>
-                        <b class="new-task__price new-task__price--cargo">3000<b> ₽</b></b>
-                        <p class="new-task__place">Москва, Центральный район</p>
-                        <span class="new-task__time">10 часов назад</span>
-                    </div>
+                <?php endforeach; ?>
                 </div>
                 <div class="new-task__pagination">
                     <ul class="new-task__pagination-list">
