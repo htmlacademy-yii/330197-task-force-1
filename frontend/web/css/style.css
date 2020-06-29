@@ -585,8 +585,9 @@ footer {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
+  /*-ms-flex-wrap: wrap;
+  flex-wrap: wrap;*/
+  flex-direction: column; /* my styling rule */
 }
 
 .search-task__categories legend {
@@ -646,7 +647,8 @@ footer {
   padding-bottom: 14px;
   padding-right: 16px;
   padding-left: 16px;
-  margin-bottom: 35px; }
+  margin-bottom: 35px;
+  min-width: 100%; }  /*add this property for ActiveForm*/
 
 .multiple-select {
   padding-top: 14px;
@@ -666,7 +668,9 @@ footer {
   appearance: none !important;
   background-image: url("../img/select-arrow.png");
   background-position: 230px 20px;
-  background-repeat: no-repeat; }
+  background-repeat: no-repeat; 
+  min-width: 100%;} /*add this property for ActiveForm*/
+
 
 .input-navigation {
   background-image: url("../img/navigation.png");
@@ -695,7 +699,8 @@ footer {
 .registration-town {
   background-position: 325px 20px; }
 
-.checkbox__input + label::before {
+.checkbox__input + label::before,
+.checkbox__label::before {
   content: "";
   position: absolute;
   left: 0;
