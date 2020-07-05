@@ -8,18 +8,13 @@ use yii\helpers\Html;
 use yii\captcha\Captcha;
 use yii\widgets\ActiveForm;
 use yii\widgets\ActiveField;
-
-require_once '../../vendor/autoload.php';
-
-$this->title = 'Задачи';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
-     <h1><?= Html::encode($this->title) ?></h1>  
     <main class="page-main">
         <div class="main-container page-container">
             <section class="new-task">
                 <div class="new-task__wrapper">
                     <h1>Новые задания</h1>
+                <?php if(isset($data)):?>
                     <?php foreach($data as $value): ?>
                     <div class="new-task__card">
                         <div class="new-task__title">
@@ -34,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <p class="new-task__place"><?php echo $value['address'] ?></p>
                         <span class="new-task__time"><?php echo $value['date_diff'] ?></span>
                     </div>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
                 </div>
                 <div class="new-task__pagination">
                     <ul class="new-task__pagination-list">
@@ -46,93 +41,38 @@ $this->params['breadcrumbs'][] = $this->title;
                         <li class="pagination__item"><a href="#"></a></li>
                     </ul>
                 </div>
+                <?php else:?>
+                    <br />
+                    <p class="new-task_description">По вашему запросу ничего не найдено.</p>
+                
+                <?php endif;?>
             </section>
             <section  class="search-task">
                 <div class="search-task__wrapper">
-                    <?php $form = ActiveForm::begin([
-                            'action' => ['index'],
-                            'method' => "post",
-                            'options' => [
-                                'data-pjax' => 1,
-                                'class' => 'search-task__form',
-                            ],
-                        ]); ?> 
-
+                    <form class="search-task__form" name="test" method="post">
                         <fieldset class="search-task__categories">
                             <legend>Категории</legend>
-                            <?= $form->field($model, 'category',[
-                                'template' => '{input}',
-                                // 'template' => '{input}{label}'
-                                
-                            ])
-                                ->checkboxList($categories,
-                                    [
-                                        'item' => function ($index, $label, $name, $checked, $value) {
-                                                return Html::checkbox($name, $checked, [
-                                                    'value' => $value,
-                                                    'id' => 'cat-'.$value,
-                                                    'label' => $label,
-                                                    // 'label' => '<label for="cat-' . $value . '">' . $label . '</label>',
-                                                ]);
-                                        },
-                                    ], false
-                                )
-                                ->label('',['class' => 'visually-hidden checkbox__input'])?> 
+                        <?php foreach($categories as $id => $category):?>
+                            <input class="visually-hidden checkbox__input" id="cat-<?php echo $id?>" type="checkbox" name="categories[]" value="<?php echo $id?>">
+                            <label for="cat-<?php echo $id?>"><?php echo $category ?></label>
+                        <?php endforeach;?>
                         </fieldset>
                         <fieldset class="search-task__categories">
                             <legend>Дополнительно</legend>
-                            <?= $form->field($model, 'no_executers')
-                                    ->checkbox(['fieldOptions' => ['class' => 'visually-hidden checkbox__input']])
-                                    ?>
-                            <?= $form->field($model, 'no_address')
-                                    ->checkbox(
-                                    ['class' => 'visually-hidden checkbox__input'])?>
+                        <?php foreach($addition as $key => $value):?>
+                            <input class="visually-hidden checkbox__input" id="<?php echo $key?>" type="checkbox" name="<?php echo $key?>" value="<?php echo $key?>">
+                            <label for="<?php echo $key?>"><?php echo $value?></label>
+                        <?php endforeach;?>
                         </fieldset>
-                        
-                        <?= $form->field($model, 'period')
-                                ->dropDownList($period, ['class' => 'multiple-select input'])
-                                ->label('Период',['class' => 'search-task__name'])?>
-
-                        <?= $form->field($model, 'search')
-                                ->textInput(['class' => "input-middle input"])
-                                ->label('Поиск по названию',['class' => 'search-task__name'])?>
-                        <div class="form-group">
-                        <?= Html::submitButton('Искать', ['class' => "button",
-                                                          'type' => 'submit', 
-                                                          'name' => 'submit']) ?>
-                        </div>
-                    <?php ActiveForm::end(); ?>
-                </div>
-                <div class="search-task__wrapper">
-                    <form class="search-task__form" name="test" method="post" action="#">
-                        <fieldset class="search-task__categories">
-                            <legend>Категории</legend>
-                            <input class="visually-hidden checkbox__input" id="1" type="checkbox" name="" value="" checked>
-                            <label for="1">Курьерские услуги </label>
-                            <input class="visually-hidden checkbox__input" id="2" type="checkbox" name="" value="" checked>
-                            <label  for="2">Грузоперевозки </label>
-                            <input class="visually-hidden checkbox__input" id="3" type="checkbox" name="" value="">
-                            <label  for="3">Переводы </label>
-                            <input class="visually-hidden checkbox__input" id="4" type="checkbox" name="" value="">
-                            <label  for="4">Строительство и ремонт </label>
-                            <input class="visually-hidden checkbox__input" id="5" type="checkbox" name="" value="">
-                            <label  for="5">Выгул животных </label>
-                        </fieldset>
-                        <fieldset class="search-task__categories">
-                            <legend>Дополнительно</legend>
-                            <input class="visually-hidden checkbox__input" id="6" type="checkbox" name="" value="">
-                            <label for="6">Без откликов</label>
-                           <input class="visually-hidden checkbox__input" id="7" type="checkbox" name="" value="" checked>
-                            <label for="7">Удаленная работа </label>
-                        </fieldset>
-                       <label class="search-task__name" for="8">Период</label>
-                           <select class="multiple-select input" id="8"size="1" name="time[]">
-                            <option value="day">За день</option>
-                            <option selected value="week">За неделю</option>
-                            <option value="month">За месяц</option>
+                        <label class="search-task__name" for="8">Период</label>
+                            <select class="multiple-select input" id="8"size="1" name="period">
+                            <option value="all_time">За всё время</option>
+                        <?php foreach($period as $key => $value):?>
+                            <option value="<?php echo $key?>"><?php echo $value?></option>
+                        <?php endforeach;?>
                         </select>
                         <label class="search-task__name" for="9">Поиск по названию</label>
-                            <input class="input-middle input" id="9" type="search" name="q" placeholder="">
+                            <input class="input-middle input" id="9" type="search" name="find" placeholder="">
                         <button class="button" type="submit">Искать</button>
                     </form>
                 </div>

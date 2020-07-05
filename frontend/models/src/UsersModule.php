@@ -4,6 +4,7 @@ namespace frontend\models\src;
 
 use Yii;
 use yii\base\Module;
+use yii\helpers\ArrayHelper;
 use frontend\models\ExecutersCategory;
 use frontend\models\Users;
 use frontend\models\UserProfile;
@@ -15,11 +16,64 @@ use frontend\functions;
 class UsersModule extends Module {
 	
 	/*Выводим данные для представления*/
-    public function getData(){
+    public function getData($form_data = null){
+        if($form_data['categories']){
+            $array_cat = implode(",",$form_data['categories']);
+        }
+        if($form_data['free']){
+            $free = true;
+        }
+        if($form_data['online']){
+            $online = true;
+            // var_dump($online); die('here');
+        }
+        if($form_data['feedback']){
+            $feedback = true;
+        }
+        if($form_data['favorite']){
+            $favorite = true;
+        }
+        if($form_data['find']){
+            $find = $form_data['find'];
+        }
+
+        //Выводим список исполнителей, которые принадлежат к выбранной категории
+        $users = new ExecutersCategory();
+        $idusers = $users->find()->distinct()->select(['idexecuter'])->from('executers_category');
+        if($array_cat){
+            $idusers = $idusers->andWhere("idcategory in ($array_cat)");
+        }
+        $idusers = $idusers->all();
+        //Записываем в масив список всех исполнителей с нужной категорией
+        foreach($idusers as $value){
+            $array_exec[] = $value['idexecuter'];
+        }
+        $array_exec = implode(",",$array_exec);
+
         // Выводим список всех исполнителей с их id, fio и датой регистрации
         $exec = new Users();
-        $idexecuters = $exec->find()->select(['u.id', 'u.fio', 'u.dt_add', 'u.avatar', 'u.about', 'u.last_update'])->from('users u')->where('u.role = 2')->orderBy(['u.last_update' => SORT_DESC])->limit(10)->all();
+        $idexecuters = $exec->find()->distinct()->select(['u.id', 'u.fio', 'u.dt_add', 'u.avatar', 'u.about', 'u.last_update'])->from('users u')->where("u.id in ($array_exec)");
         
+        //Добавляем условия по фильтрам
+        if($find){
+            $idexecuters = $idexecuters->andWhere("MATCH(fio) AGAINST('*$find*' in boolean mode)");
+        } else {
+            if($free){
+                $idexecuters = $idexecuters->andWhere("NOT EXISTS (SELECT * FROM tasks t WHERE t.idexecuter = u.id AND t.current_status IN ('new','in_progress'))");
+            }
+            if($online){
+                $idexecuters = $idexecuters->andWhere("u.last_update >= date_sub(NOW(),INTERVAL 30 MINUTE)");
+            }
+            if($feedback){
+                $idexecuters = $idexecuters->andWhere("u.id in (select distinct idexecuter from feadback)");
+            }
+            if($favorite){
+                $idexecuters = $idexecuters->andWhere("u.id in (select distinct idexecuter from favorite)");
+            }
+        }
+        
+        $idexecuters = $idexecuters->orderBy(['u.last_update' => SORT_DESC])->limit(10)->all();
+
         // Выводим список всех категорий с их id и названиями
         $categ = new Categories();
         $all_categories = $categ->find()->select(['c.id','c.category','c.icon'])->from('categories c')->all();
