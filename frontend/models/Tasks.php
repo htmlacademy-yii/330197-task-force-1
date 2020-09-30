@@ -82,9 +82,6 @@ class Tasks extends \yii\db\ActiveRecord
             'address' => 'Address',
             'latitude' => 'Latitude',
             'longitude' => 'Longitude',
-            'file_1' => 'File 1',
-            'file_2' => 'File 2',
-            'file_3' => 'File 3',
         ];
     }
 

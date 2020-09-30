@@ -1,12 +1,12 @@
-INSERT INTO categories (id, category, icon) VALUES
-	(1, 'Переводы', 'translation'),
-	(2, 'Уборка', 'clean'),
-	(3, 'Переезды', 'cargo'),
-	(4, 'Компьютерная помощь', 'neo'),
-	(5, 'Ремонт квартирный', 'flat'),
-	(6, 'Ремонт техники', 'repair'),
-	(7, 'Красота', 'beauty'),
-	(8, 'Фото', 'photo');
+INSERT INTO categories (category, icon) VALUES
+	('Переводы', 'translation'),
+	('Уборка', 'clean'),
+	('Переезды', 'cargo'),
+	('Компьютерная помощь', 'neo'),
+	('Ремонт квартирный', 'flat'),
+	('Ремонт техники', 'repair'),
+	('Красота', 'beauty'),
+	('Фото', 'photo');
 	
 INSERT INTO cities (id, city, latitude, longitude) VALUES
 	(1, 'Абаза', 52.6517296, 90.0885929),
@@ -1118,39 +1118,43 @@ INSERT INTO cities (id, city, latitude, longitude) VALUES
 	(1107, 'Ясный', 51.0369499, 59.8743256),
 	(1108, 'Яхрома', 56.2889858, 37.4831016);
 
-INSERT INTO users (id, fio, email, pass, dt_add, role, address, birthday, about, avatar, phone, skype, telegram, last_update) VALUES
-	(1, 'Karrie Buttress', 'kbuttress0@1und1.de', 'JcfoKBYAB4k', '2019-08-10', 1, '38737 Moose Avenue', '1989-11-11', 'In est risus, auctor sed, tristique in, tempus sit amet, sem. Fusce consequat.', 'user-man.jpg', '64574473047', 'high-level', NULL, '2020-06-01 12:10:25'),
-	(2, 'Bob Aymer', 'baymer1@hp.com', 'ZEE54kg', '2018-12-21', 1, '738 Hagan Lane', '1989-03-05', 'Pellentesque ultrices mattis odio.', 'user-man2.jpg', '75531015353', 'mobile', NULL, '2020-06-05 09:50:25'),
-	(3, 'Zilvia Boulding', 'zboulding2@macromedia.com', 'VJyMV1Zat', '2019-07-25', 1, '758 Old Shore Parkway', '1989-12-30', 'Morbi a ipsum. Integer a nibh. In quis justo.', 'man-blond.jpg', '16371407508', 'Re-engineered', NULL, '2020-06-01 12:10:25'),
-	(4, 'Emalee Mollon', 'emollon3@bloglovin.com', 'XUIeJ693h', '2018-11-13', 1, '11 Dovetail Junction', '0629-03-03', 'Suspendisse potenti.', NULL, '21468788926', 'Grass-roots', NULL, '2020-06-05 09:50:25'),
-	(5, 'Maria Mulberry', 'mmulberry4@cmu.edu', 'oWspnl', '2019-07-20', 1, '050 Bowman Alley', '1989-04-08', 'Morbi quis tortor id nulla ultrices aliquet. Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo.', NULL, '62931646367', 'fault-tolerant', NULL, '2020-06-01 12:10:25'),
-	(6, 'Levey By', 'lby5@mozilla.com', 'GdtcUU', '2019-02-12', 1, '5 Iowa Avenue', '1989-04-18', 'Maecenas tristique, est et tempus semper, est quam pharetra magna, ac consequat metus sapien ut nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam.', NULL, '63271348718', 'Team-oriented', NULL, '2020-06-05 09:50:25'),
-	(7, 'Baron Eates', 'beates6@last.fm', 'UQw6VeA', '2019-05-03', 1, '87119 Northland Hill', '1989-03-20', 'Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.', NULL, '41056175169', 'portal', NULL, '2019-04-03 07:05:05'),
-	(8, 'Trip Vink', 'tvink7@fotki.com', '49znXd7haFGz', '2019-01-13', 1, '6823 Lillian Point', '1989-12-13', 'Pellentesque viverra pede ac diam. Cras pellentesque volutpat dui. Maecenas tristique, est et tempus semper, est quam pharetra magna, ac consequat metus sapien ut nunc.', NULL, '72882384431', 'intermediate', NULL, '2020-01-05 17:35:05'),
-	(9, 'Boonie Terbeck', 'bterbeck8@about.me', 'unCjJTF7sjs', '2019-09-15', 1, '43 Marquette Plaza', '1989-01-14', 'Morbi ut odio.', NULL, '69043821394', 'local area network', NULL, '2019-04-03 07:05:05'),
-	(10, 'Alonzo Traviss', 'atraviss9@auda.org.au', 'dLuVMAg', '2018-12-19', 1, '5303 Village Green Hill', '1989-02-03', 'Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem. Fusce consequat.', NULL, '28396220507', 'upward-trending', NULL, '2020-01-05 17:35:05'),
-	(11, 'Natassia Wittering', 'nwitteringa@google.com.br', 'tQlUG4n', '2019-03-24', 2, '67399 Reindahl Place', '1989-05-23', 'Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.', 'man-hat.png', '83344513307', 'grid-enabled', NULL, '2019-04-03 07:05:05'),
-	(12, 'Felice Brooke', 'fbrookeb@nba.com', 's9y9Mcfgy1g', '2019-09-27', 2, '45 Twin Pines Hill', '1989-07-06', 'Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl. Aenean lectus. Pellentesque eget nunc.', 'man-glasses.jpg', '64890419671', 'background', NULL, '2020-01-05 17:35:05'),
-	(13, 'Carlen Viccary', 'cviccaryc@amazon.co.uk', '9qd747vh', '2018-12-06', 2, '46 Sheridan Place', '1903-04-16', 'Quisque ut erat. Curabitur gravida nisi at nibh. In hac habitasse platea dictumst.', 'man-brune.jpg', '23005580487', 'challenge', NULL, '2018-08-16 10:35:05'),
-	(14, 'Hendrik Gethings', 'hgethingsd@sogou.com', 'zzN5c4', '2018-11-18', 2, '73 Kedzie Terrace', '1989-11-07', 'Pellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.', NULL, '27052074771', 'coherent', NULL, '2020-06-13 06:10:05'),
-	(15, 'Dunc Girodias', 'dgirodiase@stanford.edu', 'j9QW6GQI', '2018-10-14', 2, '85509 Ludington Drive', '1989-02-13', 'Cras pellentesque volutpat dui.', NULL, '14800371520', 'neutral', NULL, '2018-08-16 10:35:05'),
-	(16, 'Bibbie Tanman', 'btanmanf@smh.com.au', '1aukKNEIneq', '2019-05-03', 2, '67 Northwestern Center', '1989-07-07', 'Aliquam erat volutpat. In congue.', NULL, '75569924500', 'Programmable', NULL, '2020-06-13 06:10:05'),
-	(17, 'Barnabas Bartoletti', 'bbartolettig@simplemachines.org', '3chTNtqhoo', '2018-12-25', 2, '725 Eagle Crest Hill', '1989-09-29', 'Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem. Duis aliquam convallis nunc.', NULL, '37349256497', 'encompassing', NULL, '2018-08-16 10:35:05'),
-	(18, 'Nixie Cullip', 'nculliph@fc2.com', '2UdKIR2f', '2019-04-07', 2, '507 Graceland Junction', '1989-03-19', 'Suspendisse potenti.', NULL, '12403580562', 'knowledge base', NULL, '2020-06-13 06:10:05'),
-	(19, 'Matilde Pimblott', 'mpimblotti@xing.com', 'nGZ8disdg', '2019-07-18', 2, '92 Gina Park', '1989-09-29', 'Phasellus sit amet erat.', NULL, '40139478003', 'dynamic', NULL, '2020-06-10 21:50:05'),
-	(20, 'Al Skurray', 'askurrayj@un.org', 'bL9tAf', '2018-11-25', 2, '8 Ridgeview Trail', '1989-12-21', 'Cras pellentesque volutpat dui.', NULL, '76657531985', 'solution', NULL, '2020-06-10 21:50:05');
+INSERT INTO users (fio, email, pass, dt_add, role, address, birthday, about, avatar, phone, skype, telegram, last_update) VALUES
+	('Karrie Buttress', 'kbuttress0@1und1.de', 'JcfoKBYAB4k', '2019-08-10', 1, '38737 Moose Avenue', '1989-11-11', 'In est risus, auctor sed, tristique in, tempus sit amet, sem. Fusce consequat.', 'user-man.jpg', '64574473047', 'high-level', NULL, '2020-06-01 12:10:25'),
+	('Bob Aymer', 'baymer1@hp.com', 'ZEE54kg', '2018-12-21', 1, '738 Hagan Lane', '1989-03-05', 'Pellentesque ultrices mattis odio.', 'user-man2.jpg', '75531015353', 'mobile', NULL, '2020-06-05 09:50:25'),
+	('Zilvia Boulding', 'zboulding2@macromedia.com', 'VJyMV1Zat', '2019-07-25', 1, '758 Old Shore Parkway', '1989-12-30', 'Morbi a ipsum. Integer a nibh. In quis justo.', 'man-blond.jpg', '16371407508', 'Re-engineered', NULL, '2020-06-01 12:10:25'),
+	('Emalee Mollon', 'emollon3@bloglovin.com', 'XUIeJ693h', '2018-11-13', 1, '11 Dovetail Junction', '0629-03-03', 'Suspendisse potenti.', NULL, '21468788926', 'Grass-roots', NULL, '2020-06-05 09:50:25'),
+	('Maria Mulberry', 'mmulberry4@cmu.edu', 'oWspnl', '2019-07-20', 1, '050 Bowman Alley', '1989-04-08', 'Morbi quis tortor id nulla ultrices aliquet. Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo.', NULL, '62931646367', 'fault-tolerant', NULL, '2020-06-01 12:10:25'),
+	('Levey By', 'lby5@mozilla.com', 'GdtcUU', '2019-02-12', 1, '5 Iowa Avenue', '1989-04-18', 'Maecenas tristique, est et tempus semper, est quam pharetra magna, ac consequat metus sapien ut nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam.', NULL, '63271348718', 'Team-oriented', NULL, '2020-06-05 09:50:25'),
+	('Baron Eates', 'beates6@last.fm', 'UQw6VeA', '2019-05-03', 1, '87119 Northland Hill', '1989-03-20', 'Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.', NULL, '41056175169', 'portal', NULL, '2019-04-03 07:05:05'),
+	('Trip Vink', 'tvink7@fotki.com', '49znXd7haFGz', '2019-01-13', 1, '6823 Lillian Point', '1989-12-13', 'Pellentesque viverra pede ac diam. Cras pellentesque volutpat dui. Maecenas tristique, est et tempus semper, est quam pharetra magna, ac consequat metus sapien ut nunc.', NULL, '72882384431', 'intermediate', NULL, '2020-01-05 17:35:05'),
+	('Boonie Terbeck', 'bterbeck8@about.me', 'unCjJTF7sjs', '2019-09-15', 1, '43 Marquette Plaza', '1989-01-14', 'Morbi ut odio.', NULL, '69043821394', 'local area network', NULL, '2019-04-03 07:05:05'),
+	('Alonzo Traviss', 'atraviss9@auda.org.au', 'dLuVMAg', '2018-12-19', 1, '5303 Village Green Hill', '1989-02-03', 'Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem. Fusce consequat.', NULL, '28396220507', 'upward-trending', NULL, '2020-01-05 17:35:05'),
+	('Natassia Wittering', 'nwitteringa@google.com.br', 'tQlUG4n', '2019-03-24', 2, '67399 Reindahl Place', '1989-05-23', 'Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.', 'man-hat.png', '83344513307', 'grid-enabled', NULL, '2019-04-03 07:05:05'),
+	('Felice Brooke', 'fbrookeb@nba.com', 's9y9Mcfgy1g', '2019-09-27', 2, '45 Twin Pines Hill', '1989-07-06', 'Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl. Aenean lectus. Pellentesque eget nunc.', 'man-glasses.jpg', '64890419671', 'background', NULL, '2020-01-05 17:35:05'),
+	('Carlen Viccary', 'cviccaryc@amazon.co.uk', '9qd747vh', '2018-12-06', 2, '46 Sheridan Place', '1903-04-16', 'Quisque ut erat. Curabitur gravida nisi at nibh. In hac habitasse platea dictumst.', 'man-brune.jpg', '23005580487', 'challenge', NULL, '2018-08-16 10:35:05'),
+	('Hendrik Gethings', 'hgethingsd@sogou.com', 'zzN5c4', '2018-11-18', 2, '73 Kedzie Terrace', '1989-11-07', 'Pellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.', NULL, '27052074771', 'coherent', NULL, '2020-06-13 06:10:05'),
+	('Dunc Girodias', 'dgirodiase@stanford.edu', 'j9QW6GQI', '2018-10-14', 2, '85509 Ludington Drive', '1989-02-13', 'Cras pellentesque volutpat dui.', NULL, '14800371520', 'neutral', NULL, '2018-08-16 10:35:05'),
+	('Bibbie Tanman', 'btanmanf@smh.com.au', '1aukKNEIneq', '2019-05-03', 2, '67 Northwestern Center', '1989-07-07', 'Aliquam erat volutpat. In congue.', NULL, '75569924500', 'Programmable', NULL, '2020-06-13 06:10:05'),
+	('Barnabas Bartoletti', 'bbartolettig@simplemachines.org', '3chTNtqhoo', '2018-12-25', 2, '725 Eagle Crest Hill', '1989-09-29', 'Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem. Duis aliquam convallis nunc.', NULL, '37349256497', 'encompassing', NULL, '2018-08-16 10:35:05'),
+	('Nixie Cullip', 'nculliph@fc2.com', '2UdKIR2f', '2019-04-07', 2, '507 Graceland Junction', '1989-03-19', 'Suspendisse potenti.', NULL, '12403580562', 'knowledge base', NULL, '2020-06-13 06:10:05'),
+	('Matilde Pimblott', 'mpimblotti@xing.com', 'nGZ8disdg', '2019-07-18', 2, '92 Gina Park', '1989-09-29', 'Phasellus sit amet erat.', NULL, '40139478003', 'dynamic', NULL, '2020-06-10 21:50:05'),
+	('Al Skurray', 'askurrayj@un.org', 'bL9tAf', '2018-11-25', 2, '8 Ridgeview Trail', '1989-12-21', 'Cras pellentesque volutpat dui.', NULL, '76657531985', 'solution', NULL, '2020-06-10 21:50:05'),
+	('Андрей Балконский', 'andrew@bal.com', 'supperpass', '2017-02-10', 2, 'пер. Вишнёвый', '1970-03-11', 'Фотограф на все случаи жизни. Сделаю важные события в Вешей жизни незабываемыми.', 'user-man.jpg', '0947536548', 'andrew-balc', NULL, DATE_ADD(SYSDATE(), INTERVAL -5 MINUTE));
 
-INSERT INTO tasks (id, idcustomer, idexecuter, title, description, idcategory, budget, dt_add, deadline, current_status, idcity, address, latitude, longitude, file_1, file_2, file_3) VALUES
-	(1, 1, 11, 'enable impactful technologies', 'Suspendisse potenti. In eleifend quam a odio. In hac habitasse platea dictumst.', 2, 6587, '2019-03-09', '2019-11-15', 'new', NULL, '1 Eagan Crossing', 6.9641667, 158.2083333, NULL, NULL, NULL),
-	(2, 2, 12, 'exploit revolutionary portals', 'Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.\r\n\r\nCurabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.', 3, 2904, '2019-07-03', '2019-12-07', 'new', NULL, '24043 Paget Alley', 5.6235050, 10.2544044, NULL, NULL, NULL),
-	(3, 3, 13, 'matrix next-generation e-commerce', 'Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.\r\n\r\nCras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. Vivamus vel nulla eget eros elementum pellentesque.\r\n\r\nQuisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.', 2, 1170, '2019-06-27', '2019-11-23', 'new', NULL, '2867 Dryden Pass', 63.5932190, 53.9068532, NULL, NULL, NULL),
-	(4, 4, 14, 'benchmark plug-and-play infomediaries', 'Praesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.\r\n\r\nMorbi porttitor lorem id ligula. Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem.\r\n\r\nFusce consequat. Nulla nisl. Nunc nisl.', 1, 838, '2019-01-01', '2019-11-10', 'new', NULL, '80 Cambridge Street', 20.5800358, -75.2435307, NULL, NULL, NULL),
-	(5, 5, 15, 'integrate cross-platform e-business', 'Praesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.', 3, 7484, '2019-09-07', '2019-12-15', 'new', NULL, '1 Stone Corner Junction', 14.9326574, -91.6941845, NULL, NULL, NULL),
-	(6, 6, 16, 'enable dot-com niches', 'Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.', 7, 5725, '2018-11-01', '2019-11-24', 'new', NULL, '12 Stephen Terrace', 40.1631270, 116.6388680, NULL, NULL, NULL),
-	(7, 7, 17, 'transform web-enabled relationships', 'Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.', 5, 4414, '2019-09-13', '2019-11-19', 'new', NULL, '6213 Lake View Drive', 44.3794871, 20.2638941, NULL, NULL, NULL),
-	(8, 8, 18, 'strategize frictionless solutions', 'Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.\r\n\r\nPraesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.\r\n\r\nMorbi porttitor lorem id ligula. Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem.', 8, 3454, '2019-04-01', '2019-11-14', 'new', NULL, '994 Corry Park', -7.3251485, 108.3607464, NULL, NULL, NULL),
-	(9, 9, 19, 'innovate seamless metrics', 'Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.', 4, 3101, '2019-03-28', '2019-12-12', 'new', NULL, '2 Bluestem Park', 43.0000000, -87.9700000, NULL, NULL, NULL),
-	(10, 10, 20, 'integrate wireless infomediaries', 'Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque.', 4, 6562, '2019-05-01', '2019-12-19', 'new', NULL, '1 Dexter Hill', 41.3410168, -8.3169303, NULL, NULL, NULL);
+INSERT INTO tasks (idcustomer, idexecuter, title, description, idcategory, budget, dt_add, deadline, current_status, idcity, address, latitude, longitude) VALUES
+	(1, 11, 'enable impactful technologies', 'Suspendisse potenti. In eleifend quam a odio. In hac habitasse platea dictumst.', 2, 6587, '2019-03-09', '2019-11-15', 'done', NULL, '1 Eagan Crossing', 6.9641667, 158.2083333),
+	(2, 12, 'exploit revolutionary portals', 'Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.\r\n\r\nCurabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.', 3, 2904, '2019-07-03', '2019-12-07', 'new', NULL, '24043 Paget Alley', 5.6235050, 10.2544044),
+	(3, 13, 'matrix next-generation e-commerce', 'Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.\r\n\r\nCras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. Vivamus vel nulla eget eros elementum pellentesque.\r\n\r\nQuisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.', 2, 1170, '2019-06-27', '2019-11-23', 'done', NULL, '2867 Dryden Pass', 63.5932190, 53.9068532),
+	(4, 14, 'benchmark plug-and-play infomediaries', 'Praesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.\r\n\r\nMorbi porttitor lorem id ligula. Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem.\r\n\r\nFusce consequat. Nulla nisl. Nunc nisl.', 1, 838, '2019-01-01', '2019-11-10', 'done', NULL, '80 Cambridge Street', 20.5800358, -75.2435307),
+	(5, NULL, 'integrate cross-platform e-business', 'Praesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.', 3, 7484, '2019-09-07', '2019-12-15', 'canceled', NULL, '1 Stone Corner Junction', 14.9326574, -91.6941845),
+	(6, 16, 'enable dot-com niches', 'Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.', 7, 5725, '2018-11-01', '2019-11-24', 'failed', NULL, '12 Stephen Terrace', 40.1631270, 116.6388680),
+	(7, 17, 'transform web-enabled relationships', 'Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.', 5, 4414, '2019-09-13', '2019-11-19', 'failed', NULL, '6213 Lake View Drive', 44.3794871, 20.2638941),
+	(8, NULL, 'strategize frictionless solutions', 'Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.\r\n\r\nPraesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.\r\n\r\nMorbi porttitor lorem id ligula. Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem.', 8, 3454, '2019-04-01', '2019-11-14', 'canceled', NULL, '994 Corry Park', -7.3251485, 108.3607464),
+	(9, 19, 'innovate seamless metrics', 'Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.', 4, 3101, '2019-03-28', '2020-12-12', 'in_progress', NULL, '2 Bluestem Park', 43.0000000, -87.9700000),
+	(10, 20, 'integrate wireless infomediaries', 'Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque.', 4, 6562, '2019-05-01', '2020-12-19', 'in_progress', NULL, '1 Dexter Hill', 41.3410168, -8.3169303),
+	(6, NULL, 'Убраться в квартире после вписки', 'Значимость этих проблем настолько очевидна, что начало повседневной работы по формированию позиции требуют определения и уточнения позиций…', 2, 1000, DATE_ADD(SYSDATE(), INTERVAL -5 DAY), '2021-07-25', 'new', 920, NULL, 61.2539773, 73.3961726),
+	(8, NULL, 'Перевезти груз на новое место', 'Значимость этих проблем настолько очевидна, что начало повседневной работы по формированию позиции требуют определения и уточнения позиций…', 3, 1500, DATE_ADD(SYSDATE(), INTERVAL -25 DAY), DEFAULT, 'new', 566, NULL, NULL, NULL),
+	(2, NULL, 'Перевести войну и мир на клингонский', 'Значимость этих проблем настолько очевидна, что начало повседневной работы по формированию позиции требуют определения и уточнения позиций…', 1, 3500, DEFAULT, DEFAULT, DEFAULT, NULL, NULL, NULL, NULL);
 	
 INSERT INTO comments (idtask, dt_add, rate, notetext) VALUES
 	(1, '2019-08-19', 3, 'Cras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. Vivamus vel nulla eget eros elementum pellentesque.\r\n\r\nQuisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.\r\n\r\nPhasellus in felis. Donec semper sapien a libero. Nam dui.'),
@@ -1179,7 +1183,8 @@ INSERT INTO executers_category (idexecuter, idcategory) VALUES
 	(20, 3),
 	(20, 4),
 	(13, 8),
-	(15, 2);
+	(15, 2),
+	(21, 8);
 	
 INSERT INTO feadback (idtask, idexecuter, idcustomer, rate, dt_add, description) VALUES
 	(1, 11, 1, 1, '2019-05-09', 'Curabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem.\r\n\r\nInteger tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.\r\n\r\nPraesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.'),

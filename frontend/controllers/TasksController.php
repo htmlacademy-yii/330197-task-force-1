@@ -4,38 +4,41 @@ namespace frontend\controllers;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
-use frontend\models\src\TasksModule;
+use frontend\models\src\TasksSearch;
 use frontend\models\categories;
 
 class TasksController extends Controller
-{	
+{   
     public function beforeAction($action)
     {
-        $this->enableCsrfValidation = false;
+        $this->enableCsrfValidation = true;
         return true;
     }
 
     public function actionIndex()
     {
-    	$form_data = array();
+        $form_data = array();
 
-	if (Yii::$app->request->getIsPost()) {
-		$form_data = Yii::$app->request->post();
-	}
-	
-        $category = new Categories();
-        $cats = $category->find()->select(['category', 'id'])->from('categories')->all();
-        $data['categories'] = (ArrayHelper::map($cats, 'id', 'category'));
+    if (Yii::$app->request->getIsPost()) {
+        $form_data = Yii::$app->request->post();
+    }
+    
+        $category = Categories::find()->select(['category', 'id'])->from('categories')->all();
+        $data['categories'] = (ArrayHelper::map($category, 'id', 'category'));
 
         $data['addition'] = ['no_executers' => 'Без откликов',
-	                    	'no_address' => 'Удаленная работа'];
+                            'no_address' => 'Удаленная работа'];
         
         $data['period'] = ['day' => 'За день',
-	                    'week' => 'За неделю',
-	                    'month' => 'За месяц'];
+                            'week' => 'За неделю',
+                            'month' => 'За месяц'];
         
-    	$task = new TasksModule('task');
-    	$data['data'] = $task->getData($form_data);
-    	return $this->render('/site/tasks', $data);
+        $search = new TasksSearch('task');
+        $parsed_data = $search->parse_data($form_data);
+        $rows = $search->search($parsed_data);
+        $data['tasks'] = $search->create_array($rows);
+
+        return $this->render('/site/tasks', $data);
     }
+
 }

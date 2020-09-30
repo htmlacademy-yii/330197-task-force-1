@@ -1,12 +1,9 @@
 <?php
-/* @var $this yii\web\View */
-/* @var $form yii\bootstrap\ActiveForm */
-/* @var $model \frontend\models\ContactForm */
+/* @var $executers \frontend\controllers\UsersController*/
+/* @var $categories \frontend\controllers\UsersController*/
+/* @var $addition \frontend\controllers\UsersController*/
 
 use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
-use yii\captcha\Captcha;
-require_once '../../vendor/autoload.php';
 
 $this->title = 'Исполнители';
 $this->params['breadcrumbs'][] = $this->title;
@@ -28,32 +25,32 @@ $this->params['breadcrumbs'][] = $this->title;
                         </li>
                     </ul>
                 </div>
-            <?php if(isset($data)):?>
-                <?php foreach($data as $value): ?>
+            <?php if(isset($executers)):?>
+                <?php foreach($executers as $executer): ?>
                 <div class="content-view__feedback-card user__search-wrapper">
                     <div class="feedback-card__top">
                         <div class="user__search-icon">
-                            <a href="#"><img src="./img/<?php if(isset($value['avatar'])) { echo $value['avatar'];} else { echo 'upload.png';}  ?>" width="65" height="65"></a>
-                            <span><?php echo $value['qtask']?> заданий</span>
-                            <span><?php echo $value['qrate']?> отзывов</span>
+                            <a href="#"><img src="./img/<?php if(isset($executer['avatar'])) { echo $executer['avatar'];} else { echo 'upload.png';}  ?>" width="65" height="65"></a>
+                            <span><?php echo $executer['qtask']?> заданий</span>
+                            <span><?php echo $executer['qrate']?> отзывов</span>
                         </div>
                         <div class="feedback-card__top--name user__search-card">
-                            <p class="link-name"><a href="#" class="link-regular"><?php echo $value['fio']?></a></p>
-                            <?php for($i=0; $i<round($value['rate']); $i++): ?>
+                            <p class="link-name"><a href="#" class="link-regular"><?php echo $executer['fio']?></a></p>
+                            <?php for($i=0; $i<round($executer['rate']); $i++): ?>
                                 <span></span>
                             <?php endfor;?>
-                            <?php for($i=0; $i<(5-round($value['rate'])); $i++): ?>
+                            <?php for($i=0; $i<(5-round($executer['rate'])); $i++): ?>
                                 <span class="star-disabled"></span>
                             <?php endfor;?>
-                            <b><?php echo $value['rate']?></b>
+                            <b><?php echo $executer['rate']?></b>
                             <p class="user__search-content">
-                                <?php echo $value['about']?>
+                                <?php echo $executer['about']?>
                             </p>
                         </div>
-                        <span class="new-task__time">Был на сайте <?php echo $value['last_update']?></span>
+                        <span class="new-task__time">Был на сайте <?php echo $executer['last_update']?></span>
                     </div>
                     <div class="link-specialization user__search-link--bottom">
-                        <?php foreach($value['categories'] as $category): ?>
+                        <?php foreach($executer['categories'] as $category): ?>
                             <a href="#" class="link-regular"><?php echo $category ?></a>
                         <?php endforeach;?>
                     </div>

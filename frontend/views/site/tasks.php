@@ -1,33 +1,28 @@
 <?php
-/* @var $this yii\web\View */
-/* @var $form yii\bootstrap\ActiveForm */
-/* @var $model \frontend\models\ContactForm */
+/* @var $tasks \frontend\controllers\TasksController*/
+/* @var $categories \frontend\controllers\TasksController*/
 
 use yii\helpers\Html;
-// use yii\bootstrap\ActiveForm;
-use yii\captcha\Captcha;
-use yii\widgets\ActiveForm;
-use yii\widgets\ActiveField;
 ?>
     <main class="page-main">
         <div class="main-container page-container">
             <section class="new-task">
                 <div class="new-task__wrapper">
                     <h1>Новые задания</h1>
-                <?php if(isset($data)):?>
-                    <?php foreach($data as $value): ?>
+                <?php if(isset($tasks)):?>
+                    <?php foreach($tasks as $task): ?>
                     <div class="new-task__card">
                         <div class="new-task__title">
-                            <a href="#" class="link-regular"><h2><?php echo $value['title'] ?></h2></a>
-                            <a  class="new-task__type link-regular" href="#"><p><?php echo $value['category'] ?></p></a>
+                            <a href="#" class="link-regular"><h2><?php echo $task['title'] ?></h2></a>
+                            <a  class="new-task__type link-regular" href="#"><p><?php echo $task['category'] ?></p></a>
                         </div>
-                        <div class="new-task__icon new-task__icon--<?php echo $value['icon']?>"></div>
+                        <div class="new-task__icon new-task__icon--<?php echo $task['icon']?>"></div>
                         <p class="new-task_description">
-                            <?php echo $value['description'] ?>
+                            <?php echo $task['description'] ?>
                         </p>
-                        <b class="new-task__price new-task__price--<?php echo $value['icon']?>"><?php echo $value['budget'] ?><b> ₽</b></b>
-                        <p class="new-task__place"><?php echo $value['address'] ?></p>
-                        <span class="new-task__time"><?php echo $value['date_diff'] ?></span>
+                        <b class="new-task__price new-task__price--<?php echo $task['icon']?>"><?php echo $task['budget'] ?><b> ₽</b></b>
+                        <p class="new-task__place"><?php echo $task['address'] ?></p>
+                        <span class="new-task__time"><?php echo $task['date_diff'] ?></span>
                     </div>
                     <?php endforeach; ?>
                 </div>
