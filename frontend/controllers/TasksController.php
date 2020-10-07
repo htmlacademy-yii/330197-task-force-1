@@ -6,17 +6,14 @@ use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use frontend\models\src\TasksSearch;
 use frontend\models\categories;
+use frontend\models\CategoriesFormNew;
 
 class TasksController extends Controller
 {   
-    public function beforeAction($action)
-    {
-        $this->enableCsrfValidation = true;
-        return true;
-    }
-
     public function actionIndex()
     {
+        $task_form = new CategoriesFormNew();
+       
         $form_data = array();
 
     if (Yii::$app->request->getIsPost()) {
@@ -37,6 +34,7 @@ class TasksController extends Controller
         $parsed_data = $search->parse_data($form_data);
         $rows = $search->search($parsed_data);
         $data['tasks'] = $search->create_array($rows);
+        $data['model'] = $task_form;
 
         return $this->render('/site/tasks', $data);
     }

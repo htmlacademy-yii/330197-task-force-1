@@ -3,6 +3,8 @@
 /* @var $categories \frontend\controllers\TasksController*/
 
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
+use yii\widgets\ActiveField;
 ?>
     <main class="page-main">
         <div class="main-container page-container">
@@ -44,34 +46,41 @@ use yii\helpers\Html;
             </section>
             <section  class="search-task">
                 <div class="search-task__wrapper">
-                    <form class="search-task__form" name="test" method="post">
+                    <?php $form = ActiveForm::begin([
+                            'action' => ['index'],
+                            'method' => "post",
+                            'options' => ['data-pjax' => 1, 'class' => 'search-task__form'],
+                            'enableAjaxValidation' => false, 
+                        ]); ?> 
                         <fieldset class="search-task__categories">
                             <legend>Категории</legend>
-                        <?php foreach($categories as $id => $category):?>
-                            <input class="visually-hidden checkbox__input" id="cat-<?php echo $id?>" type="checkbox" name="categories[]" value="<?php echo $id?>">
-                            <label for="cat-<?php echo $id?>"><?php echo $category ?></label>
-                        <?php endforeach;?>
+                            <?= $form->field($model, 'category',['template' => '{input}'])
+                                ->checkboxList($categories,
+                                    [
+                                        'item' => function ($index, $label, $name, $checked, $value) {
+                                                return Html::checkbox($name, $checked, ['value' => $value,'id' => 'cat-'.$value,'label' => $label]);
+                                        },
+                                    ], false
+                                )
+                                ->label('',['class' => 'visually-hidden checkbox__input'])?> 
                         </fieldset>
                         <fieldset class="search-task__categories">
                             <legend>Дополнительно</legend>
-                        <?php foreach($addition as $key => $value):?>
-                            <input class="visually-hidden checkbox__input" id="<?php echo $key?>" type="checkbox" name="<?php echo $key?>" value="<?php echo $key?>">
-                            <label for="<?php echo $key?>"><?php echo $value?></label>
-                        <?php endforeach;?>
+                            <?= $form->field($model, 'no_executers')->checkbox(['fieldOptions' => ['class' => 'visually-hidden checkbox__input']])?>
+                            <?= $form->field($model, 'no_address')->checkbox(['fieldOptions' => ['class' => 'visually-hidden checkbox__input']])?>
                         </fieldset>
-                        <label class="search-task__name" for="8">Период</label>
-                            <select class="multiple-select input" id="8"size="1" name="period">
-                            <option value="all_time">За всё время</option>
-                        <?php foreach($period as $key => $value):?>
-                            <option value="<?php echo $key?>"><?php echo $value?></option>
-                        <?php endforeach;?>
-                        </select>
-                        <label class="search-task__name" for="9">Поиск по названию</label>
-                            <input class="input-middle input" id="9" type="search" name="find" placeholder="">
-                        <button class="button" type="submit">Искать</button>
-                    </form>
+                        
+                        <?= $form->field($model, 'period')->dropDownList($period, ['class' => 'multiple-select input'])->label('Период',['class' => 'search-task__name'])?>
+
+                        <?= $form->field($model, 'search')->textInput(['class' => "input-middle input"])->label('Поиск по названию',['class' => 'search-task__name'])?>
+
+                        <div class="form-group">
+                        <?= Html::submitButton('Искать', ['class' => "button",'type' => 'submit','name' => 'submit']) ?>
+                        </div>
+                    <?php ActiveForm::end(); ?> 
+
                 </div>
             </section>
         </div>
     </main>
-    
+
