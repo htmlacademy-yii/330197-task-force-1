@@ -20,8 +20,9 @@ use frontend\functions;
 class TasksSearch extends Module {
 
     public function parse_data($form_data){
-        if($form_data['categories']){
-            $form_data['categories'] = implode(",",$form_data['categories']);
+
+        if($form_data['category']){
+            $form_data['category'] = implode(",",$form_data['category']);
         }
         if($form_data['no_executers']){
             $form_data['no_executers'] = true;
@@ -45,17 +46,18 @@ class TasksSearch extends Module {
                     break;
             }
         }
-        if($form_data['find']){
-            $form_data['find'] = $form_data['find'];
+        if($form_data['search']){
+            $form_data['search'] = $form_data['search'];
         }
+
         return $form_data;
     }
 
     public function search($form_data = null){
         $query = Tasks::find()->select(['t.title','t.description','t.budget','t.address','t.dt_add','t.deadline','t.idcategory as id'])->from(['tasks t'])->where("current_status = 'new'");
         //Подключаем переданные фильтры через форму
-        if($form_data['categories']){
-            $query = $query->andWhere("t.idcategory in (".$form_data['categories'].")");
+        if($form_data['category']){
+            $query = $query->andWhere("t.idcategory in (".$form_data['category'].")");
         }
         if($form_data['no_executers']){
             $query = $query->andWhere("t.id not in (select distinct idtask from responds)");
@@ -66,8 +68,8 @@ class TasksSearch extends Module {
         if($form_data['period']){
             $query = $query->andWhere("date(dt_add) >= date('".$form_data['period']."')");
         }
-        if($form_data['find']){
-            $query = $query->andWhere("MATCH(title) AGAINST('*".$form_data['find']."*' in boolean mode)");
+        if($form_data['search']){
+            $query = $query->andWhere("MATCH(title) AGAINST('*".$form_data['search']."*' in boolean mode)");
         }
 
         $query = $query->orderBy(['t.dt_add' => SORT_DESC])->limit(5);
@@ -75,26 +77,4 @@ class TasksSearch extends Module {
         return $rows;
     }
 
-    public function create_array($rows){
-        foreach($rows as $row){
-            $i= $row['id'];
-            $catgory[$i] = Categories::find()->select(['c.category','c.icon'])->from('categories c')->where("c.id = $i")->groupBy('c.category')->one();
-        }
-
-        $fun = new Functions();
-        foreach($rows as $row){
-            $data[] = array('category' => $catgory[$row['id']]['category'],
-                            'icon' => $catgory[$row['id']]['icon'],
-                            'title' => $row['title'],
-                            'description' => $row['description'],
-                            'budget' => $row['budget'],
-                            'address' => $row['address'],
-                            'date_diff' => $fun->diff_result($row['dt_add']),
-                            'deadline' => $row['deadline']
-                            );
-        }
-        
-        return $data;
-    }
-    
 }

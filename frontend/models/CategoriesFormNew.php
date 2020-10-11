@@ -35,7 +35,8 @@ class CategoriesFormNew extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['category', 'icon', 'no_executers', 'no_address', 'period', 'search'], 'string', 'max' => 255],
+            [['category'],'safe'],
+            [['icon', 'no_executers', 'no_address', 'period', 'search'], 'string', 'max' => 255],
         ];
     }
 

@@ -5,26 +5,28 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\ActiveField;
+use frontend\functions;
+$fun = new Functions();
 ?>
     <main class="page-main">
         <div class="main-container page-container">
             <section class="new-task">
                 <div class="new-task__wrapper">
                     <h1>Новые задания</h1>
-                <?php if(isset($tasks)):?>
+                <?php if(isset($tasks) and !empty($tasks)): ?>
                     <?php foreach($tasks as $task): ?>
                     <div class="new-task__card">
                         <div class="new-task__title">
-                            <a href="#" class="link-regular"><h2><?php echo $task['title'] ?></h2></a>
-                            <a  class="new-task__type link-regular" href="#"><p><?php echo $task['category'] ?></p></a>
+                            <a href="#" class="link-regular"><h2><?php echo $task->title ?></h2></a>
+                            <a  class="new-task__type link-regular" href="#"><p><?php echo implode(array_keys($categoryTask[$task->id])) ?></p></a>
                         </div>
-                        <div class="new-task__icon new-task__icon--<?php echo $task['icon']?>"></div>
+                        <div class="new-task__icon new-task__icon--<?php echo $categoryTask[$task->id][implode(array_keys($categoryTask[$task->id]))] ?>"></div>
                         <p class="new-task_description">
-                            <?php echo $task['description'] ?>
+                            <?php echo $task->description ?>
                         </p>
-                        <b class="new-task__price new-task__price--<?php echo $task['icon']?>"><?php echo $task['budget'] ?><b> ₽</b></b>
-                        <p class="new-task__place"><?php echo $task['address'] ?></p>
-                        <span class="new-task__time"><?php echo $task['date_diff'] ?></span>
+                        <b class="new-task__price new-task__price--<?php echo $categoryTask[$task->id][implode(array_keys($categoryTask[$task->id]))] ?>"><?php echo $task->budget ?><b> ₽</b></b>
+                        <p class="new-task__place"><?php echo $task->address ?></p>
+                        <span class="new-task__time"><?php echo $fun->diff_result($task->dt_add) ?></span>
                     </div>
                     <?php endforeach; ?>
                 </div>
@@ -47,14 +49,12 @@ use yii\widgets\ActiveField;
             <section  class="search-task">
                 <div class="search-task__wrapper">
                     <?php $form = ActiveForm::begin([
-                            'action' => ['index'],
                             'method' => "post",
                             'options' => ['data-pjax' => 1, 'class' => 'search-task__form'],
-                            'enableAjaxValidation' => false, 
                         ]); ?> 
                         <fieldset class="search-task__categories">
                             <legend>Категории</legend>
-                            <?= $form->field($model, 'category',['template' => '{input}'])
+                            <?= $form->field($model, 'category')
                                 ->checkboxList($categories,
                                     [
                                         'item' => function ($index, $label, $name, $checked, $value) {
@@ -62,12 +62,12 @@ use yii\widgets\ActiveField;
                                         },
                                     ], false
                                 )
-                                ->label('',['class' => 'visually-hidden checkbox__input'])?> 
+                                ->label('',['class' => 'visually-hidden checkbox__input'])?>
                         </fieldset>
                         <fieldset class="search-task__categories">
                             <legend>Дополнительно</legend>
-                            <?= $form->field($model, 'no_executers')->checkbox(['fieldOptions' => ['class' => 'visually-hidden checkbox__input']])?>
-                            <?= $form->field($model, 'no_address')->checkbox(['fieldOptions' => ['class' => 'visually-hidden checkbox__input']])?>
+                            <?= $form->field($model, 'no_executers')->checkbox(['label' => 'Без откликов'])->label('Без откликов',['class' => 'visually-hidden checkbox__input'])?>
+                            <?= $form->field($model, 'no_address')->checkbox(['label' => 'Удаленная работа'])?>
                         </fieldset>
                         
                         <?= $form->field($model, 'period')->dropDownList($period, ['class' => 'multiple-select input'])->label('Период',['class' => 'search-task__name'])?>
