@@ -7,11 +7,15 @@ use Yii;
 /**
  * This is the model class for table "feadback".
  *
- * @property int|null $idtask
+ * @property int $idtask
+ * @property int|null $idexecuter
+ * @property int|null $idcustomer
  * @property int|null $rate
  * @property string|null $dt_add
  * @property string|null $description
  *
+ * @property Users $idcustomer0
+ * @property Users $idexecuter0
  * @property Tasks $idtask0
  */
 class Feadback extends \yii\db\ActiveRecord
@@ -30,10 +34,13 @@ class Feadback extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['idtask', 'rate'], 'integer'],
+            [['idtask'], 'required'],
+            [['idtask', 'idexecuter', 'idcustomer', 'rate'], 'integer'],
             [['dt_add'], 'safe'],
             [['description'], 'string'],
             [['idtask'], 'exist', 'skipOnError' => true, 'targetClass' => Tasks::className(), 'targetAttribute' => ['idtask' => 'id']],
+            [['idexecuter'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['idexecuter' => 'id']],
+            [['idcustomer'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['idcustomer' => 'id']],
         ];
     }
 
@@ -44,10 +51,32 @@ class Feadback extends \yii\db\ActiveRecord
     {
         return [
             'idtask' => 'Idtask',
+            'idexecuter' => 'Idexecuter',
+            'idcustomer' => 'Idcustomer',
             'rate' => 'Rate',
             'dt_add' => 'Dt Add',
             'description' => 'Description',
         ];
+    }
+
+    /**
+     * Gets query for [[Idcustomer0]].
+     *
+     * @return \yii\db\ActiveQuery|ExecutersCategoryQuery
+     */
+    public function getIdcustomer0()
+    {
+        return $this->hasOne(Users::className(), ['id' => 'idcustomer']);
+    }
+
+    /**
+     * Gets query for [[Idexecuter0]].
+     *
+     * @return \yii\db\ActiveQuery|ExecutersCategoryQuery
+     */
+    public function getIdexecuter0()
+    {
+        return $this->hasOne(Users::className(), ['id' => 'idexecuter']);
     }
 
     /**
@@ -62,10 +91,10 @@ class Feadback extends \yii\db\ActiveRecord
 
     /**
      * {@inheritdoc}
-     * @return ExecutersCategoryQuery the active query used by this AR class.
+     * @return FeadbackQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new ExecutersCategoryQuery(get_called_class());
+        return new FeadbackQuery(get_called_class());
     }
 }

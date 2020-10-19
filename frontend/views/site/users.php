@@ -4,58 +4,60 @@
 /* @var $addition \frontend\controllers\UsersController*/
 
 use yii\helpers\Html;
-
+use yii\widgets\ActiveForm;
+use yii\widgets\ActiveField;
+use frontend\functions;
+$fun = new Functions();
 $this->title = 'Исполнители';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
     <main class="page-main">
         <div class="main-container page-container">
             <section class="user__search">
+                <?php if(isset($users) and !empty($users[0]['id'])): ?>
                 <div class="user__search-link">
                     <p>Сортировать по:</p>
                     <ul class="user__search-list">
-                        <li class="user__search-item user__search-item--current">
-                            <a href="#" class="link-regular">Рейтингу</a>
+                        <li class="user__search-item <?php if(!isset($sort) or $sort === 'rate') {echo 'user__search-item--current';} ?>">
+                            <a href="/index.php?r=users&s=rate" class="link-regular">Рейтингу</a>
                         </li>
-                        <li class="user__search-item">
-                            <a href="#" class="link-regular">Числу заказов</a>
+                        <li class="user__search-item <?php if(isset($sort) and $sort === 'orders') {echo 'user__search-item--current';} ?>">
+                            <a href="/index.php?r=users&s=orders" class="link-regular">Числу заказов</a>
                         </li>
-                        <li class="user__search-item">
-                            <a href="#" class="link-regular">Популярности</a>
+                        <li class="user__search-item <?php if(isset($sort) and $sort === 'favor') {echo 'user__search-item--current';} ?>">
+                            <a href="/index.php?r=users&s=favor" class="link-regular">Популярности</a>
                         </li>
                     </ul>
                 </div>
-            <?php if(isset($executers)):?>
-                <?php foreach($executers as $executer): ?>
+                <?php foreach($users as $user): ?>
                 <div class="content-view__feedback-card user__search-wrapper">
                     <div class="feedback-card__top">
                         <div class="user__search-icon">
-                            <a href="#"><img src="./img/<?php if(isset($executer['avatar'])) { echo $executer['avatar'];} else { echo 'upload.png';}  ?>" width="65" height="65"></a>
-                            <span><?php echo $executer['qtask']?> заданий</span>
-                            <span><?php echo $executer['qrate']?> отзывов</span>
+                            <a href="#"><img src="./img/<?php if(isset($user['avatar'])) { echo $user['avatar'];} else { echo 'upload.png';}?>" width="65" height="65"></a>
+                            <span><?php echo $user['qtask']?> заданий</span>
+                            <span><?php echo $user['qrate']?> отзывов</span>
                         </div>
                         <div class="feedback-card__top--name user__search-card">
-                            <p class="link-name"><a href="#" class="link-regular"><?php echo $executer['fio']?></a></p>
-                            <?php for($i=0; $i<round($executer['rate']); $i++): ?>
+                            <p class="link-name"><a href="#" class="link-regular"><?php echo $user['fio']?></a></p>
+                            <?php for($i=0; $i<round($user['rate']); $i++): ?>
                                 <span></span>
                             <?php endfor;?>
-                            <?php for($i=0; $i<(5-round($executer['rate'])); $i++): ?>
+                            <?php for($i=0; $i<(5-round($user['rate'])); $i++): ?>
                                 <span class="star-disabled"></span>
                             <?php endfor;?>
-                            <b><?php echo $executer['rate']?></b>
+                            <b><?php echo round($user['rate'],2)?></b>
                             <p class="user__search-content">
-                                <?php echo $executer['about']?>
+                                <?php echo $user['about']; ?>
                             </p>
                         </div>
-                        <span class="new-task__time">Был на сайте <?php echo $executer['last_update']?></span>
+                        <span class="new-task__time">Был на сайте <?php echo $fun->diff_result($user['last_update']) ?></span>
                     </div>
                     <div class="link-specialization user__search-link--bottom">
-                        <?php foreach($executer['categories'] as $category): ?>
-                            <a href="#" class="link-regular"><?php echo $category ?></a>
+                        <?php foreach($users_addition[$user['id']]['idcategories'] as $idcategory): ?>
+                        <a href="#" class="link-regular"><?php echo $categories[$idcategory] ?></a>
                         <?php endforeach;?>
                     </div>
                 </div>
-                <?php endforeach;?>
+            <?php endforeach;?>
             <?php else:?>
                 <p></p>
                 <p class="new-task_description">По вашему запросу ничего не найдено.</p>
@@ -63,25 +65,31 @@ $this->params['breadcrumbs'][] = $this->title;
             </section>
             <section  class="search-task">
                 <div class="search-task__wrapper">
-                    <form class="search-task__form" name="users" method="post">
+                    <?php $form = ActiveForm::begin([
+                            'method' => "post",
+                            'options' => ['data-pjax' => 1, 'class' => 'search-task__form'],
+                        ]); ?>
                         <fieldset class="search-task__categories">
                             <legend>Категории</legend>
-                        <?php foreach($categories as $id => $category):?>
-                            <input class="visually-hidden checkbox__input" id="cat-<?php echo $id?>" type="checkbox" name="categories[]" value="<?php echo $id?>">
-                            <label for="cat-<?php echo $id?>"><?php echo $category ?></label>
-                        <?php endforeach;?>
+                            <?= $form->field($model, 'category')->checkboxList($categories,
+                                ['item' => function ($index, $label, $name, $checked, $value) {
+                                    return Html::checkbox($name, $checked, ['value' => $value,'id' => 'category-'.$value,'label' => $label]); 
+                                    },
+                                ], false)->label('',['class' => 'visually-hidden checkbox__input'])?>
                         </fieldset>
                         <fieldset class="search-task__categories">
                             <legend>Дополнительно</legend>
-                        <?php foreach($addition as $key => $value):?>
-                            <input class="visually-hidden checkbox__input" id="<?php echo $key?>" type="checkbox" name="<?php echo $key?>" value="<?php echo $key?>">
-                            <label for="<?php echo $key?>"><?php echo $value?></label>
-                        <?php endforeach;?>
+                            <?= $form->field($model, 'free')->checkbox(['label' => 'Сейчас свободен'])->label('Без откликов',['class' => 'visually-hidden checkbox__input'])?>
+                            <?= $form->field($model, 'online')->checkbox(['label' => 'Сейчас онлайн'])?>
+                            <?= $form->field($model, 'feedback')->checkbox(['label' => 'Есть отзывы'])?>
+                            <?= $form->field($model, 'favorite')->checkbox(['label' => 'В избранном'])?>
                         </fieldset>
-                        <label class="search-task__name" for="110">Поиск по имени</label>
-                        <input class="input-middle input" id="110" type="search" name="find" placeholder="">
-                        <button class="button" type="submit">Искать</button>
-                    </form>
+                        <?= $form->field($model, 'search')->textInput(['class' => "input-middle input"])->label('Поиск по имени',['class' => 'search-task__name'])?>
+
+                        <div class="form-group">
+                        <?= Html::submitButton('Искать', ['class' => "button",'type' => 'submit','name' => 'submit']) ?>
+                        </div>
+                    <?php ActiveForm::end(); ?>
                 </div>
             </section>
         </div>

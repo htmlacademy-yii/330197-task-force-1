@@ -8,18 +8,30 @@ use Yii;
  * This is the model class for table "users".
  *
  * @property int $id
- * @property string|null $fio
- * @property string|null $email
- * @property string|null $pass
+ * @property string $fio
+ * @property string $email
+ * @property string $pass
  * @property string|null $dt_add
+ * @property int $role
+ * @property string|null $address
+ * @property string|null $birthday
+ * @property string|null $about
+ * @property string|null $avatar
+ * @property string|null $phone
+ * @property string|null $skype
+ * @property string|null $telegram
+ * @property string|null $last_update
  *
  * @property ExecutersCategory[] $executersCategories
+ * @property Favorite[] $favorites
+ * @property Favorite[] $favorites0
+ * @property Feadback[] $feadbacks
+ * @property Feadback[] $feadbacks0
  * @property Portfolio[] $portfolios
  * @property Responds[] $responds
  * @property Tasks[] $tasks
  * @property Tasks[] $tasks0
  * @property UserPersonality[] $userPersonalities
- * @property UserProfile[] $userProfiles
  */
 class Users extends \yii\db\ActiveRecord
 {
@@ -37,8 +49,12 @@ class Users extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['dt_add'], 'safe'],
-            [['fio', 'email', 'pass'], 'string', 'max' => 255],
+            [['fio', 'email', 'pass', 'role'], 'required'],
+            [['dt_add', 'birthday', 'last_update'], 'safe'],
+            [['role'], 'integer'],
+            [['about'], 'string'],
+            [['fio', 'email', 'pass', 'address', 'avatar', 'phone', 'skype', 'telegram'], 'string', 'max' => 255],
+            [['email'], 'unique'],
         ];
     }
 
@@ -53,6 +69,15 @@ class Users extends \yii\db\ActiveRecord
             'email' => 'Email',
             'pass' => 'Pass',
             'dt_add' => 'Dt Add',
+            'role' => 'Role',
+            'address' => 'Address',
+            'birthday' => 'Birthday',
+            'about' => 'About',
+            'avatar' => 'Avatar',
+            'phone' => 'Phone',
+            'skype' => 'Skype',
+            'telegram' => 'Telegram',
+            'last_update' => 'Last Update',
         ];
     }
 
@@ -67,9 +92,49 @@ class Users extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Favorites]].
+     *
+     * @return \yii\db\ActiveQuery|FavoriteQuery
+     */
+    public function getFavorites()
+    {
+        return $this->hasMany(Favorite::className(), ['iduser' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Favorites0]].
+     *
+     * @return \yii\db\ActiveQuery|FavoriteQuery
+     */
+    public function getFavorites0()
+    {
+        return $this->hasMany(Favorite::className(), ['idexecuter' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Feadbacks]].
+     *
+     * @return \yii\db\ActiveQuery|FeadbackQuery
+     */
+    public function getFeadbacks()
+    {
+        return $this->hasMany(Feadback::className(), ['idexecuter' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Feadbacks0]].
+     *
+     * @return \yii\db\ActiveQuery|FeadbackQuery
+     */
+    public function getFeadbacks0()
+    {
+        return $this->hasMany(Feadback::className(), ['idcustomer' => 'id']);
+    }
+
+    /**
      * Gets query for [[Portfolios]].
      *
-     * @return \yii\db\ActiveQuery|PortfolioQuery
+     * @return \yii\db\ActiveQuery|ExecutersCategoryQuery
      */
     public function getPortfolios()
     {
@@ -79,7 +144,7 @@ class Users extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Responds]].
      *
-     * @return \yii\db\ActiveQuery|RespondsQuery
+     * @return \yii\db\ActiveQuery|ExecutersCategoryQuery
      */
     public function getResponds()
     {
@@ -109,7 +174,7 @@ class Users extends \yii\db\ActiveRecord
     /**
      * Gets query for [[UserPersonalities]].
      *
-     * @return \yii\db\ActiveQuery|UserPersonalityQuery
+     * @return \yii\db\ActiveQuery|ExecutersCategoryQuery
      */
     public function getUserPersonalities()
     {
@@ -117,21 +182,11 @@ class Users extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[UserProfiles]].
-     *
-     * @return \yii\db\ActiveQuery|ExecutersCategoryQuery
-     */
-    public function getUserProfiles()
-    {
-        return $this->hasMany(UserProfile::className(), ['iduser' => 'id']);
-    }
-
-    /**
      * {@inheritdoc}
-     * @return ExecutersCategoryQuery the active query used by this AR class.
+     * @return UsersQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new ExecutersCategoryQuery(get_called_class());
+        return new UsersQuery(get_called_class());
     }
 }
