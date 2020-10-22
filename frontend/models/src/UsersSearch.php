@@ -41,7 +41,7 @@ class UsersSearch extends Module {
     public function search($form_data = null){
         $idexecuters = $this->getExequtersCategory($form_data['category']);
         $users = (new Query())
-                    ->select(['u.id', 'u.fio', 'u.dt_add', 'u.last_update', 'u.avatar', 'u.about', 'avg(ifnull(f.rate,0)) as rate' , 'COUNT(t.id) as qtask' , 'COUNT(distinct f.rate) as qrate'])
+                    ->select(['u.id', 'u.fio', 'u.dt_add', 'u.last_update', 'u.avatar', 'u.about', 'avg(ifnull(f.rate,0)) as rate' , 'COUNT(t.id) as qtask' , 'u.views'])
                     ->from('users u')
                     ->leftJoin('feadback f','f.idexecuter = u.id')
                     ->leftJoin('tasks t','t.idexecuter = u.id')
@@ -63,7 +63,7 @@ class UsersSearch extends Module {
                 $users = $users->andWhere("u.id in (select distinct idexecuter from favorite)");
             }
         }
-        $users = $users->groupBy(['u.fio', 'u.dt_add', 'u.last_update', 'u.avatar', 'u.about']);
+        $users = $users->groupBy(['u.fio', 'u.dt_add', 'u.last_update', 'u.avatar', 'u.about', 'u.views']);
         if($form_data['s'] === 'date'){
             $users = $users->orderBy(['u.dt_add'=> SORT_DESC]);
         }
@@ -74,7 +74,7 @@ class UsersSearch extends Module {
             $users = $users->orderBy(['qtask'=> SORT_DESC]);
         }
         if($form_data['s'] === 'favor'){
-            $users = $users->orderBy(['qrate'=> SORT_DESC]);
+            $users = $users->orderBy(['views'=> SORT_DESC]);
         }           
         $users = $users->limit(5)->all();
 
