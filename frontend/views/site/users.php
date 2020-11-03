@@ -17,13 +17,13 @@ $this->title = 'Исполнители';
                 <div class="user__search-link">
                     <p>Сортировать по:</p>
                     <ul class="user__search-list">
-                        <li class="user__search-item <?php if(!isset($sort) or $sort === 'rate') {echo 'user__search-item--current';} ?>">
+                        <li class="user__search-item <?php if(!isset($sortField) or $sortField === 'rate') {echo 'user__search-item--current';} ?>">
                             <a href="/index.php?r=users&s=rate" class="link-regular">Рейтингу</a>
                         </li>
-                        <li class="user__search-item <?php if(isset($sort) and $sort === 'orders') {echo 'user__search-item--current';} ?>">
+                        <li class="user__search-item <?php if(isset($sortField) and $sortField === 'orders') {echo 'user__search-item--current';} ?>">
                             <a href="/index.php?r=users&s=orders" class="link-regular">Числу заказов</a>
                         </li>
-                        <li class="user__search-item <?php if(isset($sort) and $sort === 'favor') {echo 'user__search-item--current';} ?>">
+                        <li class="user__search-item <?php if(isset($sortField) and $sortField === 'favor') {echo 'user__search-item--current';} ?>">
                             <a href="/index.php?r=users&s=favor" class="link-regular">Популярности</a>
                         </li>
                     </ul>
@@ -71,20 +71,20 @@ $this->title = 'Исполнители';
                         ]); ?>
                         <fieldset class="search-task__categories">
                             <legend>Категории</legend>
-                            <?= $form->field($model, 'category')->checkboxList($categories,
+                            <?= $form->field($user_form, 'category')->checkboxList($categories,
                                 ['item' => function ($index, $label, $name, $checked, $value) {
                                     return Html::checkbox($name, $checked, ['value' => $value,'id' => 'category-'.$value,'label' => $label]); 
                                     },
-                                ], false)->label('',['class' => 'visually-hidden checkbox__input'])?>
+                                ])->label('',['class' => 'visually-hidden checkbox__input'])?>
                         </fieldset>
                         <fieldset class="search-task__categories">
                             <legend>Дополнительно</legend>
-                            <?= $form->field($model, 'free')->checkbox(['label' => 'Сейчас свободен'])->label('Без откликов',['class' => 'visually-hidden checkbox__input'])?>
-                            <?= $form->field($model, 'online')->checkbox(['label' => 'Сейчас онлайн'])?>
-                            <?= $form->field($model, 'feedback')->checkbox(['label' => 'Есть отзывы'])?>
-                            <?= $form->field($model, 'favorite')->checkbox(['label' => 'В избранном'])?>
+                            <?= $form->field($user_form, 'free')->checkbox(['label' => 'Сейчас свободен'])->label('Без откликов',['class' => 'visually-hidden checkbox__input'])?>
+                            <?= $form->field($user_form, 'online')->checkbox(['label' => 'Сейчас онлайн'])?>
+                            <?= $form->field($user_form, 'feedback')->checkbox(['label' => 'Есть отзывы'])?>
+                            <?= $form->field($user_form, 'favorite')->checkbox(['label' => 'В избранном'])?>
                         </fieldset>
-                        <?= $form->field($model, 'search')->textInput(['class' => "input-middle input"])->label('Поиск по имени',['class' => 'search-task__name'])?>
+                        <?= $form->field($user_form, 'search')->textInput(['class' => "input-middle input"])->label('Поиск по имени',['class' => 'search-task__name'])?>
 
                         <div class="form-group">
                         <?= Html::submitButton('Искать', ['class' => "button",'type' => 'submit','name' => 'submit']) ?>

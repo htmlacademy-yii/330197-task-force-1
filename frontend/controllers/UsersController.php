@@ -20,8 +20,8 @@ class UsersController extends Controller
     {   
         $user_form = new UsersForm();
         $form_data = array();
-        $data['sort'] = (isset($_GET['s'])) ? $_GET['s'] : 'date';
-        $form_data['UsersForm']['s'] = $data['sort'];
+        $sortField = (isset($_GET['s'])) ? $_GET['s'] : 'date';
+        $form_data['UsersForm']['s'] = $sortField;
 
         if (Yii::$app->request->getIsPost()) {
             $form_data = Yii::$app->request->post();
@@ -29,20 +29,18 @@ class UsersController extends Controller
         }
 
         $category = Categories::find()->select(['category', 'id'])->from('categories')->all();
-        $data['categories'] = (ArrayHelper::map($category, 'id', 'category'));
-
-        $data['free'] = ['free' => 'Сейчас свободен'];
-        $data['online'] = ['online' => 'Сейчас онлайн'];
-        $data['feedback'] = ['feedback' => 'Есть отзывы'];
-        $data['favorite'] = ['favorite' => 'В избранном'];
+        $categories = (ArrayHelper::map($category, 'id', 'category'));
 
         $search = new UsersSearch('users');
         $parsed_data = $search->parse_data($form_data['UsersForm']);
-        $data['users'] = $search->search($parsed_data);
-        $data['users_addition'] = $search->getAddition($data['users']);
+        $users = $search->search($parsed_data);
+        $users_addition = $search->getAddition($users);
 
-        $data['model'] = $user_form;
-        return $this->render('/site/users',$data);
+        return $this->render('/site/users',['sortField' => $sortField,
+                                            'categories' => $categories,
+                                            'users' => $users,
+                                            'users_addition' => $users_addition,
+                                            'user_form' => $user_form]);
     }
 
 }

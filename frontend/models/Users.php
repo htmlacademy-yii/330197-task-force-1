@@ -51,7 +51,7 @@ class Users extends \yii\db\ActiveRecord
         return [
             [['fio', 'email', 'pass', 'role'], 'required'],
             [['dt_add', 'birthday', 'last_update'], 'safe'],
-            [['role'], 'integer'],
+            [['role','views'], 'integer'],
             [['about'], 'string'],
             [['fio', 'email', 'pass', 'address', 'avatar', 'phone', 'skype', 'telegram'], 'string', 'max' => 255],
             [['email'], 'unique'],
@@ -78,6 +78,7 @@ class Users extends \yii\db\ActiveRecord
             'skype' => 'Skype',
             'telegram' => 'Telegram',
             'last_update' => 'Last Update',
+            'views' => 'Views',
         ];
     }
 

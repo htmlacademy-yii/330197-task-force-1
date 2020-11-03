@@ -18,13 +18,13 @@ $fun = new Functions();
                     <div class="new-task__card">
                         <div class="new-task__title">
                             <a href="#" class="link-regular"><h2><?php echo $task->title ?></h2></a>
-                            <a  class="new-task__type link-regular" href="#"><p><?php echo implode(array_keys($categoryTask[$task->id])) ?></p></a>
+                            <a  class="new-task__type link-regular" href="#"><p><?php echo implode(array_keys($categoryTasks[$task->id])) ?></p></a>
                         </div>
-                        <div class="new-task__icon new-task__icon--<?php echo $categoryTask[$task->id][implode(array_keys($categoryTask[$task->id]))] ?>"></div>
+                        <div class="new-task__icon new-task__icon--<?php echo $categoryTasks[$task->id][implode(array_keys($categoryTasks[$task->id]))] ?>"></div>
                         <p class="new-task_description">
                             <?php echo $task->description ?>
                         </p>
-                        <b class="new-task__price new-task__price--<?php echo $categoryTask[$task->id][implode(array_keys($categoryTask[$task->id]))] ?>"><?php echo $task->budget ?><b> ₽</b></b>
+                        <b class="new-task__price new-task__price--<?php echo $categoryTasks[$task->id][implode(array_keys($categoryTasks[$task->id]))] ?>"><?php echo $task->budget ?><b> ₽</b></b>
                         <p class="new-task__place"><?php echo $task->address ?></p>
                         <span class="new-task__time"><?php echo $fun->diff_result($task->dt_add) ?></span>
                     </div>
@@ -54,7 +54,7 @@ $fun = new Functions();
                         ]); ?> 
                         <fieldset class="search-task__categories">
                             <legend>Категории</legend>
-                            <?= $form->field($model, 'category')
+                            <?= $form->field($task_form, 'category')
                                 ->checkboxList($categories,
                                     [
                                         'item' => function ($index, $label, $name, $checked, $value) {
@@ -66,13 +66,13 @@ $fun = new Functions();
                         </fieldset>
                         <fieldset class="search-task__categories">
                             <legend>Дополнительно</legend>
-                            <?= $form->field($model, 'no_executers')->checkbox(['label' => 'Без откликов'])->label('Без откликов',['class' => 'visually-hidden checkbox__input'])?>
-                            <?= $form->field($model, 'no_address')->checkbox(['label' => 'Удаленная работа'])?>
+                            <?= $form->field($task_form, 'no_executers')->checkbox(['label' => 'Без откликов'])->label('Без откликов',['class' => 'visually-hidden checkbox__input'])?>
+                            <?= $form->field($task_form, 'no_address')->checkbox(['label' => 'Удаленная работа'])?>
                         </fieldset>
                         
-                        <?= $form->field($model, 'period')->dropDownList($period, ['class' => 'multiple-select input'])->label('Период',['class' => 'search-task__name'])?>
+                        <?= $form->field($task_form, 'period')->dropDownList($period, ['class' => 'multiple-select input'])->label('Период',['class' => 'search-task__name'])?>
 
-                        <?= $form->field($model, 'search')->textInput(['class' => "input-middle input"])->label('Поиск по названию',['class' => 'search-task__name'])?>
+                        <?= $form->field($task_form, 'search')->textInput(['class' => "input-middle input"])->label('Поиск по названию',['class' => 'search-task__name'])?>
 
                         <div class="form-group">
                         <?= Html::submitButton('Искать', ['class' => "button",'type' => 'submit','name' => 'submit']) ?>
