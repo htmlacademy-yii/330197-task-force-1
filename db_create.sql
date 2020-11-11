@@ -27,7 +27,7 @@ CREATE TABLE users (
   fio varchar(255) NOT NULL,
   email varchar(255) NOT NULL UNIQUE,
   pass varchar(255) NOT NULL,
-  dt_add datetime DEFAULT SYSDATE(),
+  dt_add datetime DEFAULT NOW(),
   role smallint(6) NOT NULL,
   address varchar(255) DEFAULT NULL,
   birthday date DEFAULT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE users (
   phone varchar(255) DEFAULT NULL,
   skype varchar(255) DEFAULT NULL,
   telegram varchar(255) DEFAULT NULL,
-  last_update datetime DEFAULT SYSDATE(),
+  last_update datetime DEFAULT NOW(),
   PRIMARY KEY (id),
   FULLTEXT(fio)
 ) AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
@@ -49,8 +49,8 @@ CREATE TABLE tasks (
   description text DEFAULT NULL,
   idcategory mediumint(9) NOT NULL,
   budget mediumint(9) DEFAULT NULL,
-  dt_add datetime DEFAULT SYSDATE(),
-  deadline datetime DEFAULT date_add(SYSDATE(), INTERVAL 30 DAY),
+  dt_add datetime DEFAULT NOW(),
+  deadline datetime DEFAULT null,
   current_status varchar(100) DEFAULT 'new',
   idcity mediumint(9) DEFAULT NULL,
   address varchar(255) DEFAULT NULL,
@@ -66,7 +66,7 @@ CREATE TABLE tasks (
 
 CREATE TABLE comments (
   idtask mediumint(9) NOT NULL,
-  dt_add datetime DEFAULT SYSDATE(),
+  dt_add datetime DEFAULT NOW(),
   rate smallint(2) DEFAULT NULL,
   notetext text DEFAULT NULL,
   CONSTRAINT comments_ibfk_1 FOREIGN KEY (idtask) REFERENCES tasks (id)
@@ -84,7 +84,7 @@ CREATE TABLE feadback (
   idexecuter mediumint(9) DEFAULT NULL,
   idcustomer mediumint(9) DEFAULT NULL,
   rate smallint(2) DEFAULT NULL,
-  dt_add datetime DEFAULT SYSDATE(),
+  dt_add datetime DEFAULT NOW(),
   description text DEFAULT NULL,
   CONSTRAINT feadback_ibfk_1 FOREIGN KEY (idtask) REFERENCES tasks (id),
   CONSTRAINT feadback_ibfk_2 FOREIGN KEY (idexecuter) REFERENCES users (id),
@@ -107,7 +107,7 @@ CREATE TABLE portfolio (
 CREATE TABLE responds (
   idtask mediumint(9) NOT NULL,
   idexecuter mediumint(9) DEFAULT NULL,
-  dt_add datetime DEFAULT SYSDATE(),
+  dt_add datetime DEFAULT NOW(),
   notetext text DEFAULT NULL,
   CONSTRAINT responds_ibfk_1 FOREIGN KEY (idtask) REFERENCES tasks (id),
   CONSTRAINT responds_ibfk_2 FOREIGN KEY (idexecuter) REFERENCES users (id)

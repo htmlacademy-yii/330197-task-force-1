@@ -63,7 +63,7 @@ class UsersSearch extends Module {
                 $users = $users->andWhere("u.id in (select distinct idexecuter from favorite)");
             }
         }
-        $users = $users->groupBy(['u.fio', 'u.dt_add', 'u.last_update', 'u.avatar', 'u.about', 'u.views']);
+        $users = $users->groupBy(['u.id','u.fio', 'u.dt_add', 'u.last_update', 'u.avatar', 'u.about', 'u.views']);
         if($form_data['s'] === 'date'){
             $users = $users->orderBy(['u.dt_add'=> SORT_DESC]);
         }
