@@ -68,6 +68,7 @@ $this->title = 'Исполнители';
                     <?php $form = ActiveForm::begin([
                             'method' => "post",
                             'options' => ['data-pjax' => 1, 'class' => 'search-task__form'],
+                            'validateOnSubmit' => false,
                         ]); ?>
                         <fieldset class="search-task__categories">
                             <legend>Категории</legend>
