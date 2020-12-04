@@ -3,11 +3,11 @@
 namespace frontend\models;
 
 /**
- * This is the ActiveQuery class for [[Feadback]].
+ * This is the ActiveQuery class for [[Favorite]].
  *
- * @see Feadback
+ * @see Favorite
  */
-class FeadbackQuery extends \yii\db\ActiveQuery
+class FavoriteQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +16,7 @@ class FeadbackQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return Feadback[]|array
+     * @return Favorite[]|array
      */
     public function all($db = null)
     {
@@ -25,7 +25,7 @@ class FeadbackQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return Feadback|array|null
+     * @return Favorite|array|null
      */
     public function one($db = null)
     {

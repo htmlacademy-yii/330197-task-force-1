@@ -33,7 +33,8 @@ class TasksController extends Controller
                     'month' => 'За месяц'];
 
         $task = new Tasks();
-        $tasks = $task->filter($form_data['CategoriesFormNew']);
+        $parsed_data = $task->parse_data($form_data['CategoriesFormNew']);
+        $tasks = $task->filter($parsed_data);
 
         return $this->render('/site/tasks', ['categories' => $categories,
                                              'categoryTasks' => $categoryTasks,

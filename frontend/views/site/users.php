@@ -32,27 +32,27 @@ $this->title = 'Исполнители';
                 <div class="content-view__feedback-card user__search-wrapper">
                     <div class="feedback-card__top">
                         <div class="user__search-icon">
-                            <a href="#"><img src="./img/<?php if(isset($user['avatar'])) { echo $user['avatar'];} else { echo 'upload.png';}?>" width="65" height="65"></a>
-                            <span><?php echo $user['qtask']?> заданий</span>
-                            <span><?php echo $user['qrate']?> отзывов</span>
+                            <a href="#"><img src="./img/<?php if(isset($user->avatar)) { echo $user->avatar;} else { echo 'upload.png';}?>" width="65" height="65"></a>
+                            <span><?php echo $users_tasks[$user->id]?> заданий</span>
+                            <span><?php echo $users_rate['feedbacks'][$user->id]?> отзывов</span>
                         </div>
                         <div class="feedback-card__top--name user__search-card">
-                            <p class="link-name"><a href="#" class="link-regular"><?php echo $user['fio']?></a></p>
-                            <?php for($i=0; $i<round($user['rate']); $i++): ?>
+                            <p class="link-name"><a href="#" class="link-regular"><?php echo $user->fio?></a></p>
+                            <?php for($i=0; $i<$users_rate['rate'][$user->id]; $i++): ?>
                                 <span></span>
                             <?php endfor;?>
-                            <?php for($i=0; $i<(5-round($user['rate'])); $i++): ?>
+                            <?php for($i=0; $i<(5-$users_rate['rate'][$user->id]); $i++): ?>
                                 <span class="star-disabled"></span>
                             <?php endfor;?>
-                            <b><?php echo round($user['rate'],2)?></b>
+                            <b><?php echo $users_rate['rate'][$user->id]?></b>
                             <p class="user__search-content">
-                                <?php echo $user['about']; ?>
+                                <?php echo $user->about; ?>
                             </p>
                         </div>
-                        <span class="new-task__time">Был на сайте <?php echo $fun->diff_result($user['last_update']) ?></span>
+                        <span class="new-task__time">Был на сайте <?php echo $fun->diff_result($user->last_update) ?></span>
                     </div>
                     <div class="link-specialization user__search-link--bottom">
-                        <?php foreach($users_addition[$user['id']]['idcategories'] as $idcategory): ?>
+                        <?php foreach($users_addition[$user->id]['idcategories'] as $idcategory): ?>
                         <a href="#" class="link-regular"><?php echo $categories[$idcategory] ?></a>
                         <?php endforeach;?>
                     </div>

@@ -9,30 +9,29 @@ use yii\data\ActiveDataProvider;
  * This is the model class for table "tasks".
  *
  * @property int $id
- * @property int|null $idcustomer
+ * @property int $idcustomer
  * @property int|null $idexecuter
- * @property string|null $title
+ * @property string $title
  * @property string|null $description
- * @property int|null $idcategory
+ * @property int $idcategory
  * @property int|null $budget
  * @property string|null $dt_add
  * @property string|null $deadline
- * @property string|null $satatus
+ * @property string|null $current_status
  * @property int|null $idcity
  * @property string|null $address
  * @property float|null $latitude
  * @property float|null $longitude
- * @property string|null $file_1
- * @property string|null $file_2
- * @property string|null $file_3
  *
- * @property Comments[] $comments
- * @property Feadback[] $feadbacks
- * @property Categories $idcategory0
- * @property Cities $idcity0
- * @property Users $idcustomer0
- * @property Users $idexecuter0
- * @property Responds[] $responds
+ * @property CommentsForTask[] $commentsForTasks
+ * @property ExecuterResponds[] $executerResponds
+ * @property Favorite[] $favorites
+ * @property FeedbackAboutExecuter[] $feedbackAboutExecuters
+ * @property Categories $idcategory
+ * @property Cities $idcity
+ * @property Users $idcustomer
+ * @property Users $idexecuter
+ * @property StoredFiles[] $storedFiles
  */
 class Tasks extends \yii\db\ActiveRecord
 {
@@ -50,12 +49,13 @@ class Tasks extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['idcustomer', 'title', 'idcategory'], 'required'],
             [['idcustomer', 'idexecuter', 'idcategory', 'budget', 'idcity'], 'integer'],
             [['description'], 'string'],
             [['dt_add', 'deadline'], 'safe'],
             [['latitude', 'longitude'], 'number'],
-            [['title', 'address', 'file_1', 'file_2', 'file_3'], 'string', 'max' => 255],
-            [['satatus'], 'string', 'max' => 100],
+            [['title', 'address'], 'string', 'max' => 255],
+            [['current_status'], 'string', 'max' => 100],
             [['idcustomer'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['idcustomer' => 'id']],
             [['idexecuter'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['idexecuter' => 'id']],
             [['idcategory'], 'exist', 'skipOnError' => true, 'targetClass' => Categories::className(), 'targetAttribute' => ['idcategory' => 'id']],
@@ -78,7 +78,7 @@ class Tasks extends \yii\db\ActiveRecord
             'budget' => 'Budget',
             'dt_add' => 'Dt Add',
             'deadline' => 'Deadline',
-            'satatus' => 'Satatus',
+            'current_status' => 'Current Status',
             'idcity' => 'Idcity',
             'address' => 'Address',
             'latitude' => 'Latitude',
@@ -87,13 +87,23 @@ class Tasks extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Comments]].
+     * Gets query for [[CommentsForTasks]].
      *
-     * @return \yii\db\ActiveQuery|CommentsQuery
+     * @return \yii\db\ActiveQuery|CommentsForTaskQuery
      */
-    public function getComments()
+    public function getCommentsForTasks()
     {
-        return $this->hasMany(Comments::className(), ['idtask' => 'id']);
+        return $this->hasMany(CommentsForTask::className(), ['target_task_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[ExecuterResponds]].
+     *
+     * @return \yii\db\ActiveQuery|ExecuterRespondsQuery
+     */
+    public function getExecuterResponds()
+    {
+        return $this->hasMany(ExecuterResponds::className(), ['target_task_id' => 'id']);
     }
 
     /**
@@ -103,67 +113,57 @@ class Tasks extends \yii\db\ActiveRecord
      */
     public function getFavorites()
     {
-        return $this->hasMany(Favorite::className(), ['idtask' => 'id']);
+        return $this->hasMany(Favorite::className(), ['favorite_task' => 'id']);
     }
 
     /**
-     * Gets query for [[Feadbacks]].
+     * Gets query for [[FeedbackAboutExecuters]].
      *
-     * @return \yii\db\ActiveQuery|FeadbackQuery
+     * @return \yii\db\ActiveQuery|FeedbackAboutExecuterQuery
      */
-    public function getFeadbacks()
+    public function getFeedbackAboutExecuters()
     {
-        return $this->hasMany(Feadback::className(), ['idtask' => 'id']);
+        return $this->hasMany(FeedbackAboutExecuter::className(), ['target_task_id' => 'id']);
     }
 
     /**
-     * Gets query for [[Idcategory0]].
+     * Gets query for [[Idcategory]].
      *
-     * @return \yii\db\ActiveQuery|CategoriesQuery
+     * @return \yii\db\ActiveQuery|ExecutersCategoryQuery
      */
-    public function getIdcategory0()
+    public function getIdcategory()
     {
         return $this->hasOne(Categories::className(), ['id' => 'idcategory']);
     }
 
     /**
-     * Gets query for [[Idcity0]].
+     * Gets query for [[Idcity]].
      *
-     * @return \yii\db\ActiveQuery|CitiesQuery
+     * @return \yii\db\ActiveQuery|ExecutersCategoryQuery
      */
-    public function getIdcity0()
+    public function getIdcity()
     {
         return $this->hasOne(Cities::className(), ['id' => 'idcity']);
     }
 
     /**
-     * Gets query for [[Idcustomer0]].
+     * Gets query for [[Idcustomer]].
      *
      * @return \yii\db\ActiveQuery|UsersQuery
      */
-    public function getIdcustomer0()
+    public function getIdcustomer()
     {
         return $this->hasOne(Users::className(), ['id' => 'idcustomer']);
     }
 
     /**
-     * Gets query for [[Idexecuter0]].
+     * Gets query for [[Idexecuter]].
      *
      * @return \yii\db\ActiveQuery|UsersQuery
      */
-    public function getIdexecuter0()
+    public function getIdexecuter()
     {
         return $this->hasOne(Users::className(), ['id' => 'idexecuter']);
-    }
-
-    /**
-     * Gets query for [[Responds]].
-     *
-     * @return \yii\db\ActiveQuery|RespondsQuery
-     */
-    public function getResponds()
-    {
-        return $this->hasMany(Responds::className(), ['idtask' => 'id']);
     }
 
     /**
@@ -185,8 +185,9 @@ class Tasks extends \yii\db\ActiveRecord
         return new TasksQuery(get_called_class());
     }
 
-    public static function filter ($form_data = null){
-
+    public function parse_data($form_data = null)
+    {
+        // Представляем, данные полученные из формы в удобном виде
         if($form_data['category']){
             $form_data['category'] = implode(",",$form_data['category']);
         }
@@ -212,19 +213,23 @@ class Tasks extends \yii\db\ActiveRecord
                     break;
             }
         }
-        if($form_data['search']){
-            $form_data['search'] = $form_data['search'];
-        }
+
+        return $form_data;
+    }
+
+    public static function filter ($form_data = null){
 
         $query = self::find();
-        $query = $query->from(['tasks t'])->where("current_status = 'new'");
+        $query = $query->from(['tasks t'])
+                        ->joinWith('executerResponds er', true, 'LEFT JOIN')
+                        ->where(['in','current_status', ['new']]);
 
         //Подключаем переданные фильтры через форму
         if($form_data['category']){
             $query = $query->andWhere("t.idcategory in (".$form_data['category'].")");
         }
         if($form_data['no_executers']){
-            $query = $query->andWhere("t.id not in (select distinct idtask from responds)");
+            $query = $query->andWhere("er.target_task_id is null");
         }
         if($form_data['no_address']){
             $query = $query->andWhere("t.latitude is null or t.longitude is null");
@@ -233,7 +238,7 @@ class Tasks extends \yii\db\ActiveRecord
             $query = $query->andWhere("date(dt_add) >= date('".$form_data['period']."')");
         }
         if($form_data['search']){
-            $query = $query->andWhere("MATCH(title) AGAINST('*".$form_data['search']."*' in boolean mode)");
+            $query = $query->andWhere(['like', 'title', $form_data['search']]);
         }
 
         $query = $query->orderBy(['t.dt_add' => SORT_DESC]);
