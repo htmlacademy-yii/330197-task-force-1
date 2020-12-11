@@ -1,37 +1,34 @@
 <?php
-/* @var $this yii\web\View */
-/* @var $form yii\bootstrap\ActiveForm */
-/* @var $model \frontend\models\ContactForm */
+/* @var $tasks \frontend\controllers\TasksController*/
+/* @var $categories \frontend\controllers\TasksController*/
 
 use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
-use yii\captcha\Captcha;
-require_once '../../vendor/autoload.php';
-
-$this->title = 'Задачи';
-$this->params['breadcrumbs'][] = $this->title;
+use yii\widgets\ActiveForm;
+use yii\widgets\ActiveField;
+use frontend\functions;
+$fun = new Functions();
 ?>
-     <h1><?= Html::encode($this->title) ?></h1>  
     <main class="page-main">
         <div class="main-container page-container">
             <section class="new-task">
                 <div class="new-task__wrapper">
                     <h1>Новые задания</h1>
-                    <?php foreach($data as $value): ?>
+                <?php if(isset($tasks) and !empty($tasks)): ?>
+                    <?php foreach($tasks as $task): ?>
                     <div class="new-task__card">
                         <div class="new-task__title">
-                            <a href="#" class="link-regular"><h2><?php echo $value['title'] ?></h2></a>
-                            <a  class="new-task__type link-regular" href="#"><p><?php echo $value['category'] ?></p></a>
+                            <a href="#" class="link-regular"><h2><?php echo $task->title ?></h2></a>
+                            <a  class="new-task__type link-regular" href="#"><p><?php echo implode(array_keys($categoryTasks[$task->idcategory])) ?></p></a>
                         </div>
-                        <div class="new-task__icon new-task__icon--<?php echo $value['icon']?>"></div>
+                        <div class="new-task__icon new-task__icon--<?php echo $categoryTasks[$task->idcategory][implode(array_keys($categoryTasks[$task->idcategory]))] ?>"></div>
                         <p class="new-task_description">
-                            <?php echo $value['description'] ?>
+                            <?php echo $task->description ?>
                         </p>
-                        <b class="new-task__price new-task__price--<?php echo $value['icon']?>"><?php echo $value['budget'] ?><b> ₽</b></b>
-                        <p class="new-task__place"><?php echo $value['address'] ?></p>
-                        <span class="new-task__time"><?php echo $value['date_diff'] ?></span>
+                        <b class="new-task__price new-task__price--<?php echo $categoryTasks[$task->idcategory][implode(array_keys($categoryTasks[$task->idcategory]))] ?>"><?php echo $task->budget ?><b> ₽</b></b>
+                        <p class="new-task__place"><?php echo $task->address ?></p>
+                        <span class="new-task__time"><?php echo $fun->diff_result($task->dt_add) ?></span>
                     </div>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
                 </div>
                 <div class="new-task__pagination">
                     <ul class="new-task__pagination-list">
@@ -43,42 +40,48 @@ $this->params['breadcrumbs'][] = $this->title;
                         <li class="pagination__item"><a href="#"></a></li>
                     </ul>
                 </div>
+                <?php else:?>
+                    <br />
+                    <p class="new-task_description">По вашему запросу ничего не найдено.</p>
+                
+                <?php endif;?>
             </section>
             <section  class="search-task">
                 <div class="search-task__wrapper">
-                    <form class="search-task__form" name="test" method="post" action="#">
+                    <?php $form = ActiveForm::begin([
+                            'method' => "post",
+                            'options' => ['data-pjax' => 1, 'class' => 'search-task__form'],
+                            'validateOnSubmit' => false,
+                        ]); ?> 
                         <fieldset class="search-task__categories">
                             <legend>Категории</legend>
-                            <input class="visually-hidden checkbox__input" id="1" type="checkbox" name="" value="" checked>
-                            <label for="1">Курьерские услуги </label>
-                            <input class="visually-hidden checkbox__input" id="2" type="checkbox" name="" value="" checked>
-                            <label  for="2">Грузоперевозки </label>
-                            <input class="visually-hidden checkbox__input" id="3" type="checkbox" name="" value="">
-                            <label  for="3">Переводы </label>
-                            <input class="visually-hidden checkbox__input" id="4" type="checkbox" name="" value="">
-                            <label  for="4">Строительство и ремонт </label>
-                            <input class="visually-hidden checkbox__input" id="5" type="checkbox" name="" value="">
-                            <label  for="5">Выгул животных </label>
+                            <?= $form->field($task_form, 'category')
+                                ->checkboxList($categories,
+                                    [
+                                        'item' => function ($index, $label, $name, $checked, $value) {
+                                                return Html::checkbox($name, $checked, ['value' => $value,'id' => 'cat-'.$value,'label' => $label]);
+                                        },
+                                    ], false
+                                )
+                                ->label('',['class' => 'visually-hidden checkbox__input'])?>
                         </fieldset>
                         <fieldset class="search-task__categories">
                             <legend>Дополнительно</legend>
-                            <input class="visually-hidden checkbox__input" id="6" type="checkbox" name="" value="">
-                            <label for="6">Без откликов</label>
-                           <input class="visually-hidden checkbox__input" id="7" type="checkbox" name="" value="" checked>
-                            <label for="7">Удаленная работа </label>
+                            <?= $form->field($task_form, 'no_executers')->checkbox(['label' => 'Без откликов'])->label('Без откликов',['class' => 'visually-hidden checkbox__input'])?>
+                            <?= $form->field($task_form, 'no_address')->checkbox(['label' => 'Удаленная работа'])?>
                         </fieldset>
-                       <label class="search-task__name" for="8">Период</label>
-                           <select class="multiple-select input" id="8"size="1" name="time[]">
-                            <option value="day">За день</option>
-                            <option selected value="week">За неделю</option>
-                            <option value="month">За месяц</option>
-                        </select>
-                        <label class="search-task__name" for="9">Поиск по названию</label>
-                            <input class="input-middle input" id="9" type="search" name="q" placeholder="">
-                        <button class="button" type="submit">Искать</button>
-                    </form>
+                        
+                        <?= $form->field($task_form, 'period')->dropDownList($period, ['class' => 'multiple-select input'])->label('Период',['class' => 'search-task__name'])?>
+
+                        <?= $form->field($task_form, 'search')->textInput(['class' => "input-middle input"])->label('Поиск по названию',['class' => 'search-task__name'])?>
+
+                        <div class="form-group">
+                        <?= Html::submitButton('Искать', ['class' => "button",'type' => 'submit','name' => 'submit']) ?>
+                        </div>
+                    <?php ActiveForm::end(); ?> 
+
                 </div>
             </section>
         </div>
     </main>
-    
+

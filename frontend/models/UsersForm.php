@@ -14,8 +14,14 @@ use Yii;
  * @property ExecutersCategory[] $executersCategories
  * @property Tasks[] $tasks
  */
-class Categories extends \yii\db\ActiveRecord
+class UsersForm extends \yii\db\ActiveRecord
 {
+    public $free = 'Сейчас свободен';
+    public $online = 'Сейчас онлайн';
+    public $feedback = 'Есть отзывы';
+    public $favorite = 'В избранном';
+    public $search;
+    
     /**
      * {@inheritdoc}
      */
@@ -30,7 +36,8 @@ class Categories extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['category', 'icon'], 'string', 'max' => 255],
+            [['category'],'safe'],
+            [['icon', 'free', 'online', 'feedback', 'favorite', 'search'], 'string', 'max' => 255],
         ];
     }
 
@@ -43,6 +50,11 @@ class Categories extends \yii\db\ActiveRecord
             'id' => 'ID',
             'category' => 'Category',
             'icon' => 'Icon',
+            'online' => $this->online,
+            'free' => $this->free,
+            'feedback' => $this->feedback,
+            'favorite' => $this->favorite,
+            'search' => $this->search,
         ];
     }
 
@@ -68,11 +80,10 @@ class Categories extends \yii\db\ActiveRecord
 
     /**
      * {@inheritdoc}
-     * @return ExecutersCategoryQuery the active query used by this AR class.
+     * @return CategoriesQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new ExecutersCategoryQuery(get_called_class());
+        return new CategoriesQuery(get_called_class());
     }
-    
 }

@@ -1,59 +1,13 @@
--- --------------------------------------------------------
--- Сервер:                       127.0.0.1
--- Версія сервера:               10.3.13-MariaDB-log - mariadb.org binary distribution
--- ОС сервера:                   Win64
--- HeidiSQL Версія:              10.2.0.5599
--- --------------------------------------------------------
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-
-
--- Dumping database structure for task_force
-DROP DATABASE IF EXISTS task_force;
-DROP USER IF EXISTS 'tf_admin'@'localhost';
-
-CREATE DATABASE IF NOT EXISTS task_force /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE task_force;
-
-CREATE USER 'tf_admin'@'localhost' IDENTIFIED BY 'hf,)nf2O';
-GRANT ALL PRIVILEGES ON task_force.* TO 'tf_admin'@'localhost' WITH GRANT OPTION;
-
--- Dumping structure for таблиця task_force.categories
-CREATE TABLE IF NOT EXISTS categories (
-  id mediumint(9) NOT NULL AUTO_INCREMENT,
-  category varchar(255) DEFAULT NULL,
-  icon varchar(255) DEFAULT NULL,
-  PRIMARY KEY (id)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
-
--- Dumping data for table task_force.categories: ~8 rows (приблизно)
-/*!40000 ALTER TABLE categories DISABLE KEYS */;
-INSERT INTO categories (id, category, icon) VALUES
-	(1, 'Переводы', 'translation'),
-	(2, 'Уборка', 'clean'),
-	(3, 'Переезды', 'cargo'),
-	(4, 'Компьютерная помощь', 'neo'),
-	(5, 'Ремонт квартирный', 'flat'),
-	(6, 'Ремонт техники', 'repair'),
-	(7, 'Красота', 'beauty'),
-	(8, 'Фото', 'photo');
-/*!40000 ALTER TABLE categories ENABLE KEYS */;
-
--- Dumping structure for таблиця task_force.cities
-CREATE TABLE IF NOT EXISTS cities (
-  id mediumint(9) NOT NULL AUTO_INCREMENT,
-  city varchar(255) DEFAULT NULL,
-  latitude double(10,7) DEFAULT NULL,
-  longitude double(10,7) DEFAULT NULL,
-  PRIMARY KEY (id)
-) ENGINE=InnoDB AUTO_INCREMENT=1109 DEFAULT CHARSET=utf8;
-
--- Dumping data for table task_force.cities: ~1 108 rows (приблизно)
-/*!40000 ALTER TABLE cities DISABLE KEYS */;
+INSERT INTO categories (category, icon) VALUES
+	('Переводы', 'translation'),
+	('Уборка', 'clean'),
+	('Переезды', 'cargo'),
+	('Компьютерная помощь', 'neo'),
+	('Ремонт квартирный', 'flat'),
+	('Ремонт техники', 'repair'),
+	('Красота', 'beauty'),
+	('Фото', 'photo');
+	
 INSERT INTO cities (id, city, latitude, longitude) VALUES
 	(1, 'Абаза', 52.6517296, 90.0885929),
 	(2, 'Абакан', 53.7223661, 91.4437792),
@@ -1163,20 +1117,45 @@ INSERT INTO cities (id, city, latitude, longitude) VALUES
 	(1106, 'Ясногорск', 54.4795178, 37.6896690),
 	(1107, 'Ясный', 51.0369499, 59.8743256),
 	(1108, 'Яхрома', 56.2889858, 37.4831016);
-/*!40000 ALTER TABLE cities ENABLE KEYS */;
 
--- Dumping structure for таблиця task_force.comments
-CREATE TABLE IF NOT EXISTS comments (
-  idtask mediumint(9) DEFAULT NULL,
-  dt_add date DEFAULT NULL,
-  rate smallint(2) DEFAULT NULL,
-  notetext text DEFAULT NULL,
-  KEY idtask (idtask),
-  CONSTRAINT comments_ibfk_1 FOREIGN KEY (idtask) REFERENCES tasks (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO users (fio, email, pass, dt_add, role, address, birthday, about, avatar, phone, skype, telegram, last_update) VALUES
+	('Karrie Buttress', 'kbuttress0@1und1.de', 'JcfoKBYAB4k', '2019-08-10', 1, '38737 Moose Avenue', '1989-11-11', 'In est risus, auctor sed, tristique in, tempus sit amet, sem. Fusce consequat.', 'user-man.jpg', '64574473047', 'high-level', NULL, '2020-06-01 12:10:25'),
+	('Bob Aymer', 'baymer1@hp.com', 'ZEE54kg', '2018-12-21', 1, '738 Hagan Lane', '1989-03-05', 'Pellentesque ultrices mattis odio.', 'user-man2.jpg', '75531015353', 'mobile', NULL, '2020-06-05 09:50:25'),
+	('Zilvia Boulding', 'zboulding2@macromedia.com', 'VJyMV1Zat', '2019-07-25', 1, '758 Old Shore Parkway', '1989-12-30', 'Morbi a ipsum. Integer a nibh. In quis justo.', 'man-blond.jpg', '16371407508', 'Re-engineered', NULL, '2020-06-01 12:10:25'),
+	('Emalee Mollon', 'emollon3@bloglovin.com', 'XUIeJ693h', '2018-11-13', 1, '11 Dovetail Junction', '0629-03-03', 'Suspendisse potenti.', NULL, '21468788926', 'Grass-roots', NULL, '2020-06-05 09:50:25'),
+	('Maria Mulberry', 'mmulberry4@cmu.edu', 'oWspnl', '2019-07-20', 1, '050 Bowman Alley', '1989-04-08', 'Morbi quis tortor id nulla ultrices aliquet. Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo.', NULL, '62931646367', 'fault-tolerant', NULL, '2020-06-01 12:10:25'),
+	('Levey By', 'lby5@mozilla.com', 'GdtcUU', '2019-02-12', 1, '5 Iowa Avenue', '1989-04-18', 'Maecenas tristique, est et tempus semper, est quam pharetra magna, ac consequat metus sapien ut nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam.', NULL, '63271348718', 'Team-oriented', NULL, '2020-06-05 09:50:25'),
+	('Baron Eates', 'beates6@last.fm', 'UQw6VeA', '2019-05-03', 1, '87119 Northland Hill', '1989-03-20', 'Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.', NULL, '41056175169', 'portal', NULL, '2019-04-03 07:05:05'),
+	('Trip Vink', 'tvink7@fotki.com', '49znXd7haFGz', '2019-01-13', 1, '6823 Lillian Point', '1989-12-13', 'Pellentesque viverra pede ac diam. Cras pellentesque volutpat dui. Maecenas tristique, est et tempus semper, est quam pharetra magna, ac consequat metus sapien ut nunc.', NULL, '72882384431', 'intermediate', NULL, '2020-01-05 17:35:05'),
+	('Boonie Terbeck', 'bterbeck8@about.me', 'unCjJTF7sjs', '2019-09-15', 1, '43 Marquette Plaza', '1989-01-14', 'Morbi ut odio.', NULL, '69043821394', 'local area network', NULL, '2019-04-03 07:05:05'),
+	('Alonzo Traviss', 'atraviss9@auda.org.au', 'dLuVMAg', '2018-12-19', 1, '5303 Village Green Hill', '1989-02-03', 'Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem. Fusce consequat.', NULL, '28396220507', 'upward-trending', NULL, '2020-01-05 17:35:05'),
+	('Natassia Wittering', 'nwitteringa@google.com.br', 'tQlUG4n', '2019-03-24', 2, '67399 Reindahl Place', '1989-05-23', 'Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.', 'man-hat.png', '83344513307', 'grid-enabled', NULL, '2019-04-03 07:05:05'),
+	('Felice Brooke', 'fbrookeb@nba.com', 's9y9Mcfgy1g', '2019-09-27', 2, '45 Twin Pines Hill', '1989-07-06', 'Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl. Aenean lectus. Pellentesque eget nunc.', 'man-glasses.jpg', '64890419671', 'background', NULL, '2020-01-05 17:35:05'),
+	('Carlen Viccary', 'cviccaryc@amazon.co.uk', '9qd747vh', '2018-12-06', 2, '46 Sheridan Place', '1903-04-16', 'Quisque ut erat. Curabitur gravida nisi at nibh. In hac habitasse platea dictumst.', 'man-brune.jpg', '23005580487', 'challenge', NULL, '2018-08-16 10:35:05'),
+	('Hendrik Gethings', 'hgethingsd@sogou.com', 'zzN5c4', '2018-11-18', 2, '73 Kedzie Terrace', '1989-11-07', 'Pellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.', NULL, '27052074771', 'coherent', NULL, '2020-06-13 06:10:05'),
+	('Dunc Girodias', 'dgirodiase@stanford.edu', 'j9QW6GQI', '2018-10-14', 2, '85509 Ludington Drive', '1989-02-13', 'Cras pellentesque volutpat dui.', NULL, '14800371520', 'neutral', NULL, '2018-08-16 10:35:05'),
+	('Bibbie Tanman', 'btanmanf@smh.com.au', '1aukKNEIneq', '2019-05-03', 2, '67 Northwestern Center', '1989-07-07', 'Aliquam erat volutpat. In congue.', NULL, '75569924500', 'Programmable', NULL, '2020-06-13 06:10:05'),
+	('Barnabas Bartoletti', 'bbartolettig@simplemachines.org', '3chTNtqhoo', '2018-12-25', 2, '725 Eagle Crest Hill', '1989-09-29', 'Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem. Duis aliquam convallis nunc.', NULL, '37349256497', 'encompassing', NULL, '2018-08-16 10:35:05'),
+	('Nixie Cullip', 'nculliph@fc2.com', '2UdKIR2f', '2019-04-07', 2, '507 Graceland Junction', '1989-03-19', 'Suspendisse potenti.', NULL, '12403580562', 'knowledge base', NULL, '2020-06-13 06:10:05'),
+	('Matilde Pimblott', 'mpimblotti@xing.com', 'nGZ8disdg', '2019-07-18', 2, '92 Gina Park', '1989-09-29', 'Phasellus sit amet erat.', NULL, '40139478003', 'dynamic', NULL, '2020-06-10 21:50:05'),
+	('Al Skurray', 'askurrayj@un.org', 'bL9tAf', '2018-11-25', 2, '8 Ridgeview Trail', '1989-12-21', 'Cras pellentesque volutpat dui.', NULL, '76657531985', 'solution', NULL, '2020-06-10 21:50:05'),
+	('Андрей Балконский', 'andrew@bal.com', 'supperpass', '2017-02-10', 2, 'пер. Вишнёвый', '1970-03-11', 'Фотограф на все случаи жизни. Сделаю важные события в Вешей жизни незабываемыми.', 'user-man.jpg', '0947536548', 'andrew-balc', NULL, DATE_ADD(SYSDATE(), INTERVAL -5 MINUTE));
 
--- Dumping data for table task_force.comments: ~10 rows (приблизно)
-/*!40000 ALTER TABLE comments DISABLE KEYS */;
+INSERT INTO tasks (idcustomer, idexecuter, title, description, idcategory, budget, dt_add, deadline, current_status, idcity, address, latitude, longitude) VALUES
+	(1, 11, 'enable impactful technologies', 'Suspendisse potenti. In eleifend quam a odio. In hac habitasse platea dictumst.', 2, 6587, '2019-03-09', '2019-11-15', 'done', NULL, '1 Eagan Crossing', 6.9641667, 158.2083333),
+	(2, 12, 'exploit revolutionary portals', 'Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.\r\n\r\nCurabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.', 3, 2904, '2019-07-03', '2019-12-07', 'new', NULL, '24043 Paget Alley', 5.6235050, 10.2544044),
+	(3, 13, 'matrix next-generation e-commerce', 'Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.\r\n\r\nCras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. Vivamus vel nulla eget eros elementum pellentesque.\r\n\r\nQuisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.', 2, 1170, '2019-06-27', '2019-11-23', 'done', NULL, '2867 Dryden Pass', 63.5932190, 53.9068532),
+	(4, 14, 'benchmark plug-and-play infomediaries', 'Praesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.\r\n\r\nMorbi porttitor lorem id ligula. Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem.\r\n\r\nFusce consequat. Nulla nisl. Nunc nisl.', 1, 838, '2019-01-01', '2019-11-10', 'done', NULL, '80 Cambridge Street', 20.5800358, -75.2435307),
+	(5, NULL, 'integrate cross-platform e-business', 'Praesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.', 3, 7484, '2019-09-07', '2019-12-15', 'canceled', NULL, '1 Stone Corner Junction', 14.9326574, -91.6941845),
+	(6, 16, 'enable dot-com niches', 'Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.', 7, 5725, '2018-11-01', '2019-11-24', 'failed', NULL, '12 Stephen Terrace', 40.1631270, 116.6388680),
+	(7, 17, 'transform web-enabled relationships', 'Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.', 5, 4414, '2019-09-13', '2019-11-19', 'failed', NULL, '6213 Lake View Drive', 44.3794871, 20.2638941),
+	(8, NULL, 'strategize frictionless solutions', 'Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.\r\n\r\nPraesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.\r\n\r\nMorbi porttitor lorem id ligula. Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem.', 8, 3454, '2019-04-01', '2019-11-14', 'canceled', NULL, '994 Corry Park', -7.3251485, 108.3607464),
+	(9, 19, 'innovate seamless metrics', 'Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.', 4, 3101, '2019-03-28', '2020-12-12', 'in_progress', NULL, '2 Bluestem Park', 43.0000000, -87.9700000),
+	(10, 20, 'integrate wireless infomediaries', 'Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque.', 4, 6562, '2019-05-01', '2020-12-19', 'in_progress', NULL, '1 Dexter Hill', 41.3410168, -8.3169303),
+	(6, NULL, 'Убраться в квартире после вписки', 'Значимость этих проблем настолько очевидна, что начало повседневной работы по формированию позиции требуют определения и уточнения позиций…', 2, 1000, DATE_ADD(SYSDATE(), INTERVAL -5 DAY), '2021-07-25', 'new', 920, NULL, 61.2539773, 73.3961726),
+	(8, NULL, 'Перевезти груз на новое место', 'Значимость этих проблем настолько очевидна, что начало повседневной работы по формированию позиции требуют определения и уточнения позиций…', 3, 1500, DATE_ADD(SYSDATE(), INTERVAL -25 DAY), DEFAULT, 'new', 566, NULL, NULL, NULL),
+	(2, NULL, 'Перевести войну и мир на клингонский', 'Значимость этих проблем настолько очевидна, что начало повседневной работы по формированию позиции требуют определения и уточнения позиций…', 1, 3500, DEFAULT, DEFAULT, DEFAULT, NULL, NULL, NULL, NULL);
+	
 INSERT INTO comments (idtask, dt_add, rate, notetext) VALUES
 	(1, '2019-08-19', 3, 'Cras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. Vivamus vel nulla eget eros elementum pellentesque.\r\n\r\nQuisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.\r\n\r\nPhasellus in felis. Donec semper sapien a libero. Nam dui.'),
 	(2, '2019-02-22', 2, 'Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.\r\n\r\nSed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.\r\n\r\nPellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.'),
@@ -1188,20 +1167,7 @@ INSERT INTO comments (idtask, dt_add, rate, notetext) VALUES
 	(8, '2018-10-20', 2, 'Curabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem.\r\n\r\nInteger tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.'),
 	(9, '2018-10-27', 2, 'Cras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. Vivamus vel nulla eget eros elementum pellentesque.\r\n\r\nQuisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.'),
 	(10, '2019-06-14', 4, 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin risus. Praesent lectus.');
-/*!40000 ALTER TABLE comments ENABLE KEYS */;
-
--- Dumping structure for таблиця task_force.executers_category
-CREATE TABLE IF NOT EXISTS executers_category (
-  idexecuter mediumint(9) NOT NULL,
-  idcategory mediumint(9) NOT NULL,
-  KEY idexecuter (idexecuter),
-  KEY idcategory (idcategory),
-  CONSTRAINT executers_category_ibfk_1 FOREIGN KEY (idexecuter) REFERENCES users (id),
-  CONSTRAINT executers_category_ibfk_2 FOREIGN KEY (idcategory) REFERENCES categories (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- Dumping data for table task_force.executers_category: ~15 rows (приблизно)
-/*!40000 ALTER TABLE executers_category DISABLE KEYS */;
+	
 INSERT INTO executers_category (idexecuter, idcategory) VALUES
 	(11, 1),
 	(12, 2),
@@ -1217,27 +1183,9 @@ INSERT INTO executers_category (idexecuter, idcategory) VALUES
 	(20, 3),
 	(20, 4),
 	(13, 8),
-	(15, 2);
-/*!40000 ALTER TABLE executers_category ENABLE KEYS */;
-
--- Dumping structure for таблиця task_force.feadback
-CREATE TABLE IF NOT EXISTS feadback (
-  idtask mediumint(9) DEFAULT NULL,
-  idexecuter mediumint(9) DEFAULT NULL,
-  idcustomer mediumint(9) DEFAULT NULL,
-  rate smallint(2) DEFAULT NULL,
-  dt_add date DEFAULT NULL,
-  description text DEFAULT NULL,
-  KEY idtask (idtask),
-  KEY idexecuter (idexecuter),
-  KEY idcustomer (idcustomer),
-  CONSTRAINT feadback_ibfk_1 FOREIGN KEY (idtask) REFERENCES tasks (id),
-  CONSTRAINT feadback_ibfk_2 FOREIGN KEY (idexecuter) REFERENCES users (id),
-  CONSTRAINT feadback_ibfk_3 FOREIGN KEY (idcustomer) REFERENCES users (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- Dumping data for table task_force.feadback: ~20 rows (приблизно)
-/*!40000 ALTER TABLE feadback DISABLE KEYS */;
+	(15, 2),
+	(21, 8);
+	
 INSERT INTO feadback (idtask, idexecuter, idcustomer, rate, dt_add, description) VALUES
 	(1, 11, 1, 1, '2019-05-09', 'Curabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem.\r\n\r\nInteger tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.\r\n\r\nPraesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.'),
 	(2, 12, 2, 4, '2018-10-27', 'Fusce consequat. Nulla nisl. Nunc nisl.\r\n\r\nDuis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum.\r\n\r\nIn hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo.'),
@@ -1259,55 +1207,18 @@ INSERT INTO feadback (idtask, idexecuter, idcustomer, rate, dt_add, description)
 	(8, 18, 8, 2, '2019-09-15', 'Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus.'),
 	(9, 19, 9, 3, '2018-10-16', 'Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus.\r\n\r\nIn sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.'),
 	(10, 20, 10, 4, '2019-02-13', 'Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.\r\n\r\nPraesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.');
-/*!40000 ALTER TABLE feadback ENABLE KEYS */;
 
--- Dumping structure for таблиця task_force.person_notice
-CREATE TABLE IF NOT EXISTS person_notice (
-  id mediumint(9) NOT NULL AUTO_INCREMENT,
-  key_name varchar(255) DEFAULT NULL,
-  notice varchar(255) DEFAULT NULL,
-  PRIMARY KEY (id)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
-
--- Dumping data for table task_force.person_notice: ~5 rows (приблизно)
-/*!40000 ALTER TABLE person_notice DISABLE KEYS */;
 INSERT INTO person_notice (id, key_name, notice) VALUES
 	(1, 'new_message', 'Новое сообщение'),
 	(2, 'task_actions', 'Действия по заданию'),
 	(3, 'new_feadback', 'Новый отзыв'),
 	(4, 'customer_only', 'Показывать мои контакты только заказчику'),
 	(5, 'hide_profile', 'Не показывать мой профиль');
-/*!40000 ALTER TABLE person_notice ENABLE KEYS */;
-
--- Dumping structure for таблиця task_force.portfolio
-CREATE TABLE IF NOT EXISTS portfolio (
-  idexecuter mediumint(9) DEFAULT NULL,
-  photo varchar(255) DEFAULT NULL,
-  KEY idexecuter (idexecuter),
-  CONSTRAINT portfolio_ibfk_1 FOREIGN KEY (idexecuter) REFERENCES users (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- Dumping data for table task_force.portfolio: ~2 rows (приблизно)
-/*!40000 ALTER TABLE portfolio DISABLE KEYS */;
+	
 INSERT INTO portfolio (idexecuter, photo) VALUES
 	(11, 'img/rome-photo.jpg'),
 	(12, 'img/dotonbori-photo.png');
-/*!40000 ALTER TABLE portfolio ENABLE KEYS */;
-
--- Dumping structure for таблиця task_force.responds
-CREATE TABLE IF NOT EXISTS responds (
-  idtask mediumint(9) NOT NULL,
-  idexecuter mediumint(9) DEFAULT NULL,
-  dt_add date DEFAULT NULL,
-  notetext text DEFAULT NULL,
-  KEY idtask (idtask),
-  KEY idexecuter (idexecuter),
-  CONSTRAINT responds_ibfk_1 FOREIGN KEY (idtask) REFERENCES tasks (id),
-  CONSTRAINT responds_ibfk_2 FOREIGN KEY (idexecuter) REFERENCES users (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- Dumping data for table task_force.responds: ~10 rows (приблизно)
-/*!40000 ALTER TABLE responds DISABLE KEYS */;
+	
 INSERT INTO responds (idtask, idexecuter, dt_add, notetext) VALUES
 	(1, 11, '2019-08-19', 'Cras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. Vivamus vel nulla eget eros elementum pellentesque.\r\n\r\nQuisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.\r\n\r\nPhasellus in felis. Donec semper sapien a libero. Nam dui.'),
 	(1, 12, '2019-02-22', 'Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.\r\n\r\nSed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.\r\n\r\nPellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.'),
@@ -1319,109 +1230,7 @@ INSERT INTO responds (idtask, idexecuter, dt_add, notetext) VALUES
 	(8, 18, '2018-10-20', 'Curabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem.\r\n\r\nInteger tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.'),
 	(9, 19, '2018-10-27', 'Cras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. Vivamus vel nulla eget eros elementum pellentesque.\r\n\r\nQuisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.'),
 	(10, 20, '2019-06-14', 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin risus. Praesent lectus.');
-/*!40000 ALTER TABLE responds ENABLE KEYS */;
 
--- Dumping structure for таблиця task_force.tasks
-CREATE TABLE IF NOT EXISTS tasks (
-  id mediumint(9) NOT NULL AUTO_INCREMENT,
-  idcustomer mediumint(9) DEFAULT NULL,
-  idexecuter mediumint(9) DEFAULT NULL,
-  title varchar(255) DEFAULT NULL,
-  description text DEFAULT NULL,
-  idcategory mediumint(9) DEFAULT NULL,
-  budget mediumint(9) DEFAULT NULL,
-  dt_add date DEFAULT NULL,
-  deadline date DEFAULT NULL,
-  current_status varchar(100) DEFAULT NULL,
-  idcity mediumint(9) DEFAULT NULL,
-  address varchar(255) DEFAULT NULL,
-  latitude double(10,7) DEFAULT NULL,
-  longitude double(10,7) DEFAULT NULL,
-  file_1 varchar(255) DEFAULT NULL,
-  file_2 varchar(255) DEFAULT NULL,
-  file_3 varchar(255) DEFAULT NULL,
-  PRIMARY KEY (id),
-  KEY idcustomer (idcustomer),
-  KEY idexecuter (idexecuter),
-  KEY idcategory (idcategory),
-  KEY idcity (idcity),
-  CONSTRAINT tasks_ibfk_1 FOREIGN KEY (idcustomer) REFERENCES users (id),
-  CONSTRAINT tasks_ibfk_2 FOREIGN KEY (idexecuter) REFERENCES users (id),
-  CONSTRAINT tasks_ibfk_3 FOREIGN KEY (idcategory) REFERENCES categories (id),
-  CONSTRAINT tasks_ibfk_4 FOREIGN KEY (idcity) REFERENCES cities (id)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
-
--- Dumping data for table task_force.tasks: ~10 rows (приблизно)
-/*!40000 ALTER TABLE tasks DISABLE KEYS */;
-INSERT INTO tasks (id, idcustomer, idexecuter, title, description, idcategory, budget, dt_add, deadline, current_status, idcity, address, latitude, longitude, file_1, file_2, file_3) VALUES
-	(1, 1, 11, 'enable impactful technologies', 'Suspendisse potenti. In eleifend quam a odio. In hac habitasse platea dictumst.', 2, 6587, '2019-03-09', '2019-11-15', 'new', NULL, '1 Eagan Crossing', 6.9641667, 158.2083333, NULL, NULL, NULL),
-	(2, 2, 12, 'exploit revolutionary portals', 'Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.\r\n\r\nCurabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.', 3, 2904, '2019-07-03', '2019-12-07', 'new', NULL, '24043 Paget Alley', 5.6235050, 10.2544044, NULL, NULL, NULL),
-	(3, 3, 13, 'matrix next-generation e-commerce', 'Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.\r\n\r\nCras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. Vivamus vel nulla eget eros elementum pellentesque.\r\n\r\nQuisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.', 2, 1170, '2019-06-27', '2019-11-23', 'new', NULL, '2867 Dryden Pass', 63.5932190, 53.9068532, NULL, NULL, NULL),
-	(4, 4, 14, 'benchmark plug-and-play infomediaries', 'Praesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.\r\n\r\nMorbi porttitor lorem id ligula. Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem.\r\n\r\nFusce consequat. Nulla nisl. Nunc nisl.', 1, 838, '2019-01-01', '2019-11-10', 'new', NULL, '80 Cambridge Street', 20.5800358, -75.2435307, NULL, NULL, NULL),
-	(5, 5, 15, 'integrate cross-platform e-business', 'Praesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.', 3, 7484, '2019-09-07', '2019-12-15', 'new', NULL, '1 Stone Corner Junction', 14.9326574, -91.6941845, NULL, NULL, NULL),
-	(6, 6, 16, 'enable dot-com niches', 'Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.', 7, 5725, '2018-11-01', '2019-11-24', 'new', NULL, '12 Stephen Terrace', 40.1631270, 116.6388680, NULL, NULL, NULL),
-	(7, 7, 17, 'transform web-enabled relationships', 'Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.', 5, 4414, '2019-09-13', '2019-11-19', 'new', NULL, '6213 Lake View Drive', 44.3794871, 20.2638941, NULL, NULL, NULL),
-	(8, 8, 18, 'strategize frictionless solutions', 'Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.\r\n\r\nPraesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.\r\n\r\nMorbi porttitor lorem id ligula. Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem.', 8, 3454, '2019-04-01', '2019-11-14', 'new', NULL, '994 Corry Park', -7.3251485, 108.3607464, NULL, NULL, NULL),
-	(9, 9, 19, 'innovate seamless metrics', 'Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.', 4, 3101, '2019-03-28', '2019-12-12', 'new', NULL, '2 Bluestem Park', 43.0000000, -87.9700000, NULL, NULL, NULL),
-	(10, 10, 20, 'integrate wireless infomediaries', 'Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque.', 4, 6562, '2019-05-01', '2019-12-19', 'new', NULL, '1 Dexter Hill', 41.3410168, -8.3169303, NULL, NULL, NULL);
-/*!40000 ALTER TABLE tasks ENABLE KEYS */;
-
--- Dumping structure for таблиця task_force.users
-CREATE TABLE IF NOT EXISTS users (
-  id mediumint(9) NOT NULL AUTO_INCREMENT,
-  fio varchar(255) DEFAULT NULL,
-  email varchar(255) DEFAULT NULL,
-  pass varchar(255) DEFAULT NULL,
-  dt_add date DEFAULT NULL,
-  role smallint(6) DEFAULT NULL,
-  address varchar(255) DEFAULT NULL,
-  birthday date DEFAULT NULL,
-  about text DEFAULT NULL,
-  avatar varchar(255) DEFAULT NULL,
-  phone varchar(255) DEFAULT NULL,
-  skype varchar(255) DEFAULT NULL,
-  telegram varchar(255) DEFAULT NULL,
-  last_update datetime DEFAULT NULL,
-  PRIMARY KEY (id)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
-
--- Dumping data for table task_force.users: ~20 rows (приблизно)
-/*!40000 ALTER TABLE users DISABLE KEYS */;
-INSERT INTO users (id, fio, email, pass, dt_add, role, address, birthday, about, avatar, phone, skype, telegram, last_update) VALUES
-	(1, 'Karrie Buttress', 'kbuttress0@1und1.de', 'JcfoKBYAB4k', '2019-08-10', 1, '38737 Moose Avenue', '1989-11-11', 'In est risus, auctor sed, tristique in, tempus sit amet, sem. Fusce consequat.', 'user-man.jpg', '64574473047', 'high-level', NULL, '2020-06-01 12:10:25'),
-	(2, 'Bob Aymer', 'baymer1@hp.com', 'ZEE54kg', '2018-12-21', 1, '738 Hagan Lane', '1989-03-05', 'Pellentesque ultrices mattis odio.', 'user-man2.jpg', '75531015353', 'mobile', NULL, '2020-06-05 09:50:25'),
-	(3, 'Zilvia Boulding', 'zboulding2@macromedia.com', 'VJyMV1Zat', '2019-07-25', 1, '758 Old Shore Parkway', '1989-12-30', 'Morbi a ipsum. Integer a nibh. In quis justo.', 'man-blond.jpg', '16371407508', 'Re-engineered', NULL, '2020-06-01 12:10:25'),
-	(4, 'Emalee Mollon', 'emollon3@bloglovin.com', 'XUIeJ693h', '2018-11-13', 1, '11 Dovetail Junction', '0629-03-03', 'Suspendisse potenti.', NULL, '21468788926', 'Grass-roots', NULL, '2020-06-05 09:50:25'),
-	(5, 'Maria Mulberry', 'mmulberry4@cmu.edu', 'oWspnl', '2019-07-20', 1, '050 Bowman Alley', '1989-04-08', 'Morbi quis tortor id nulla ultrices aliquet. Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo.', NULL, '62931646367', 'fault-tolerant', NULL, '2020-06-01 12:10:25'),
-	(6, 'Levey By', 'lby5@mozilla.com', 'GdtcUU', '2019-02-12', 1, '5 Iowa Avenue', '1989-04-18', 'Maecenas tristique, est et tempus semper, est quam pharetra magna, ac consequat metus sapien ut nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam.', NULL, '63271348718', 'Team-oriented', NULL, '2020-06-05 09:50:25'),
-	(7, 'Baron Eates', 'beates6@last.fm', 'UQw6VeA', '2019-05-03', 1, '87119 Northland Hill', '1989-03-20', 'Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.', NULL, '41056175169', 'portal', NULL, '2019-04-03 07:05:05'),
-	(8, 'Trip Vink', 'tvink7@fotki.com', '49znXd7haFGz', '2019-01-13', 1, '6823 Lillian Point', '1989-12-13', 'Pellentesque viverra pede ac diam. Cras pellentesque volutpat dui. Maecenas tristique, est et tempus semper, est quam pharetra magna, ac consequat metus sapien ut nunc.', NULL, '72882384431', 'intermediate', NULL, '2020-01-05 17:35:05'),
-	(9, 'Boonie Terbeck', 'bterbeck8@about.me', 'unCjJTF7sjs', '2019-09-15', 1, '43 Marquette Plaza', '1989-01-14', 'Morbi ut odio.', NULL, '69043821394', 'local area network', NULL, '2019-04-03 07:05:05'),
-	(10, 'Alonzo Traviss', 'atraviss9@auda.org.au', 'dLuVMAg', '2018-12-19', 1, '5303 Village Green Hill', '1989-02-03', 'Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem. Fusce consequat.', NULL, '28396220507', 'upward-trending', NULL, '2020-01-05 17:35:05'),
-	(11, 'Natassia Wittering', 'nwitteringa@google.com.br', 'tQlUG4n', '2019-03-24', 2, '67399 Reindahl Place', '1989-05-23', 'Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.', 'man-hat.png', '83344513307', 'grid-enabled', NULL, '2019-04-03 07:05:05'),
-	(12, 'Felice Brooke', 'fbrookeb@nba.com', 's9y9Mcfgy1g', '2019-09-27', 2, '45 Twin Pines Hill', '1989-07-06', 'Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl. Aenean lectus. Pellentesque eget nunc.', 'man-glasses.jpg', '64890419671', 'background', NULL, '2020-01-05 17:35:05'),
-	(13, 'Carlen Viccary', 'cviccaryc@amazon.co.uk', '9qd747vh', '2018-12-06', 2, '46 Sheridan Place', '1903-04-16', 'Quisque ut erat. Curabitur gravida nisi at nibh. In hac habitasse platea dictumst.', 'man-brune.jpg', '23005580487', 'challenge', NULL, '2018-08-16 10:35:05'),
-	(14, 'Hendrik Gethings', 'hgethingsd@sogou.com', 'zzN5c4', '2018-11-18', 2, '73 Kedzie Terrace', '1989-11-07', 'Pellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.', NULL, '27052074771', 'coherent', NULL, '2020-06-13 06:10:05'),
-	(15, 'Dunc Girodias', 'dgirodiase@stanford.edu', 'j9QW6GQI', '2018-10-14', 2, '85509 Ludington Drive', '1989-02-13', 'Cras pellentesque volutpat dui.', NULL, '14800371520', 'neutral', NULL, '2018-08-16 10:35:05'),
-	(16, 'Bibbie Tanman', 'btanmanf@smh.com.au', '1aukKNEIneq', '2019-05-03', 2, '67 Northwestern Center', '1989-07-07', 'Aliquam erat volutpat. In congue.', NULL, '75569924500', 'Programmable', NULL, '2020-06-13 06:10:05'),
-	(17, 'Barnabas Bartoletti', 'bbartolettig@simplemachines.org', '3chTNtqhoo', '2018-12-25', 2, '725 Eagle Crest Hill', '1989-09-29', 'Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem. Duis aliquam convallis nunc.', NULL, '37349256497', 'encompassing', NULL, '2018-08-16 10:35:05'),
-	(18, 'Nixie Cullip', 'nculliph@fc2.com', '2UdKIR2f', '2019-04-07', 2, '507 Graceland Junction', '1989-03-19', 'Suspendisse potenti.', NULL, '12403580562', 'knowledge base', NULL, '2020-06-13 06:10:05'),
-	(19, 'Matilde Pimblott', 'mpimblotti@xing.com', 'nGZ8disdg', '2019-07-18', 2, '92 Gina Park', '1989-09-29', 'Phasellus sit amet erat.', NULL, '40139478003', 'dynamic', NULL, '2020-06-10 21:50:05'),
-	(20, 'Al Skurray', 'askurrayj@un.org', 'bL9tAf', '2018-11-25', 2, '8 Ridgeview Trail', '1989-12-21', 'Cras pellentesque volutpat dui.', NULL, '76657531985', 'solution', NULL, '2020-06-10 21:50:05');
-/*!40000 ALTER TABLE users ENABLE KEYS */;
-
--- Dumping structure for таблиця task_force.user_personality
-CREATE TABLE IF NOT EXISTS user_personality (
-  iduser mediumint(9) NOT NULL,
-  idnotice mediumint(9) NOT NULL,
-  KEY iduser (iduser),
-  KEY idnotice (idnotice),
-  CONSTRAINT user_personality_ibfk_1 FOREIGN KEY (iduser) REFERENCES users (id),
-  CONSTRAINT user_personality_ibfk_2 FOREIGN KEY (idnotice) REFERENCES person_notice (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- Dumping data for table task_force.user_personality: ~60 rows (приблизно)
-/*!40000 ALTER TABLE user_personality DISABLE KEYS */;
 INSERT INTO user_personality (iduser, idnotice) VALUES
 	(1, 1),
 	(1, 2),
@@ -1483,8 +1292,10 @@ INSERT INTO user_personality (iduser, idnotice) VALUES
 	(20, 5),
 	(20, 1),
 	(20, 2);
-/*!40000 ALTER TABLE user_personality ENABLE KEYS */;
 
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+INSERT INTO favorite(iduser,idtask,idexecuter)
+VALUES 
+(1, NULL, 12),
+(1, NULL, 15),
+(12, 5, NULL),
+(13, 9, NULL);

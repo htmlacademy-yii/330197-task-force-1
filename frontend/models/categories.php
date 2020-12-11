@@ -74,4 +74,5 @@ class Categories extends \yii\db\ActiveRecord
     {
         return new ExecutersCategoryQuery(get_called_class());
     }
+    
 }
