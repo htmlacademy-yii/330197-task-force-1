@@ -33,8 +33,7 @@ class UsersController extends Controller
         $categories = (ArrayHelper::map($category, 'id', 'category'));
 
         $user = new Users();
-        $parsed_data = $user->parse_data($form_data['UsersForm']);
-        $users = $user->search($parsed_data);
+        $users = $user->search($form_data['UsersForm']);
         $users_addition = $user->getAddition($users);
         $users_rate = $user->getRates($users);
         $users_tasks = $user->getTaskCount($users);

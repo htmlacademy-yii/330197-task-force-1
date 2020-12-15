@@ -188,9 +188,6 @@ class Tasks extends \yii\db\ActiveRecord
     public function parse_data($form_data = null)
     {
         // Представляем, данные полученные из формы в удобном виде
-        if($form_data['category']){
-            $form_data['category'] = implode(",",$form_data['category']);
-        }
         if($form_data['no_executers']){
             $form_data['no_executers'] = true;
         }
@@ -226,16 +223,16 @@ class Tasks extends \yii\db\ActiveRecord
 
         //Подключаем переданные фильтры через форму
         if($form_data['category']){
-            $query = $query->andWhere("t.idcategory in (".$form_data['category'].")");
+            $query = $query->andWhere(['in','idcategory',$form_data['category']]);
         }
         if($form_data['no_executers']){
-            $query = $query->andWhere("er.target_task_id is null");
+            $query = $query->andWhere(['is','er.target_task_id', null]);
         }
         if($form_data['no_address']){
-            $query = $query->andWhere("t.latitude is null or t.longitude is null");
+            $query = $query->andWhere(['or',['is','t.latitude', null],['is','t.longitude', null]]);
         }
         if($form_data['period']){
-            $query = $query->andWhere("date(dt_add) >= date('".$form_data['period']."')");
+            $query = $query->andWhere(['>=','t.dt_add',$form_data['period']]);
         }
         if($form_data['search']){
             $query = $query->andWhere(['like', 'title', $form_data['search']]);

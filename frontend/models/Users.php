@@ -175,20 +175,12 @@ class Users extends \yii\db\ActiveRecord
         return new UsersQuery(get_called_class());
     }
 
-    public function parse_data($form_data)
-    {
-        // Представляем, данные полученные из формы в удобном виде
-        if($form_data['category']){
-            $form_data['category'] = implode(",",$form_data['category']);
-        }
-        return $form_data;
-    }
-
     //Выводим список исполнителей, которые принадлежат к выбранной категории
     private function getExequtersByCategory($categories=null){
-        $idexecuters = ExecutersCategory::find()->distinct()->select(['idexecuter'])->from('executers_category');
+        $idexecuters = ExecutersCategory::find()->distinct()->select(['idexecuter']);
+
         if($categories){
-            $idexecuters = $idexecuters->andWhere("idcategory in ($categories)");
+            $idexecuters = $idexecuters->andWhere(['in', 'idcategory', $categories]);
         }
         $idexecuters = $idexecuters->all();
 
@@ -196,41 +188,57 @@ class Users extends \yii\db\ActiveRecord
         foreach($idexecuters as $value){
             $array_execurters[] = $value['idexecuter'];
         }
-        $array_execurters = implode(",",$array_execurters);
 
         return $array_execurters;
+    }
+
+    //Выводим список исполнителей, которые находятся в избранном для текущего пользователя
+    private function getFavoriteUser($id){
+        $favorite = Favorite::find()->distinct()->select(['favorite_user'])->andWhere(['=','iduser',$id])->all();
+
+        //Записываем в масив список всех исполнителей из избранного
+        foreach($favorite as $user){
+            $favorite_users[] = $user['favorite_user'];
+        }
+
+        return $favorite_users;
     }
 
     public function search($form_data = null){
         $id_executers = $this->getExequtersByCategory($form_data['category']);
 
         $query = self::find();
-        $query = $query->from(['users u'])
-                        ->joinWith('feedbackAboutExecuters f', true, 'LEFT JOIN' )
+        $query = $query->joinWith('feedbackAboutExecuters f', true, 'LEFT JOIN' )
                         ->joinWith('tasks t', true, 'LEFT JOIN')
-                        ->where('u.role = 2')
-                        ->andWhere("u.id in ($id_executers)");
+                        ->where(['=','users.role',2])
+                        ->andWhere(['in','users.id',$id_executers]);
 
         if($form_data['search']){
-            $query = $query->andWhere(['like', 'u.fio', $form_data['search']]);
+            $query = $query->andWhere(['like', 'users.fio', $form_data['search']]);
         } else {
             if($form_data['free']){
                 $query = $query->andWhere(['not in','t.current_status', ['new','in_progress']]);
             }
             if($form_data['online']){
-                $query = $query->andWhere("u.last_update >= date_sub(NOW(),INTERVAL 30 MINUTE)");
+                $date = date_create(date('Y-m-d H:i:s'));
+                date_sub($date,date_interval_create_from_date_string('30 minute'));
+                $date = date_format($date,'Y-m-d H:i:s');
+
+                $query = $query->andWhere(['>=','users.last_update',$date]);
             }
             if($form_data['feedback']){
-                $query = $query->andWhere("f.target_user_id is not null");
+                $query = $query->andWhere(['is not','f.target_user_id',null]);
             }
             if($form_data['favorite']){
-                $query = $query->andWhere("u.id in (select distinct favorite_user from favorite)");
+                $current_user_id = 1;
+                $favorite_users = $this->getFavoriteUser($current_user_id);
+                $query = $query->andWhere(['in','users.id',$favorite_users]);
             }
         }
 
-        $query = $query->groupBy(['u.id','u.fio', 'u.dt_add', 'u.last_update', 'u.avatar', 'u.about', 'u.views']);
+        $query = $query->groupBy(['users.id','users.fio', 'users.dt_add', 'users.last_update', 'users.avatar', 'users.about', 'users.views']);
         if($form_data['s'] === 'date'){
-            $query = $query->orderBy(['u.dt_add'=> SORT_DESC]);
+            $query = $query->orderBy(['users.dt_add'=> SORT_DESC]);
         }
         if($form_data['s'] === 'rate'){
             $query = $query->orderBy(['avg(ifnull(f.rate,0))'=> SORT_DESC]);
@@ -239,7 +247,7 @@ class Users extends \yii\db\ActiveRecord
             $query = $query->orderBy(['COUNT(t.id)'=> SORT_DESC]);
         }
         if($form_data['s'] === 'favor'){
-            $query = $query->orderBy(['u.views'=> SORT_DESC]);
+            $query = $query->orderBy(['users.views'=> SORT_DESC]);
         }
 
         $provider = new ActiveDataProvider([
