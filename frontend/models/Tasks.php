@@ -151,7 +151,7 @@ class Tasks extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery|UsersQuery
      */
-    public function getIdcustomer()
+    public function getUsersIdcustomer()
     {
         return $this->hasOne(Users::className(), ['id' => 'idcustomer']);
     }
@@ -161,7 +161,7 @@ class Tasks extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery|UsersQuery
      */
-    public function getIdexecuter()
+    public function getUsersIdexecuter()
     {
         return $this->hasOne(Users::className(), ['id' => 'idexecuter']);
     }
@@ -216,10 +216,9 @@ class Tasks extends \yii\db\ActiveRecord
 
     public static function filter ($form_data = null){
 
-        $query = self::find();
-        $query = $query->from(['tasks t'])
-                        ->joinWith('executerResponds er', true, 'LEFT JOIN')
-                        ->where(['in','current_status', ['new']]);
+        $query = self::find()
+                ->joinWith('executerResponds er', true, 'LEFT JOIN')
+                ->where(['in','current_status', ['new']]);
 
         //Подключаем переданные фильтры через форму
         if($form_data['category']){
@@ -229,16 +228,16 @@ class Tasks extends \yii\db\ActiveRecord
             $query = $query->andWhere(['is','er.target_task_id', null]);
         }
         if($form_data['no_address']){
-            $query = $query->andWhere(['or',['is','t.latitude', null],['is','t.longitude', null]]);
+            $query = $query->andWhere(['or',['is','tasks.latitude', null],['is','tasks.longitude', null]]);
         }
         if($form_data['period']){
-            $query = $query->andWhere(['>=','t.dt_add',$form_data['period']]);
+            $query = $query->andWhere(['>=','tasks.dt_add',$form_data['period']]);
         }
         if($form_data['search']){
             $query = $query->andWhere(['like', 'title', $form_data['search']]);
         }
 
-        $query = $query->orderBy(['t.dt_add' => SORT_DESC]);
+        $query = $query->orderBy(['tasks.dt_add' => SORT_DESC]);
 
         $provider = new ActiveDataProvider([
             'query' => $query,
@@ -250,4 +249,5 @@ class Tasks extends \yii\db\ActiveRecord
 
         return $tasks;
     }
+
 }

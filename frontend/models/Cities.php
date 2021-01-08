@@ -8,11 +8,14 @@ use Yii;
  * This is the model class for table "cities".
  *
  * @property int $id
- * @property string|null $city
+ * @property string $city
  * @property float|null $latitude
  * @property float|null $longitude
+ * @property int|null $country_id
  *
+ * @property Countries $country
  * @property Tasks[] $tasks
+ * @property Users[] $users
  */
 class Cities extends \yii\db\ActiveRecord
 {
@@ -30,8 +33,11 @@ class Cities extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['city'], 'required'],
             [['latitude', 'longitude'], 'number'],
+            [['country_id'], 'integer'],
             [['city'], 'string', 'max' => 255],
+            [['country_id'], 'exist', 'skipOnError' => true, 'targetClass' => Countries::className(), 'targetAttribute' => ['country_id' => 'id']],
         ];
     }
 
@@ -45,13 +51,24 @@ class Cities extends \yii\db\ActiveRecord
             'city' => 'City',
             'latitude' => 'Latitude',
             'longitude' => 'Longitude',
+            'country_id' => 'Country ID',
         ];
+    }
+
+    /**
+     * Gets query for [[Country]].
+     *
+     * @return \yii\db\ActiveQuery|CountriesQuery
+     */
+    public function getCountry()
+    {
+        return $this->hasOne(Countries::className(), ['id' => 'country_id']);
     }
 
     /**
      * Gets query for [[Tasks]].
      *
-     * @return \yii\db\ActiveQuery|ExecutersCategoryQuery
+     * @return \yii\db\ActiveQuery|TasksQuery
      */
     public function getTasks()
     {
@@ -59,11 +76,21 @@ class Cities extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Users]].
+     *
+     * @return \yii\db\ActiveQuery|UsersQuery
+     */
+    public function getUsers()
+    {
+        return $this->hasMany(Users::className(), ['city_id' => 'id']);
+    }
+
+    /**
      * {@inheritdoc}
-     * @return ExecutersCategoryQuery the active query used by this AR class.
+     * @return CitiesQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new ExecutersCategoryQuery(get_called_class());
+        return new CitiesQuery(get_called_class());
     }
 }

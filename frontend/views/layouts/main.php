@@ -17,6 +17,7 @@ AppAsset::register($this);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
+    <base href="http://yii-taskforce/">
     <?php $this->head() ?>    
 </head>
 <body>
@@ -55,10 +56,10 @@ AppAsset::register($this);
             <div class="header__nav">
                 <ul class="header-nav__list site-list">
                     <li class="site-list__item">
-                        <a href="index.php?r=tasks">Задания</a>
+                        <a href="/tasks">Задания</a>
                     </li>
                     <li class="site-list__item">
-                        <a href="index.php?r=users">Исполнители</a>
+                        <a href="/users">Исполнители</a>
                     </li>
                     <li class="site-list__item">
                         <a href="#">Создать задание</a>

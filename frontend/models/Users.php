@@ -26,6 +26,7 @@ use yii\helpers\ArrayHelper;
  * @property string|null $last_update
  * @property int|null $views
  *
+ * @property Cities $city
  * @property CommentsForTask[] $commentsForTasks
  * @property ExecuterResponds[] $executerResponds
  * @property ExecutersCategory[] $executersCategories
@@ -34,7 +35,7 @@ use yii\helpers\ArrayHelper;
  * @property FeedbackAboutExecuter[] $feedbackAboutExecuters
  * @property Portfolio[] $portfolios
  * @property Tasks[] $tasks
- * @property Tasks[] $tasks0
+ * @property DoneTasks[] $doneTasks
  * @property UserPersonality[] $userPersonalities
  */
 class Users extends \yii\db\ActiveRecord
@@ -85,6 +86,15 @@ class Users extends \yii\db\ActiveRecord
             'views' => 'Views',
         ];
     }
+    /**
+     * Gets query for [[City]].
+     *
+     * @return \yii\db\ActiveQuery|CitiesQuery
+     */
+    public function getCity()
+    {
+        return $this->hasOne(Cities::className(), ['id' => 'city_id']);
+    }
 
     /**
      * Gets query for [[CommentsForTasks]].
@@ -114,6 +124,12 @@ class Users extends \yii\db\ActiveRecord
     public function getExecutersCategories()
     {
         return $this->hasMany(ExecutersCategory::className(), ['idexecuter' => 'id']);
+    }
+
+    public function getCategories()
+    {
+        return $this->hasMany(Categories::className(), ['id' => 'idcategory'])
+                    ->viaTable('executers_category', ['idexecuter' => 'id']);
     }
 
     /**
@@ -156,6 +172,16 @@ class Users extends \yii\db\ActiveRecord
         return $this->hasMany(Tasks::className(), ['idexecuter' => 'id']);
     }
 
+    // /**
+    //  * Gets query for [[Tasks]].
+    //  *
+    //  * @return \yii\db\ActiveQuery|TasksQuery
+    //  */
+    // public function getDoneTasks()
+    // {
+    //     return $this->hasMany(Tasks::className(), ['idexecuter' => 'id'])->where(['=','current_status','done']);
+    // }
+
     /**
      * Gets query for [[UserPersonalities]].
      *
@@ -188,7 +214,6 @@ class Users extends \yii\db\ActiveRecord
         foreach($idexecuters as $value){
             $array_execurters[] = $value['idexecuter'];
         }
-
         return $array_execurters;
     }
 
@@ -200,16 +225,22 @@ class Users extends \yii\db\ActiveRecord
         foreach($favorite as $user){
             $favorite_users[] = $user['favorite_user'];
         }
-
         return $favorite_users;
     }
 
     public function search($form_data = null){
+
         $id_executers = $this->getExequtersByCategory($form_data['category']);
 
         $query = self::find();
         $query = $query->joinWith('feedbackAboutExecuters f', true, 'LEFT JOIN' )
                         ->joinWith('tasks t', true, 'LEFT JOIN')
+                        // ->joinWith(['tasks t2' => function (TasksQuery $query) {
+                        //                     return $query
+                        //                         ->andWhere(['=', 't2.current_status','done']);
+                        //                 }])
+                        // ->onCondition(['=','t.current_status','done'])
+                        // ->joinWith(['doneTasks t2', true, 'LEFT JOIN'])
                         ->where(['=','users.role',2])
                         ->andWhere(['in','users.id',$id_executers]);
 
@@ -276,46 +307,116 @@ class Users extends \yii\db\ActiveRecord
         return $array;
     }
 
-    //Формируем массив с рейтингом пользователей и количеством отзывов
-    public function getRates($users){
-        $id = 0;
-        $array = [];
-        $r = [];
-        $f = [];
-        $rates = [];
-        foreach($users as $user){
-            $id = $user->id;
+    //Возвращает средний рейтинг исполнителя по его id
+    public function getAvgRate($id){
+        $user = Users::findOne($id);
 
-            foreach ($user->feedbackAboutExecuters as $feedback) {
-                $array['rate'][$id][] = $feedback->rate;
-                $array['feedback_id'][$id][] = $feedback->id;
+        if(count($user->feedbackAboutExecuters) >1){
+            foreach ($user->feedbackAboutExecuters as $value) {
+                $array[] = $value->rate;
+                $r = array_filter($array);
+                $avg_rate = round(array_sum($r)/count($r),2);
             }
-
-            $r = array_filter($array['rate'][$id]);
-            $f = array_filter($array['feedback_id'][$id]);
-
-            $rates['rate'][$id] = round(array_sum($r)/count($r),2);
-            $rates['feedbacks'][$id] = count($f);
+        } else {
+            $avg_rate = $value->rate;
         }
-
-        return $rates;
+        return $avg_rate;
     }
 
-     //Формируем массив с количеством выполненных заданий
-    public function getTaskCount($users){
-        $id = 0;
-        $array = [];
-        $t = [];
-        $user_tasks = [];
-        foreach($users as $user){
-            $id = $user->id;
-            foreach ($user->tasks as $task) {
-                $array[$id][] = $task->id;
-            }
-            $user_tasks[$id] = count($array[$id]);
-        }
+    //Возвращает количество отзывов о пользователе по его id
+    public function getCountFeedback($id){
+        $user = Users::findOne($id);
 
-        return $user_tasks;
+        if(count($user->feedbackAboutExecuters) >0){
+            foreach ($user->feedbackAboutExecuters as $value) {
+                $array[] = $value->id;
+                $r = array_filter($array);
+                $count_feedbacks = count($r);
+            }
+        } else {
+            $count_feedbacks = 0;
+        }
+        return $count_feedbacks;
+    }
+
+    //Возвращает полную информацию всех отзывов о пользователе по его id
+    public function getFeedbackFullInfo($executer_id){
+        $user = Users::findOne($executer_id);
+
+        if(!empty($user->feedbackAboutExecuters)){
+            foreach($user->feedbackAboutExecuters as $value){
+                $task = Tasks::findOne($value->target_task_id);
+                $customer = Users::findOne($value->id_user);
+
+                $feedback[$value->id]['task_title'] = $task->title;
+                $feedback[$value->id]['task_id'] = $task->id;
+                $feedback[$value->id]['owner_fio'] = $customer->fio;
+                $feedback[$value->id]['owner_avatar'] = $customer->avatar;
+                $feedback[$value->id]['rate'] = $value->rate;
+                $feedback[$value->id]['description'] = $value->description;
+                $feedback[$value->id]['dt_add'] = $value->dt_add;
+
+                if($value->rate <= 3)
+                {
+                    $feedback[$value->id]['rate_text'] = 'three';
+                } else {
+                    $feedback[$value->id]['rate_text'] = 'five';
+                }
+            }
+        }
+        return $feedback;
+    }
+
+    //Выводим количество задач открытых заказчиком по его id
+    public static function getCustomerTaskCount($customer_id){
+        return Tasks::find()->where(['=','idcustomer', $customer_id])->count();
+    }
+
+    //Формируем массив с количеством выполненных заданий исполнителем
+    public function getExecuterTaskCount($executer_id){
+        $taskCount = self::find()
+                ->joinWith('tasks t', true, 'INNER JOIN')
+                ->where("users.id=$executer_id")
+                ->andWhere(['=','t.current_status','done'])
+                ->count();
+        return $taskCount;
+    }
+
+    //Формируем массив с названием категорий для исполнителя по его id
+    public function getArrayCaterories($executer_id){
+        $query = self::find()
+                ->joinWith('executersCategories ec', true, 'INNER JOIN')
+                ->joinWith('categories c', true, 'INNER JOIN')
+                ->where(['=','ec.idexecuter', $executer_id]);
+        $provider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $user = $provider->getModels();
+
+        foreach($user[0]->categories as $category){
+            $user_categories[] = $category["category"];
+        }
+        return $user_categories;
+    }
+
+    //Формируем массив с названием категорий для исполнителя по его id
+    public function getArrayPortfolio($executer_id){
+        $query = self::find()
+                ->joinWith('portfolios p', true, 'INNER JOIN')
+                ->where(['=','p.idexecuter', $executer_id]);
+        $provider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $user = $provider->getModels();
+
+        if(!empty($user[0]->portfolios)){
+            foreach($user[0]->portfolios as $photo){
+                $user_portfolio[] = $photo["photo"];
+            }
+        }
+        return $user_portfolio;
     }
 
 }

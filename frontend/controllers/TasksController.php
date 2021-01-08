@@ -7,7 +7,9 @@ use yii\web\Controller;
 use frontend\models\Categories;
 use frontend\models\CategoriesFormNew;
 use frontend\models\Tasks;
-use frontend\functions;
+use frontend\models\Users;
+use yii\data\ActiveDataProvider;
+use yii\web\NotFoundHttpException;
 
 class TasksController extends Controller
 {   
@@ -21,10 +23,10 @@ class TasksController extends Controller
             $task_form->load($form_data);
         }
 
-        $category = Categories::find()->select(['category', 'id'])->from('categories')->all();
+        $category = Categories::find()->select(['category', 'id'])->all();
         $categories = (ArrayHelper::map($category, 'id', 'category'));
 
-        $categoryTask = Categories::find()->select(['category', 'id','icon'])->from('categories')->all();
+        $categoryTask = Categories::find()->select(['category', 'id','icon'])->all();
         $categoryTasks = (ArrayHelper::map($categoryTask, 'category','icon', 'id'));
         
         $period = [ 'all_time' => 'За всё время',
@@ -43,4 +45,34 @@ class TasksController extends Controller
                                              'tasks' => $tasks]);
     }
 
+    public function actionView($id)
+    {
+        $task = Tasks::findOne($id);
+        if (!$task) {
+            throw new NotFoundHttpException("Задача с ID $id не найдена");
+        }
+        $category = Categories::findOne($task->idcategory);
+
+        $customer = Users::findOne($task->idcustomer);
+        $users = new Users();
+        $customer_tasks_count = $users->getCustomerTaskCount($customer->id);
+
+        $executers = $task->executerResponds;
+        $files = $task->storedFiles;
+
+        foreach($executers as $value){
+            $executer_rate[$value->id_user] = $users->getAvgRate($value->id_user);
+            $executer_info[$value->id_user] = Users::findOne($value->id_user);
+        }
+
+        return $this->render('/site/view', ['task' => $task,
+                                            'category' => $category,
+                                            'customer' => $customer,
+                                            'customer_tasks_count' => $customer_tasks_count,
+                                            'executers' => $executers,
+                                            'executer_rate' => $executer_rate,
+                                            'executer_info' => $executer_info,
+                                            'files' => $files
+                                        ]);
+    }
 }

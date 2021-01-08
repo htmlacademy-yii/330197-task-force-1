@@ -10,64 +10,92 @@ class Functions {
     *
     * @return $answer переменная содержит нужный нам формат времени
     */
-    public function diff_result($date){
+    public function diff_result($date,$param = 'long'){
         $diff = time()-strtotime($date);
+        $year = 31536000;
+        $month = 2592000;
         $answer = '';
-        // if ($diff >= 86400) {
-        //     $answer = date('d.m.y', strtotime($date)).' в '.date('H:i', strtotime($date));
-        // }
-        if ($diff >= 157680000) {
-            $answer = floor($diff/31536000).' лет';
+        $rest = 0;
 
-            $diff_month = $diff - 31536000*floor($diff/31536000);
-            if($diff_month>= 2592000){
-                $answer .= ' и ' .floor($diff_month/2592000).' мес.';
-            } 
-            $answer .= ' назад';
+        if($diff/($year*10) > 1 and $diff-floor($diff/($year*10))*$year*10 > $year) //10 лет и больше
+        {
+            $rest = $diff-floor($diff/($year*10))*$year*10;
+        } else {
+            $rest = $diff;
         }
-        elseif ($diff >= 63072000) {
-            $answer = floor($diff/31536000).' годa';
 
-            $diff_month = $diff - 31536000*floor($diff/31536000);
-            if($diff_month>= 2592000){
-                $answer .= ' и ' .floor($diff_month/2592000).' мес.';
-            } 
-            $answer .= ' назад';
-        }
-        elseif ($diff >= 31536000) {
-            $answer = floor($diff/31536000).' год';
+        if ($rest >= $year*5) //5 лет и больше
+        {
+            $answer = floor($diff/$year).' лет';
 
-            if(($diff-31536000)>= 2592000){
-                $answer .= ' и ' .floor(($diff-31536000)/2592000).' мес.';
-            } 
-            $answer .= ' назад';
+            if($param === 'long'){
+                $diff_month = $diff - $year*floor($diff/$year);
+                if($diff_month>= $month){
+                    $answer .= ' и ' .floor($diff_month/$month).' мес.';
+                }
+            }
         }
-        elseif ($diff >= 2592000) {
-            $answer = floor($diff/2592000).' мес. назад';
+        elseif ($rest >= $year*2)
+        {
+            $answer = floor($diff/$year).' годa';
+
+            if($param === 'long'){
+                $diff_month = $diff - $year*floor($diff/$year);
+                if($diff_month>= $month){
+                    $answer .= ' и ' .floor($diff_month/$month).' мес.';
+                }
+            }
         }
-        elseif ($diff >= 86400) {
-            $answer = floor($diff/86400).' дней назад';
+        elseif ($rest >= $year)
+        {
+            $answer = floor($diff/$year).' год';
+
+            if($param === 'long'){
+                if(($diff-$year)>= $month){
+                    $answer .= ' и ' .floor(($diff-$year)/$month).' мес.';
+                }
+            }
         }
-        elseif ($diff >= 16200) {
-            $answer = round($diff/3600).' часов назад';
+        elseif ($diff >= $month)
+        {
+            $answer = floor($diff/$month).' мес.';
         }
-        elseif ($diff >= 5400) {
-            $answer = round($diff/3600).' часа назад';
+        elseif ($diff >= 86400)
+        {
+            $answer = floor($diff/86400).' дней';
         }
-        elseif ($diff >= 3600) {
+        elseif ($diff >= 16200)
+        {
+            $answer = round($diff/3600).' часов';
+        }
+        elseif ($diff >= 5400)
+        {
+            $answer = round($diff/3600).' часа';
+        }
+        elseif ($diff >= 3600)
+        {
             $answer = 'час назад';
         }
-        elseif ($diff >= 270) {
-            $answer = round($diff/60).' минут назад';
+        elseif ($diff >= 270)
+        {
+            $answer = round($diff/60).' минут';
         }
-        elseif ($diff >= 90) {
-            $answer = round($diff/60).' минуты назад';
+        elseif ($diff >= 90)
+        {
+            $answer = round($diff/60).' минуты';
         }
-        elseif ($diff >= 60) {
-            $answer = 'минуту назад';
+        elseif ($diff >= 60)
+        {
+            $answer = 'минуту';
         }
-        else{
+        else
+        {
             $answer = 'только что';
+        }
+
+        if($param === 'long' and $diff >= 60)
+        {
+            $answer .= ' назад';
         }
         return $answer;
     }
