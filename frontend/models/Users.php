@@ -172,16 +172,6 @@ class Users extends \yii\db\ActiveRecord
         return $this->hasMany(Tasks::className(), ['idexecuter' => 'id']);
     }
 
-    // /**
-    //  * Gets query for [[Tasks]].
-    //  *
-    //  * @return \yii\db\ActiveQuery|TasksQuery
-    //  */
-    // public function getDoneTasks()
-    // {
-    //     return $this->hasMany(Tasks::className(), ['idexecuter' => 'id'])->where(['=','current_status','done']);
-    // }
-
     /**
      * Gets query for [[UserPersonalities]].
      *
@@ -234,13 +224,6 @@ class Users extends \yii\db\ActiveRecord
 
         $query = self::find();
         $query = $query->joinWith('feedbackAboutExecuters f', true, 'LEFT JOIN' )
-                        ->joinWith('tasks t', true, 'LEFT JOIN')
-                        // ->joinWith(['tasks t2' => function (TasksQuery $query) {
-                        //                     return $query
-                        //                         ->andWhere(['=', 't2.current_status','done']);
-                        //                 }])
-                        // ->onCondition(['=','t.current_status','done'])
-                        // ->joinWith(['doneTasks t2', true, 'LEFT JOIN'])
                         ->where(['=','users.role',2])
                         ->andWhere(['in','users.id',$id_executers]);
 
@@ -248,7 +231,8 @@ class Users extends \yii\db\ActiveRecord
             $query = $query->andWhere(['like', 'users.fio', $form_data['search']]);
         } else {
             if($form_data['free']){
-                $query = $query->andWhere(['not in','t.current_status', ['new','in_progress']]);
+                $query = $query->joinWith('tasks')
+                                ->andWhere(['not in','tasks.current_status', ['new','in_progress']]);
             }
             if($form_data['online']){
                 $date = date_create(date('Y-m-d H:i:s'));
@@ -275,7 +259,10 @@ class Users extends \yii\db\ActiveRecord
             $query = $query->orderBy(['avg(ifnull(f.rate,0))'=> SORT_DESC]);
         }
         if($form_data['s'] === 'orders'){
-            $query = $query->orderBy(['COUNT(t.id)'=> SORT_DESC]);
+             $query = $query->joinWith(['tasks' => static function (TasksQuery $query) {
+                                            return $query->onCondition(['=','tasks.current_status','done']);
+                                        }])
+                            ->orderBy(['COUNT(tasks.id)'=> SORT_DESC]);
         }
         if($form_data['s'] === 'favor'){
             $query = $query->orderBy(['users.views'=> SORT_DESC]);
