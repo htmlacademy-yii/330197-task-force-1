@@ -17,7 +17,7 @@ $fun = new Functions();
             <section class="content-view">
                 <div class="user__card-wrapper">
                     <div class="user__card">
-                        <img src="./img/<?= (isset($user->avatar)) ? $user->avatar : 'upload.png'?>" width="120" height="120" alt="Аватар пользователя">
+                        <img src="/img/<?= (isset($user->avatar)) ? $user->avatar : 'upload.png'?>" width="120" height="120" alt="Аватар пользователя">
                          <div class="content-view__headline">
                             <h1><?=$user->fio?></h1>
                              <p><?=$user_country->country?>, <?=$user_city->city?>, <?=$fun->diff_result($user->birthday,'short');?></p>
@@ -65,7 +65,7 @@ $fun = new Functions();
                         <div class="user__card-photo">                            
                             <h3 class="content-view__h3">Фото работ</h3>
                             <? foreach($user_portfolio as $photo): ?>
-                            <a href="#"><img src="./user_files/<?=$photo?>" width="85" height="86" alt="Фото работы"></a>
+                            <a href="#"><img src="/user_files/<?=$photo?>" width="85" height="86" alt="Фото работы"></a>
                             <? endforeach; ?>
                          </div>
                          <? endif ?>
@@ -79,7 +79,7 @@ $fun = new Functions();
                         <div class="feedback-card__reviews">
                             <p class="link-task link">Задание <a href="/tasks/view/<?=$feedback['task_id']?>" class="link-regular">«<?=$feedback['task_title']?>»</a></p>
                             <div class="card__review">
-                                <a href="#"><img src="./img/<?= (isset($feedback['owner_avatar'])) ? $feedback['owner_avatar'] : 'upload.png'?>" width="55" height="54"></a>
+                                <a href="#"><img src="/img/<?= (isset($feedback['owner_avatar'])) ? $feedback['owner_avatar'] : 'upload.png'?>" width="55" height="54"></a>
                                 <div class="feedback-card__reviews-content">
                                     <p class="link-name link"><a href="#" class="link-regular"><?=$feedback['owner_fio']?></a></p>
                                     <p class="review-text">
