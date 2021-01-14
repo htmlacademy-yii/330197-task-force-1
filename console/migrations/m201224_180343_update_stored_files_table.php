@@ -21,18 +21,16 @@ class m201224_180343_update_stored_files_table extends Migration
 
         $this->alterColumn('stored_files', 'file_path', $this->string());
 
-        $query = Tasks::find()->joinWith('usersIdcustomer u', true, 'INNER JOIN')->andWhere(['is not','avatar',null]);
-        $provider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
-        $tasks = $provider->getModels();
+        $tasks = Tasks::find()->all();
         foreach($tasks as $task){
-            $this->insert('stored_files',
+            $user = Users::findOne($task->idcustomer);
+            if($user->avatar){
+                $this->insert('stored_files',
                             ['idtask'=>$task->id, 
-                             'file_path'=>$task['usersIdcustomer']->avatar,
+                             'file_path'=>$user->avatar,
                             ]);
+            }
         }
-        
     }
 
     /**
