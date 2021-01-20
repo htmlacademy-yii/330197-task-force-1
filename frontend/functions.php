@@ -1,103 +1,58 @@
 <?php
+declare(strict_types=1);
 namespace frontend;
 use Yii;
+
 
 class Functions {
     /**
     * Функция показывает разницу во времени. Показывает сколько прошло минут,часов, дней, месяцев, лет.
     * @param $data string дата, которую мы хотим представить в нужном формате
+    * @param $param string если аргумент отличается от 'long' результат работы функции отрезает слово "назад" вконце формата переданной даты
     * @param $diff int внутренняя переменная функции, содержит разницу во времени (количество секунд) между текущим временем и временем, переданным в переменной $date
-    *
-    * @return $answer переменная содержит нужный нам формат времени
     */
-    public function diff_result($date,$param = 'long'){
-        $diff = time()-strtotime($date);
-        $year = 31536000;
-        $month = 2592000;
-        $answer = '';
-        $rest = 0;
+    const MINUTE = 60;
+    const HOUR = self::MINUTE * 60;
+    const DAY = self::HOUR * 24;
+    const WEEK = self::DAY * 7;
+    const MONTH = self::DAY * 30;
+    const YEAR = self::DAY * 365;
 
-        if($diff/($year*10) > 1 and $diff-floor($diff/($year*10))*$year*10 > $year) //10 лет и больше
-        {
-            $rest = $diff-floor($diff/($year*10))*$year*10;
-        } else {
-            $rest = $diff;
-        }
-
-        if ($rest >= $year*5) //5 лет и больше
-        {
-            $answer = floor($diff/$year).' лет';
-
-            if($param === 'long'){
-                $diff_month = $diff - $year*floor($diff/$year);
-                if($diff_month>= $month){
-                    $answer .= ' и ' .floor($diff_month/$month).' мес.';
-                }
-            }
-        }
-        elseif ($rest >= $year*2)
-        {
-            $answer = floor($diff/$year).' годa';
-
-            if($param === 'long'){
-                $diff_month = $diff - $year*floor($diff/$year);
-                if($diff_month>= $month){
-                    $answer .= ' и ' .floor($diff_month/$month).' мес.';
-                }
-            }
-        }
-        elseif ($rest >= $year)
-        {
-            $answer = floor($diff/$year).' год';
-
-            if($param === 'long'){
-                if(($diff-$year)>= $month){
-                    $answer .= ' и ' .floor(($diff-$year)/$month).' мес.';
-                }
-            }
-        }
-        elseif ($diff >= $month)
-        {
-            $answer = floor($diff/$month).' мес.';
-        }
-        elseif ($diff >= 86400)
-        {
-            $answer = floor($diff/86400).' дней';
-        }
-        elseif ($diff >= 16200)
-        {
-            $answer = round($diff/3600).' часов';
-        }
-        elseif ($diff >= 5400)
-        {
-            $answer = round($diff/3600).' часа';
-        }
-        elseif ($diff >= 3600)
-        {
-            $answer = 'час назад';
-        }
-        elseif ($diff >= 270)
-        {
-            $answer = round($diff/60).' минут';
-        }
-        elseif ($diff >= 90)
-        {
-            $answer = round($diff/60).' минуты';
-        }
-        elseif ($diff >= 60)
-        {
-            $answer = 'минуту';
-        }
-        else
-        {
-            $answer = 'только что';
+    public function diff_result(string $date, string $param = 'long'): string
+    {
+        $ending = "назад";
+        if($param !== 'long'){
+           $ending = "";
         }
 
-        if($param === 'long' and $diff >= 60)
-        {
-            $answer .= ' назад';
+        $diff = (int)(time()-strtotime($date));
+
+        $years = (int)($diff/self::YEAR);
+        if($years > 0){
+            return \Yii::t('app',"{n, plural, one{# год} few{# годa} many{# лет} other{# лет}} $ending", ['n' => $years]);
         }
-        return $answer;
+
+        $months = (int)($diff/self::MONTH);
+        if($months > 0){
+            return \Yii::t('app',"{n, plural, one{# месяц} few{# месяца} many{# месяцев} other{# месяцев}} $ending", ['n' => $months]);
+        }
+
+        $days = (int)($diff/self::DAY);
+        if($days > 0){
+            return \Yii::t('app',"{n, plural, one{# день} few{# дня} many{# дней} other{# дней}} $ending", ['n' => $days]);
+        }
+
+        $hours = (int)($diff/self::HOUR);
+        if($hours > 0){
+            return \Yii::t('app',"{n, plural, one{# час} few{# часа} many{# часов} other{# часов}} $ending", ['n' => $hours]);
+        }
+
+        $minutes = (int)($diff/self::MINUTE);
+        if($minutes > 0){
+            return \Yii::t('app',"{n, plural, one{# минуту} few{# минуты} many{# минут} other{# минут}} $ending", ['n' => $minutes]);
+        }
+
+        return "только что";
     }
 
 }

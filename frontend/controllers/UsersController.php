@@ -11,6 +11,7 @@ use frontend\models\Users;
 use frontend\models\Countries;
 use frontend\models\Cities;
 use frontend\models\Portfolio;
+use yii\web\NotFoundHttpException;
 
 class UsersController extends Controller
 {
@@ -58,8 +59,8 @@ class UsersController extends Controller
     public function actionView($id)
     {
         $user = Users::findOne($id);
-        if (!$user) {
-            throw new NotFoundHttpException("Пользователь с ID $id не найден");
+        if (!$user or $user->role !==2) {
+            throw new NotFoundHttpException("Исполнитель с ID $id не найден");
         }
         $category = Categories::find()->select(['category', 'id'])->all();
         $categories = (ArrayHelper::map($category, 'id', 'category'));
