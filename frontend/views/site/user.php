@@ -64,8 +64,8 @@ $fun = new Functions();
                          <? if(!empty($user_portfolio)): ?>
                         <div class="user__card-photo">                            
                             <h3 class="content-view__h3">Фото работ</h3>
-                            <? foreach($user_portfolio as $photo): ?>
-                            <a href="#"><img src="/user_files/<?=$photo?>" width="85" height="86" alt="Фото работы"></a>
+                            <? foreach($user_portfolio as $p): ?>
+                            <a href="#"><img src="/user_files/<?=$p->photo?>" width="85" height="86" alt="Фото работы"></a>
                             <? endforeach; ?>
                          </div>
                          <? endif ?>

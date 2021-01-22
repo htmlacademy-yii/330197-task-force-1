@@ -11,6 +11,7 @@ use frontend\models\Users;
 use frontend\models\Countries;
 use frontend\models\Cities;
 use frontend\models\Portfolio;
+use frontend\models\FeedbackAboutExecuter;
 use yii\web\NotFoundHttpException;
 
 class UsersController extends Controller
@@ -38,18 +39,19 @@ class UsersController extends Controller
 
         $user = new Users();
         $users = $user->search($form_data['UsersForm']);
-        $users_addition = $user->getAddition($users);
+
 
         foreach($users as $u){
             $users_rate['rate'][$u->id] = $user->getAvgRate($u->id);
-            $users_rate['feedbacks'][$u->id] = $user->getCountFeedback($u->id);
+            $users_rate['feedbacks'][$u->id] = $user->getExecutersFeedbackCount($u->id);
             $users_tasks[$u->id] = $user->getExecuterTaskCount($u->id);
+            $users_categories[$u->id] = $user->getArrayCaterories($u->id);
         }
 
         return $this->render('/site/users',['sortField' => $sortField,
                                             'categories' => $categories,
                                             'users' => $users,
-                                            'users_addition' => $users_addition,
+                                            'users_categories' => $users_categories,
                                             'users_rate' => $users_rate,
                                             'users_tasks' => $users_tasks,
                                             'user_form' => $user_form,
@@ -71,7 +73,7 @@ class UsersController extends Controller
         $user_city = Cities::findOne($user->city_id);
         $user_country = Countries::findOne($user_city->country_id);
         $user_categories = $user->getArrayCaterories($id);
-        $user_portfolio = $user->getArrayPortfolio($id);
+        $user_portfolio = $user->getPortfolio($id);
 
         return $this->render('/site/user', ['user' => $user,
                                             'categories' => $categories,

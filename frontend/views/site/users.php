@@ -52,8 +52,8 @@ $this->title = 'Исполнители';
                         <span class="new-task__time">Был на сайте <? echo $fun->diff_result($user->last_update) ?></span>
                     </div>
                     <div class="link-specialization user__search-link--bottom">
-                        <? foreach($users_addition[$user->id]['idcategories'] as $idcategory): ?>
-                        <a href="#" class="link-regular"><? echo $categories[$idcategory] ?></a>
+                        <? foreach($users_categories[$user->id] as $category): ?>
+                        <a href="#" class="link-regular"><? echo $category ?></a>
                         <? endforeach;?>
                     </div>
                 </div>
