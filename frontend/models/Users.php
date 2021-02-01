@@ -26,6 +26,7 @@ use yii\helpers\ArrayHelper;
  * @property string|null $last_update
  * @property int|null $views
  *
+ * @property Cities $city
  * @property CommentsForTask[] $commentsForTasks
  * @property ExecuterResponds[] $executerResponds
  * @property ExecutersCategory[] $executersCategories
@@ -34,7 +35,7 @@ use yii\helpers\ArrayHelper;
  * @property FeedbackAboutExecuter[] $feedbackAboutExecuters
  * @property Portfolio[] $portfolios
  * @property Tasks[] $tasks
- * @property Tasks[] $tasks0
+ * @property DoneTasks[] $doneTasks
  * @property UserPersonality[] $userPersonalities
  */
 class Users extends \yii\db\ActiveRecord
@@ -85,6 +86,15 @@ class Users extends \yii\db\ActiveRecord
             'views' => 'Views',
         ];
     }
+    /**
+     * Gets query for [[City]].
+     *
+     * @return \yii\db\ActiveQuery|CitiesQuery
+     */
+    public function getCity()
+    {
+        return $this->hasOne(Cities::className(), ['id' => 'city_id']);
+    }
 
     /**
      * Gets query for [[CommentsForTasks]].
@@ -116,6 +126,12 @@ class Users extends \yii\db\ActiveRecord
         return $this->hasMany(ExecutersCategory::className(), ['idexecuter' => 'id']);
     }
 
+    public function getCategories()
+    {
+        return $this->hasMany(Categories::className(), ['id' => 'idcategory'])
+                    ->viaTable('executers_category', ['idexecuter' => 'id']);
+    }
+
     /**
      * Gets query for [[Favorites]].
      *
@@ -124,6 +140,12 @@ class Users extends \yii\db\ActiveRecord
     public function getFavorites()
     {
         return $this->hasMany(Favorite::className(), ['iduser' => 'id']);
+    }
+
+    //Выводим список исполнителей, которые находятся в избранном для текущего пользователя
+    public function getChoicest(): FavoriteQuery
+    {
+        return $this->hasMany(Favorite::className(), ['favorite_user' => 'id']);
     }
 
     /**
@@ -175,71 +197,66 @@ class Users extends \yii\db\ActiveRecord
         return new UsersQuery(get_called_class());
     }
 
-    public function parse_data($form_data)
-    {
-        // Представляем, данные полученные из формы в удобном виде
-        if($form_data['category']){
-            $form_data['category'] = implode(",",$form_data['category']);
-        }
-        return $form_data;
-    }
-
     //Выводим список исполнителей, которые принадлежат к выбранной категории
     private function getExequtersByCategory($categories=null){
-        $idexecuters = ExecutersCategory::find()->distinct()->select(['idexecuter'])->from('executers_category');
+        $idexecuters = ExecutersCategory::find()->distinct()->select(['idexecuter']);
+
         if($categories){
-            $idexecuters = $idexecuters->andWhere("idcategory in ($categories)");
+            $idexecuters = $idexecuters->andWhere(['in', 'idcategory', $categories]);
         }
         $idexecuters = $idexecuters->all();
 
-        //Записываем в масив список всех исполнителей с нужной категорией
-        foreach($idexecuters as $value){
-            $array_execurters[] = $value['idexecuter'];
-        }
-        $array_execurters = implode(",",$array_execurters);
-
-        return $array_execurters;
+        return (ArrayHelper::getColumn($idexecuters, 'idexecuter'));
     }
 
     public function search($form_data = null){
+
         $id_executers = $this->getExequtersByCategory($form_data['category']);
 
         $query = self::find();
-        $query = $query->from(['users u'])
-                        ->joinWith('feedbackAboutExecuters f', true, 'LEFT JOIN' )
-                        ->joinWith('tasks t', true, 'LEFT JOIN')
-                        ->where('u.role = 2')
-                        ->andWhere("u.id in ($id_executers)");
+        $query = $query->joinWith('feedbackAboutExecuters f', true, 'LEFT JOIN' )
+                        ->where(['=','users.role',2])
+                        ->andWhere(['in','users.id',$id_executers]);
 
         if($form_data['search']){
-            $query = $query->andWhere(['like', 'u.fio', $form_data['search']]);
+            $query = $query->andWhere(['like', 'users.fio', $form_data['search']]);
         } else {
             if($form_data['free']){
-                $query = $query->andWhere(['not in','t.current_status', ['new','in_progress']]);
+                $query = $query->joinWith('tasks')
+                                ->andWhere(['not in','tasks.current_status', ['new','in_progress']]);
             }
             if($form_data['online']){
-                $query = $query->andWhere("u.last_update >= date_sub(NOW(),INTERVAL 30 MINUTE)");
+                $date = date_create(date('Y-m-d H:i:s'));
+                date_sub($date,date_interval_create_from_date_string('30 minute'));
+                $date = date_format($date,'Y-m-d H:i:s');
+
+                $query = $query->andWhere(['>=','users.last_update',$date]);
             }
             if($form_data['feedback']){
-                $query = $query->andWhere("f.target_user_id is not null");
+                $query = $query->andWhere(['is not','f.target_user_id',null]);
             }
             if($form_data['favorite']){
-                $query = $query->andWhere("u.id in (select distinct favorite_user from favorite)");
+                $current_user_id = 1;
+                $query = $query->joinWith('choicest')
+                                ->andWhere(['=','iduser',$current_user_id]);
             }
         }
 
-        $query = $query->groupBy(['u.id','u.fio', 'u.dt_add', 'u.last_update', 'u.avatar', 'u.about', 'u.views']);
+        $query = $query->groupBy(['users.id','users.fio', 'users.dt_add', 'users.last_update', 'users.avatar', 'users.about', 'users.views']);
         if($form_data['s'] === 'date'){
-            $query = $query->orderBy(['u.dt_add'=> SORT_DESC]);
+            $query = $query->orderBy(['users.dt_add'=> SORT_DESC]);
         }
         if($form_data['s'] === 'rate'){
             $query = $query->orderBy(['avg(ifnull(f.rate,0))'=> SORT_DESC]);
         }
         if($form_data['s'] === 'orders'){
-            $query = $query->orderBy(['COUNT(t.id)'=> SORT_DESC]);
+             $query = $query->joinWith(['tasks' => static function (TasksQuery $query) {
+                                            return $query->onCondition(['=','tasks.current_status','done']);
+                                        }])
+                            ->orderBy(['COUNT(tasks.id)'=> SORT_DESC]);
         }
         if($form_data['s'] === 'favor'){
-            $query = $query->orderBy(['u.views'=> SORT_DESC]);
+            $query = $query->orderBy(['users.views'=> SORT_DESC]);
         }
 
         $provider = new ActiveDataProvider([
@@ -254,60 +271,80 @@ class Users extends \yii\db\ActiveRecord
         return $users;
     }
 
-    //Формируем дополнительные данные для ответа
-    public function getAddition($users){
-        // Для каждого исполнителея выводим массив с idcategory работ которые они выполняют
-        foreach($users as $user){
-            $i= $user['id'];
-            $iduser = Users::findOne($i);
-            $idexecuters = $iduser->executersCategories;
-            foreach($idexecuters as $value){
-                $array[$i]['idcategories'][] = $value->idcategory;
+    //Возвращает полную информацию всех отзывов о пользователе по его id
+    public function getFeedbackFullInfo($executer_id){
+        $user = FeedbackAboutExecuter::find()->where(['=','target_user_id',$executer_id])->all();
+        if(!empty($user)){
+            foreach($user as $value){
+                $task = Tasks::findOne($value->target_task_id);
+                $customer = Users::findOne($value->id_user);
+
+                $feedback[$value->id]['task_title'] = $task->title;
+                $feedback[$value->id]['task_id'] = $task->id;
+                $feedback[$value->id]['owner_fio'] = $customer->fio;
+                $feedback[$value->id]['owner_avatar'] = $customer->avatar;
+                $feedback[$value->id]['rate'] = $value->rate;
+                $feedback[$value->id]['description'] = $value->description;
+                $feedback[$value->id]['dt_add'] = $value->dt_add;
+
+                if($value->rate <= 3)
+                {
+                    $feedback[$value->id]['rate_text'] = 'three';
+                } else {
+                    $feedback[$value->id]['rate_text'] = 'five';
+                }
             }
         }
-        return $array;
+        return $feedback;
     }
 
-    //Формируем массив с рейтингом пользователей и количеством отзывов
-    public function getRates($users){
-        $id = 0;
-        $array = [];
-        $r = [];
-        $f = [];
-        $rates = [];
-        foreach($users as $user){
-            $id = $user->id;
-
-            foreach ($user->feedbackAboutExecuters as $feedback) {
-                $array['rate'][$id][] = $feedback->rate;
-                $array['feedback_id'][$id][] = $feedback->id;
-            }
-
-            $r = array_filter($array['rate'][$id]);
-            $f = array_filter($array['feedback_id'][$id]);
-
-            $rates['rate'][$id] = round(array_sum($r)/count($r),2);
-            $rates['feedbacks'][$id] = count($f);
-        }
-
-        return $rates;
+    //Выводим количество задач открытых заказчиком по его id
+    public static function getCustomerTaskCount($customer_id){
+        return Tasks::find()->where(['=','idcustomer', $customer_id])->count();
     }
 
-     //Формируем массив с количеством выполненных заданий
-    public function getTaskCount($users){
-        $id = 0;
-        $array = [];
-        $t = [];
-        $user_tasks = [];
-        foreach($users as $user){
-            $id = $user->id;
-            foreach ($user->tasks as $task) {
-                $array[$id][] = $task->id;
-            }
-            $user_tasks[$id] = count($array[$id]);
+    //Выводим количество отзывов про исполнителя по его id
+    public static function getExecutersFeedbackCount($executer_id){
+        return FeedbackAboutExecuter::find()->where(['=','target_user_id',$executer_id])->count();
+    }
+
+    //Выводим количество отзывов про исполнителя по его id
+    public static function getAvgRate($executer_id){
+        return round(FeedbackAboutExecuter::find()->where(['=','target_user_id',$executer_id])->average('rate'),2);
+    }
+
+    //Формируем массив с количеством выполненных заданий исполнителем
+    public function getExecuterTaskCount($executer_id){
+        $taskCount = self::find()
+                ->joinWith('tasks t', true, 'INNER JOIN')
+                ->where("users.id=$executer_id")
+                ->andWhere(['=','t.current_status','done'])
+                ->count();
+        return $taskCount;
+    }
+
+    //Формируем массив с названием категорий для исполнителя по его id
+    public function getArrayCaterories($executer_id){
+        $query = self::find()
+                ->joinWith('executersCategories ec', true, 'INNER JOIN')
+                ->joinWith('categories c', true, 'INNER JOIN')
+                ->where(['=','ec.idexecuter', $executer_id]);
+        $provider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $user = $provider->getModels();
+
+        foreach($user[0]->categories as $category){
+            $user_categories[] = $category["category"];
         }
 
-        return $user_tasks;
+        return $user_categories;
+    }
+
+    //Выводим портфолио исполнителя по его id
+    public function getPortfolio($executer_id){
+        return Portfolio::find()->where(['=','idexecuter', $executer_id])->all();
     }
 
 }

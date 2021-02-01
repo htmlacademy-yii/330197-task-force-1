@@ -3,11 +3,11 @@
 namespace frontend\models;
 
 /**
- * This is the ActiveQuery class for [[Tasks_2]].
+ * This is the ActiveQuery class for [[Portfolio]].
  *
- * @see Tasks
+ * @see Portfolio
  */
-class TasksQuery extends \yii\db\ActiveQuery
+class PortfolioQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +16,7 @@ class TasksQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return Tasks[]|array
+     * @return Portfolio[]|array
      */
     public function all($db = null)
     {
@@ -25,7 +25,7 @@ class TasksQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return Tasks|array|null
+     * @return Portfolio|array|null
      */
     public function one($db = null)
     {

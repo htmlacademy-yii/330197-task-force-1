@@ -7,8 +7,9 @@ use Yii;
 /**
  * This is the model class for table "portfolio".
  *
- * @property int|null $idexecuter
- * @property string|null $photo
+ * @property int $idexecuter
+ * @property string $photo
+ * @property int $id
  *
  * @property Users $idexecuter0
  */
@@ -28,6 +29,7 @@ class Portfolio extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['idexecuter', 'photo'], 'required'],
             [['idexecuter'], 'integer'],
             [['photo'], 'string', 'max' => 255],
             [['idexecuter'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['idexecuter' => 'id']],
@@ -42,13 +44,14 @@ class Portfolio extends \yii\db\ActiveRecord
         return [
             'idexecuter' => 'Idexecuter',
             'photo' => 'Photo',
+            'id' => 'ID',
         ];
     }
 
     /**
      * Gets query for [[Idexecuter0]].
      *
-     * @return \yii\db\ActiveQuery|ExecutersCategoryQuery
+     * @return \yii\db\ActiveQuery|UsersQuery
      */
     public function getIdexecuter0()
     {
@@ -57,10 +60,10 @@ class Portfolio extends \yii\db\ActiveRecord
 
     /**
      * {@inheritdoc}
-     * @return ExecutersCategoryQuery the active query used by this AR class.
+     * @return PortfolioQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new ExecutersCategoryQuery(get_called_class());
+        return new PortfolioQuery(get_called_class());
     }
 }
