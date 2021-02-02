@@ -65,9 +65,9 @@ $fun = new Functions();
                         <?php foreach($executers as $executer):?>
                         <div class="content-view__feedback-card">
                             <div class="feedback-card__top">
-                                <a href="#"><img src="/img/<?= (isset($executer_info[$executer->id_user]->avatar)) ? $executer_info[$executer->id_user]->avatar :  'upload.png'?>" width="55" height="55"></a>
+                                <a href="/users/view/<?=$executer->id_user?>"><img src="/img/<?= (isset($executer_info[$executer->id_user]->avatar)) ? $executer_info[$executer->id_user]->avatar :  'upload.png'?>" width="55" height="55"></a>
                                 <div class="feedback-card__top--name">
-                                    <p><a href="#" class="link-regular"><?=$executer_info[$executer->id_user]->fio?></a></p>
+                                    <p><a href="/users/view/<?=$executer->id_user?>" class="link-regular"><?=$executer_info[$executer->id_user]->fio?></a></p>
                                     <?php for($i=0; $i<round($executer_rate[$executer->id_user]); $i++): ?>
                                         <span></span>
                                     <?php endfor;?>
