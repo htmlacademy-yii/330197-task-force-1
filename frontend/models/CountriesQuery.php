@@ -3,11 +3,11 @@
 namespace frontend\models;
 
 /**
- * This is the ActiveQuery class for [[Tasks_2]].
+ * This is the ActiveQuery class for [[Countries]].
  *
- * @see Tasks
+ * @see Countries
  */
-class TasksQuery extends \yii\db\ActiveQuery
+class CountriesQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +16,7 @@ class TasksQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return Tasks[]|array
+     * @return Countries[]|array
      */
     public function all($db = null)
     {
@@ -25,7 +25,7 @@ class TasksQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return Tasks|array|null
+     * @return Countries|array|null
      */
     public function one($db = null)
     {

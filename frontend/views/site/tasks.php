@@ -17,16 +17,16 @@ $fun = new Functions();
                     <?php foreach($tasks as $task): ?>
                     <div class="new-task__card">
                         <div class="new-task__title">
-                            <a href="#" class="link-regular"><h2><?php echo $task->title ?></h2></a>
-                            <a  class="new-task__type link-regular" href="#"><p><?php echo implode(array_keys($categoryTasks[$task->idcategory])) ?></p></a>
+                            <a href="/tasks/view/<?= $task->id ?>" class="link-regular"><h2><?= $task->title ?></h2></a>
+                            <a  class="new-task__type link-regular" href="#"><p><?= implode(array_keys($categoryTasks[$task->idcategory])) ?></p></a>
                         </div>
-                        <div class="new-task__icon new-task__icon--<?php echo $categoryTasks[$task->idcategory][implode(array_keys($categoryTasks[$task->idcategory]))] ?>"></div>
+                        <div class="new-task__icon new-task__icon--<?= $categoryTasks[$task->idcategory][implode(array_keys($categoryTasks[$task->idcategory]))] ?>"></div>
                         <p class="new-task_description">
-                            <?php echo $task->description ?>
+                            <?= $task->description ?>
                         </p>
-                        <b class="new-task__price new-task__price--<?php echo $categoryTasks[$task->idcategory][implode(array_keys($categoryTasks[$task->idcategory]))] ?>"><?php echo $task->budget ?><b> ₽</b></b>
-                        <p class="new-task__place"><?php echo $task->address ?></p>
-                        <span class="new-task__time"><?php echo $fun->diff_result($task->dt_add) ?></span>
+                        <b class="new-task__price new-task__price--<?= $categoryTasks[$task->idcategory][implode(array_keys($categoryTasks[$task->idcategory]))] ?>"><?= $task->budget ?><b> ₽</b></b>
+                        <p class="new-task__place"><?= $task->address ?></p>
+                        <span class="new-task__time"><?= $fun->diff_result($task->dt_add) ?></span>
                     </div>
                     <?php endforeach; ?>
                 </div>
