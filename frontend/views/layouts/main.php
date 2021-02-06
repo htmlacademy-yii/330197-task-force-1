@@ -61,13 +61,16 @@ AppAsset::register($this);
                         <a href="/users">Исполнители</a>
                     </li>
                     <li class="site-list__item">
-                        <a href="#">Создать задание</a>
+                        <a href="create.html">Создать задание</a>
                     </li>
+                    <? if($_SERVER['REQUEST_URI'] !== '/signup'):?>
                     <li class="site-list__item">
-                        <a>Мой профиль</a>
+                        <a href="account.html">Мой профиль</a>
                     </li>
+                    <?endif;?>
                 </ul>
             </div>
+            <? if($_SERVER['REQUEST_URI'] !== '/signup'):?>
             <div class="header__town">
                 <select class="multiple-select input town-select" size="1" name="town[]">
                     <option value="Moscow">Москва</option>
@@ -79,43 +82,42 @@ AppAsset::register($this);
             </div>
             <div class="header__lightbulb"></div>
             <div class="lightbulb__pop-up">
-                <h3>Новые события</h3>
-                <p class="lightbulb__new-task lightbulb__new-task--message">
-                    Новое сообщение в чате
-                    <a href="#" class="link-regular">«Помочь с курсовой»</a>
-                </p>
-                <p class="lightbulb__new-task lightbulb__new-task--executor">
-                    Выбран исполнитель для
-                    <a href="#" class="link-regular">«Помочь с курсовой»</a>
-                </p>
-                <p class="lightbulb__new-task lightbulb__new-task--close">
-                    Завершено задание
-                    <a href="#" class="link-regular">«Помочь с курсовой»</a>
-                </p>
+            <h3>Новые события</h3>
+            <p class="lightbulb__new-task lightbulb__new-task--message">
+              Новое сообщение в чате
+                <a href="view.html" class="link-regular">«Помочь с курсовой»</a>
+            </p>
+            <p class="lightbulb__new-task lightbulb__new-task--executor">
+              Выбран исполнитель для
+                <a href="view.html" class="link-regular">«Помочь с курсовой»</a>
+            </p>
+            <p class="lightbulb__new-task lightbulb__new-task--close">
+              Завершено задание
+                <a href="view.html" class="link-regular">«Помочь с курсовой»</a>
+            </p>
             </div>
             <div class="header__account">
                 <a class="header__account-photo">
                     <img src="/img/user-photo.png"
-                         width="43" height="44"
-                         alt="Аватар пользователя">
+                       width="43" height="44"
+                       alt="Аватар пользователя">
                 </a>
-                <span class="header__account-name">
-                 Василий
-                </span>
+                <span class="header__account-name">Василий</span>
             </div>
             <div class="account__pop-up">
                 <ul class="account__pop-up-list">
                     <li>
-                        <a href="#">Мои задания</a>
+                        <a href="mylist.html">Мои задания</a>
                     </li>
                     <li>
-                        <a href="#">Настройки</a>
+                        <a href="account.html">Настройки</a>
                     </li>
                     <li>
-                        <a href="#">Выход</a>
+                        <a href="landing.html">Выход</a>
                     </li>
                 </ul>
             </div>
+            <?endif;?>
         </div>
     </header>
 
@@ -163,6 +165,20 @@ AppAsset::register($this);
                          alt="Логотип HTML Academy">
                 </a>
             </div>
+            <? if($_SERVER['REQUEST_URI'] === '/signup'):?>
+            <div class="clipart-woman">
+                <img src="./img/clipart-woman.png" width="238" height="450">
+            </div>
+            <div class="clipart-message">
+                <div class="clipart-message-text">
+                  <h2>Знаете ли вы, что?</h2>
+                  <p>После регистрации вам будет доступно более
+                    двух тысяч заданий из двадцати разных категорий.</p>
+                  <p>В среднем, наши исполнители зарабатывают
+                    от 500 рублей в час.</p>
+                </div>
+            </div>
+            <?endif;?>
         </div>
     </footer>
 </div>
