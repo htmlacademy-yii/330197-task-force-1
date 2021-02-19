@@ -10,12 +10,6 @@ use frontend\models\Users;
 
 class SignupController extends Controller
 {
-    public function beforeAction($action)
-    {
-        $this->enableCsrfValidation = true;
-        return true;
-    }
-    
     public function actionIndex()
     {   
         $form_model = new SignupForm();

@@ -16,12 +16,6 @@ use yii\web\NotFoundHttpException;
 
 class UsersController extends Controller
 {
-    public function beforeAction($action)
-    {
-        $this->enableCsrfValidation = true;
-        return true;
-    }
-    
     public function actionIndex()
     {   
         $user_form = new UsersForm();
