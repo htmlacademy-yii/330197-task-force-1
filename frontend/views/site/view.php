@@ -3,7 +3,6 @@
 /* @var $categories \frontend\controllers\TasksController*/
 
 use frontend\functions;
-$fun = new Functions();
 ?>
     <main class="page-main">
         <div class="main-container page-container">
@@ -15,7 +14,7 @@ $fun = new Functions();
                                 <h1><?= $task->title?></h1>
                                 <span>Размещено в категории
                                     <a href="#" class="link-regular"><?= $category->category?></a>
-                                    <?= $fun->diff_result($task->dt_add) ?></span>
+                                    <?= Functions::diff_result($task->dt_add) ?></span>
                             </div>
                             <b class="new-task__price new-task__price--<?= $category->icon?> content-view-price"><?= $task->budget?><b> ₽</b></b>
                             <div class="new-task__icon new-task__icon--<?= $category->icon?> content-view-icon"></div>
@@ -76,7 +75,7 @@ $fun = new Functions();
                                     <?php endfor;?>                                    
                                    <b><?= $executer_rate[$executer->id_user]?></b>
                                 </div>
-                                <span class="new-task__time"><?=$fun->diff_result($executer->dt_add)?></span>
+                                <span class="new-task__time"><?=Functions::diff_result($executer->dt_add)?></span>
                             </div>
                             <div class="feedback-card__content">
                                 <p>
@@ -107,7 +106,7 @@ $fun = new Functions();
                             </div>
                         </div>
                         <p class="info-customer"><span>12 заданий</span><span class="last-">
-                            <?=$fun->diff_result($customer->dt_add,'short');?>
+                            <?=Functions::diff_result($customer->dt_add,'short');?>
                              на сайте</span></p>
                         <a href="#" class="link-regular">Смотреть профиль</a>
                     </div>

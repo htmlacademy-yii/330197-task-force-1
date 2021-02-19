@@ -7,7 +7,6 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\ActiveField;
 use frontend\functions;
-$fun = new Functions();
 $this->title = 'Исполнители';
 ?>
     <main class="page-main">
@@ -49,7 +48,7 @@ $this->title = 'Исполнители';
                                 <?= $user->about; ?>
                             </p>
                         </div>
-                        <span class="new-task__time">Был на сайте <? echo $fun->diff_result($user->last_update) ?></span>
+                        <span class="new-task__time">Был на сайте <? echo Functions::diff_result($user->last_update) ?></span>
                     </div>
                     <div class="link-specialization user__search-link--bottom">
                         <? foreach($users_categories[$user->id] as $category): ?>

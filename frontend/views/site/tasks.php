@@ -6,7 +6,6 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\ActiveField;
 use frontend\functions;
-$fun = new Functions();
 ?>
     <main class="page-main">
         <div class="main-container page-container">
@@ -26,7 +25,7 @@ $fun = new Functions();
                         </p>
                         <b class="new-task__price new-task__price--<?= $categoryTasks[$task->idcategory][implode(array_keys($categoryTasks[$task->idcategory]))] ?>"><?= $task->budget ?><b> ₽</b></b>
                         <p class="new-task__place"><?= $task->address ?></p>
-                        <span class="new-task__time"><?= $fun->diff_result($task->dt_add) ?></span>
+                        <span class="new-task__time"><?= Functions::diff_result($task->dt_add) ?></span>
                     </div>
                     <?php endforeach; ?>
                 </div>

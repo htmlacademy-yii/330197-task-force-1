@@ -10,7 +10,6 @@
 /* @var $user_feedbacks \frontend\controllers\UsersController\actionView */
 
 use frontend\functions;
-$fun = new Functions();
 ?>
     <main class="page-main">
         <div class="main-container page-container">
@@ -20,7 +19,7 @@ $fun = new Functions();
                         <img src="/img/<?= (isset($user->avatar)) ? $user->avatar : 'upload.png'?>" width="120" height="120" alt="Аватар пользователя">
                          <div class="content-view__headline">
                             <h1><?=$user->fio?></h1>
-                             <p><?=$user_country->country?>, <?=$user_city->city?>, <?=$fun->diff_result($user->birthday,'short');?></p>
+                             <p><?=$user_country->country?>, <?=$user_city->city?>, <?= Functions::diff_result($user->birthday,'short');?></p>
                             <div class="profile-mini__name five-stars__rate">                                
                                 <? for($i=0; $i<round($user_rate); $i++): ?>
                                 <span></span>
@@ -33,7 +32,7 @@ $fun = new Functions();
                             <b class="done-task">Выполнил <?=$user_tasks?> заказов</b><b class="done-review">Получил <?=count($user_feedbacks)?> отзывов</b>
                          </div>
                         <div class="content-view__headline user__card-bookmark user__card-bookmark--current">
-                            <span>Был на сайте <?=$fun->diff_result($user->last_update);?></span>
+                            <span>Был на сайте <?=Functions::diff_result($user->last_update);?></span>
                              <a href="#"><b></b></a>
                         </div>
                     </div>
