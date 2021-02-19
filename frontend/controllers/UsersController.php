@@ -36,10 +36,11 @@ class UsersController extends Controller
 
 
         foreach($users as $u){
-            $users_rate['rate'][$u->id] = $user->getAvgRate($u->id);
-            $users_rate['feedbacks'][$u->id] = $user->getExecutersFeedbackCount($u->id);
-            $users_tasks[$u->id] = $user->getExecuterTaskCount($u->id);
-            $users_categories[$u->id] = $user->getArrayCaterories($u->id);
+            $executer = Users::findOne($u->id);
+            $users_rate['rate'][$u->id] = $executer->getAvgRate();
+            $users_rate['feedbacks'][$u->id] = $executer->getExecutersFeedbackCount();
+            $users_tasks[$u->id] = $executer->getExecuterTaskCount();
+            $users_categories[$u->id] = $executer->getArrayCaterories();
         }
 
         return $this->render('/site/users',['sortField' => $sortField,
@@ -61,12 +62,12 @@ class UsersController extends Controller
         $category = Categories::find()->select(['category', 'id'])->all();
         $categories = (ArrayHelper::map($category, 'id', 'category'));
 
-        $user_rate = $user->getAvgRate($id);
-        $user_feedbacks = $user->getFeedbackFullInfo($id);
-        $user_tasks = $user->getExecuterTaskCount($id);
+        $user_rate = $user->getAvgRate();
+        $user_feedbacks = $user->getFeedbackFullInfo();
+        $user_tasks = $user->getExecuterTaskCount();
         $user_city = Cities::findOne($user->city_id);
         $user_country = Countries::findOne($user_city->country_id);
-        $user_categories = $user->getArrayCaterories($id);
+        $user_categories = $user->getArrayCaterories();
         $user_portfolio = $user->getPortfolio($id);
 
         return $this->render('/site/user', ['user' => $user,
