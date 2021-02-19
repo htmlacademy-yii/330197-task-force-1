@@ -18,6 +18,8 @@ use yii\widgets\ActiveField;
                             'method' => "post",
                             'options' => ['data-pjax' => 1, 'class' => 'registration__user-form form-create'],
                             'validateOnSubmit' => false,
+                            'enableAjaxValidation' => false,
+                            'enableClientValidation' => true,
                             'fieldConfig' => [
                                 'template' => " <div class=\"field-container field-container--registration $error_class \">{label}\n{input}\n<span class='registration__text-error'>{hint}</span>\n{error}\n</div>",
                                 'inputOptions' => [ 'class' => "input textarea", 'rows' => '1'],
@@ -25,10 +27,10 @@ use yii\widgets\ActiveField;
                         ]); ?>
                         <?= $form->field($form_model, 'email', ['options' => ['tag' => false]])
                                     ->textArea(['id'=>'16', 'placeholder' => "kumarm@mail.ru", 'autofocus' => true])
-                                    ->hint(isset($error['email']) ? $error['email'] : 'Введите валидный адрес электронной почты')
+                                    ->hint('Введите валидный адрес электронной почты')
                                     ->label('Электронная почта')?>
 
-                        <?= $form->field($form_model, 'username', ['options' => ['tag' => false]])
+                        <?= $form->field($form_model, 'fio', ['options' => ['tag' => false]])
                                     ->textArea(['id'=>'17', 'placeholder' => "Мамедов Кумар"])
                                     ->hint('Введите ваше имя и фамилию')
                                     ->label('Ваше имя')?>
