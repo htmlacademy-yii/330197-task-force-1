@@ -63,14 +63,14 @@ AppAsset::register($this);
                     <li class="site-list__item">
                         <a href="create.html">Создать задание</a>
                     </li>
-                    <? if($_SERVER['REQUEST_URI'] !== '/signup'):?>
+                    <? if(Yii::$app->controller->id !== 'signup'):?>
                     <li class="site-list__item">
                         <a href="account.html">Мой профиль</a>
                     </li>
                     <?endif;?>
                 </ul>
             </div>
-            <? if($_SERVER['REQUEST_URI'] !== '/signup'):?>
+            <? if(Yii::$app->controller->id !== 'signup'):?>
             <div class="header__town">
                 <select class="multiple-select input town-select" size="1" name="town[]">
                     <option value="Moscow">Москва</option>
@@ -165,7 +165,7 @@ AppAsset::register($this);
                          alt="Логотип HTML Academy">
                 </a>
             </div>
-            <? if($_SERVER['REQUEST_URI'] === '/signup'):?>
+            <? if(Yii::$app->controller->id === 'signup'):?>
             <div class="clipart-woman">
                 <img src="./img/clipart-woman.png" width="238" height="450">
             </div>
