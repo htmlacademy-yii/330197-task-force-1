@@ -7,6 +7,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\ActiveField;
 use frontend\functions;
+use yii\helpers\Url;
 $this->title = 'Исполнители';
 ?>
     <main class="page-main">
@@ -17,13 +18,13 @@ $this->title = 'Исполнители';
                     <p>Сортировать по:</p>
                     <ul class="user__search-list">
                         <li class="user__search-item <? if(!isset($sortField) or $sortField === 'rate') {echo 'user__search-item--current';} ?>">
-                            <a href="/users?s=rate" class="link-regular">Рейтингу</a>
+                            <a href="<?=Url::to(['/users/', 's'=>'rate'])?>" class="link-regular">Рейтингу</a>
                         </li>
                         <li class="user__search-item <? if(isset($sortField) and $sortField === 'orders') {echo 'user__search-item--current';} ?>">
-                            <a href="/users?s=orders" class="link-regular">Числу заказов</a>
+                            <a href="<?=Url::to(['/users/', 's'=>'orders'])?>" class="link-regular">Числу заказов</a>
                         </li>
                         <li class="user__search-item <? if(isset($sortField) and $sortField === 'favor') {echo 'user__search-item--current';} ?>">
-                            <a href="/users?s=favor" class="link-regular">Популярности</a>
+                            <a href="<?=Url::to(['/users/', 's'=>'favor'])?>" class="link-regular">Популярности</a>
                         </li>
                     </ul>
                 </div>
@@ -31,12 +32,12 @@ $this->title = 'Исполнители';
                 <div class="content-view__feedback-card user__search-wrapper">
                     <div class="feedback-card__top">
                         <div class="user__search-icon">
-                            <a href="/users/view/<?=$user->id?>"><img src="./img/<?=isset($user->avatar) ? $user->avatar : 'upload.png'?>" width="65" height="65"></a>
+                            <a href="<?=Url::to(['/users/view/', 'id'=>$user->id])?>"><img src="./img/<?=isset($user->avatar) ? $user->avatar : 'upload.png'?>" width="65" height="65"></a>
                             <span><? echo $users_tasks[$user->id]?> заданий</span>
                             <span><? echo $users_rate['feedbacks'][$user->id]?> отзывов</span>
                         </div>
                         <div class="feedback-card__top--name user__search-card">
-                            <p class="link-name"><a href="/users/view/<?=$user->id?>" class="link-regular"><? echo $user->fio?></a></p>
+                            <p class="link-name"><a href="<?=Url::to(['/users/view/', 'id'=>$user->id])?>" class="link-regular"><? echo $user->fio?></a></p>
                             <? for($i=0; $i<round($users_rate['rate'][$user->id]); $i++): ?>
                                 <span></span>
                             <? endfor;?>

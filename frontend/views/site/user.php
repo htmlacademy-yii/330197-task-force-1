@@ -10,6 +10,7 @@
 /* @var $user_feedbacks \frontend\controllers\UsersController\actionView */
 
 use frontend\functions;
+use yii\helpers\Url;
 ?>
     <main class="page-main">
         <div class="main-container page-container">
@@ -76,7 +77,7 @@ use frontend\functions;
                     <div class="content-view__feedback-wrapper reviews-wrapper">
                         <?foreach($user_feedbacks as $feedback):?>
                         <div class="feedback-card__reviews">
-                            <p class="link-task link">Задание <a href="/tasks/view/<?=$feedback['task_id']?>" class="link-regular">«<?=$feedback['task_title']?>»</a></p>
+                            <p class="link-task link">Задание <a href="<?=Url::to(['/tasks/view/', 'id'=>$feedback['task_id']])?>" class="link-regular">«<?=$feedback['task_title']?>»</a></p>
                             <div class="card__review">
                                 <a href="#"><img src="/img/<?= (isset($feedback['owner_avatar'])) ? $feedback['owner_avatar'] : 'upload.png'?>" width="55" height="54"></a>
                                 <div class="feedback-card__reviews-content">

@@ -16,11 +16,11 @@ use yii\web\NotFoundHttpException;
 
 class UsersController extends Controller
 {
-    public function actionIndex()
+    public function actionIndex($s = null)
     {   
         $user_form = new UsersForm();
         $form_data = array();
-        $sortField = (isset($_GET['s'])) ? $_GET['s'] : 'date';
+        $sortField = isset($s) ? $s : 'date';
         $form_data['UsersForm']['s'] = $sortField;
 
         if (Yii::$app->request->getIsPost()) {

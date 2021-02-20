@@ -6,6 +6,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\ActiveField;
 use frontend\functions;
+use yii\helpers\Url;
 ?>
     <main class="page-main">
         <div class="main-container page-container">
@@ -16,7 +17,7 @@ use frontend\functions;
                     <?php foreach($tasks as $task): ?>
                     <div class="new-task__card">
                         <div class="new-task__title">
-                            <a href="/tasks/view/<?= $task->id ?>" class="link-regular"><h2><?= $task->title ?></h2></a>
+                            <a href="<?=Url::to(['/tasks/view/', 'id' => $task->id])?>" class="link-regular"><h2><?= $task->title ?></h2></a>                            
                             <a  class="new-task__type link-regular" href="#"><p><?= implode(array_keys($categoryTasks[$task->idcategory])) ?></p></a>
                         </div>
                         <div class="new-task__icon new-task__icon--<?= $categoryTasks[$task->idcategory][implode(array_keys($categoryTasks[$task->idcategory]))] ?>"></div>
