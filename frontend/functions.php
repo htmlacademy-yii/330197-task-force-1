@@ -18,7 +18,7 @@ class Functions {
     const MONTH = self::DAY * 30;
     const YEAR = self::DAY * 365;
 
-    public function diff_result(string $date, string $param = 'long'): string
+    public static function diff_result(string $date, string $param = 'long'): string
     {
         $ending = "назад";
         if($param !== 'long'){

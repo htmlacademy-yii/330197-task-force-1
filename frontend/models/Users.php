@@ -272,8 +272,8 @@ class Users extends \yii\db\ActiveRecord
     }
 
     //Возвращает полную информацию всех отзывов о пользователе по его id
-    public function getFeedbackFullInfo($executer_id){
-        $user = FeedbackAboutExecuter::find()->where(['=','target_user_id',$executer_id])->all();
+    public function getFeedbackFullInfo(){
+        $user = FeedbackAboutExecuter::find()->where(['=','target_user_id',$this->id])->all();
         if(!empty($user)){
             foreach($user as $value){
                 $task = Tasks::findOne($value->target_task_id);
@@ -299,36 +299,36 @@ class Users extends \yii\db\ActiveRecord
     }
 
     //Выводим количество задач открытых заказчиком по его id
-    public static function getCustomerTaskCount($customer_id){
-        return Tasks::find()->where(['=','idcustomer', $customer_id])->count();
+    public function getCustomerTaskCount(){
+        return Tasks::find()->where(['=','idcustomer', $this->id])->count();
     }
 
     //Выводим количество отзывов про исполнителя по его id
-    public static function getExecutersFeedbackCount($executer_id){
-        return FeedbackAboutExecuter::find()->where(['=','target_user_id',$executer_id])->count();
+    public function getExecutersFeedbackCount(){
+        return FeedbackAboutExecuter::find()->where(['=','target_user_id',$this->id])->count();
     }
 
     //Выводим количество отзывов про исполнителя по его id
-    public static function getAvgRate($executer_id){
-        return round(FeedbackAboutExecuter::find()->where(['=','target_user_id',$executer_id])->average('rate'),2);
+    public function getAvgRate(){
+        return round(FeedbackAboutExecuter::find()->where(['=','target_user_id',$this->id])->average('rate'),2);
     }
 
     //Формируем массив с количеством выполненных заданий исполнителем
-    public function getExecuterTaskCount($executer_id){
+    public function getExecuterTaskCount(){
         $taskCount = self::find()
                 ->joinWith('tasks t', true, 'INNER JOIN')
-                ->where("users.id=$executer_id")
+                ->where(['=','users.id',$this->id])
                 ->andWhere(['=','t.current_status','done'])
                 ->count();
         return $taskCount;
     }
 
     //Формируем массив с названием категорий для исполнителя по его id
-    public function getArrayCaterories($executer_id){
+    public function getArrayCaterories(){
         $query = self::find()
                 ->joinWith('executersCategories ec', true, 'INNER JOIN')
                 ->joinWith('categories c', true, 'INNER JOIN')
-                ->where(['=','ec.idexecuter', $executer_id]);
+                ->where(['=','ec.idexecuter', $this->id]);
         $provider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -343,8 +343,8 @@ class Users extends \yii\db\ActiveRecord
     }
 
     //Выводим портфолио исполнителя по его id
-    public function getPortfolio($executer_id){
-        return Portfolio::find()->where(['=','idexecuter', $executer_id])->all();
+    public function getPortfolio(){
+        return Portfolio::find()->where(['=','idexecuter', $this->id])->all();
     }
 
 }

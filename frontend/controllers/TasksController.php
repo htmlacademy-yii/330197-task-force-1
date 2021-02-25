@@ -55,14 +55,15 @@ class TasksController extends Controller
 
         $customer = Users::findOne($task->idcustomer);
         $users = new Users();
-        $customer_tasks_count = $users->getCustomerTaskCount($customer->id);
+        $customer_tasks_count = $users->getCustomerTaskCount();
 
         $executers = $task->executerResponds;
         $files = $task->storedFiles;
 
         foreach($executers as $value){
-            $executer_rate[$value->id_user] = $users->getAvgRate($value->id_user);
-            $executer_info[$value->id_user] = Users::findOne($value->id_user);
+            $user = Users::findOne($value->id_user);
+            $executer_rate[$value->id_user] = $user->getAvgRate();
+            $executer_info[$value->id_user] = $user;
         }
 
         return $this->render('/site/view', ['task' => $task,

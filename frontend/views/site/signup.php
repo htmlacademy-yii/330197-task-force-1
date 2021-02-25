@@ -1,35 +1,53 @@
 <?php
-
-/* @var $this yii\web\View */
-/* @var $form yii\bootstrap\ActiveForm */
-/* @var $model \frontend\models\SignupForm */
+/* @var $form_model \frontend\controllers\SignupController*/
 
 use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
-
-$this->title = 'Signup';
-$this->params['breadcrumbs'][] = $this->title;
+use yii\widgets\ActiveForm;
+use yii\widgets\ActiveField;
 ?>
-<div class="site-signup">
-    <h1><?= Html::encode($this->title) ?></h1>
+    <main class="page-main">
+        <div class="main-container page-container">
+            <section class="registration__user">
+                <h1>Регистрация аккаунта</h1>
+                <div class="registration-wrapper">
+                    <?php $error_class = "";
+                        if(isset($error)){
+                            $error_class = "has-error";
+                        }
+                        $form = ActiveForm::begin([
+                            'method' => "post",
+                            'options' => ['data-pjax' => 1, 'class' => 'registration__user-form form-create'],
+                            'validateOnSubmit' => false,
+                            'enableAjaxValidation' => false,
+                            'enableClientValidation' => true,
+                            'fieldConfig' => [
+                                'template' => " <div class=\"field-container field-container--registration $error_class \">{label}\n{input}\n<span class='registration__text-error'>{hint}</span>\n{error}\n</div>",
+                                'inputOptions' => [ 'class' => "input textarea", 'rows' => '1'],
+                            ],
+                        ]); ?>
+                        <?= $form->field($form_model, 'email', ['options' => ['tag' => false]])
+                                    ->textArea(['id'=>'16', 'placeholder' => "kumarm@mail.ru", 'autofocus' => true])
+                                    ->hint('Введите валидный адрес электронной почты')
+                                    ->label('Электронная почта')?>
 
-    <p>Please fill out the following fields to signup:</p>
+                        <?= $form->field($form_model, 'fio', ['options' => ['tag' => false]])
+                                    ->textArea(['id'=>'17', 'placeholder' => "Мамедов Кумар"])
+                                    ->hint('Введите ваше имя и фамилию')
+                                    ->label('Ваше имя')?>
 
-    <div class="row">
-        <div class="col-lg-5">
-            <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
+                        <?= $form->field($form_model, 'city_id', ['options' => ['tag' => false]])
+                                    ->dropDownList($cities, ['class' => 'multiple-select input town-select registration-town', 'size' => '1', 'id' => '18'])
+                                    ->hint('Укажите город, чтобы находить подходящие задачи')
+                                    ->label('Город проживания')?>
 
-                <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+                        <?= $form->field($form_model, 'password', ['options' => ['tag' => false]])
+                                    ->passwordInput(['id'=>'19'])
+                                    ->hint('Длина пароля от 8 символов')
+                                    ->label('Пароль')?>
 
-                <?= $form->field($model, 'email') ?>
-
-                <?= $form->field($model, 'password')->passwordInput() ?>
-
-                <div class="form-group">
-                    <?= Html::submitButton('Signup', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
+                        <?= Html::submitButton('Cоздать аккаунт', ['class' => "button button__registration",'type' => 'submit','name' => 'submit']) ?>
+                    <?php ActiveForm::end(); ?>
                 </div>
-
-            <?php ActiveForm::end(); ?>
+            </section>
         </div>
-    </div>
-</div>
+    </main>

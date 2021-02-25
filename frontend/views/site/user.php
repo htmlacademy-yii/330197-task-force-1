@@ -10,7 +10,7 @@
 /* @var $user_feedbacks \frontend\controllers\UsersController\actionView */
 
 use frontend\functions;
-$fun = new Functions();
+use yii\helpers\Url;
 ?>
     <main class="page-main">
         <div class="main-container page-container">
@@ -20,7 +20,7 @@ $fun = new Functions();
                         <img src="/img/<?= (isset($user->avatar)) ? $user->avatar : 'upload.png'?>" width="120" height="120" alt="Аватар пользователя">
                          <div class="content-view__headline">
                             <h1><?=$user->fio?></h1>
-                             <p><?=$user_country->country?>, <?=$user_city->city?>, <?=$fun->diff_result($user->birthday,'short');?></p>
+                             <p><?=$user_country->country?>, <?=$user_city->city?>, <?= Functions::diff_result($user->birthday,'short');?></p>
                             <div class="profile-mini__name five-stars__rate">                                
                                 <? for($i=0; $i<round($user_rate); $i++): ?>
                                 <span></span>
@@ -33,7 +33,7 @@ $fun = new Functions();
                             <b class="done-task">Выполнил <?=$user_tasks?> заказов</b><b class="done-review">Получил <?=count($user_feedbacks)?> отзывов</b>
                          </div>
                         <div class="content-view__headline user__card-bookmark user__card-bookmark--current">
-                            <span>Был на сайте <?=$fun->diff_result($user->last_update);?></span>
+                            <span>Был на сайте <?=Functions::diff_result($user->last_update);?></span>
                              <a href="#"><b></b></a>
                         </div>
                     </div>
@@ -77,7 +77,7 @@ $fun = new Functions();
                     <div class="content-view__feedback-wrapper reviews-wrapper">
                         <?foreach($user_feedbacks as $feedback):?>
                         <div class="feedback-card__reviews">
-                            <p class="link-task link">Задание <a href="/tasks/view/<?=$feedback['task_id']?>" class="link-regular">«<?=$feedback['task_title']?>»</a></p>
+                            <p class="link-task link">Задание <a href="<?=Url::to(['/tasks/view/', 'id'=>$feedback['task_id']])?>" class="link-regular">«<?=$feedback['task_title']?>»</a></p>
                             <div class="card__review">
                                 <a href="#"><img src="/img/<?= (isset($feedback['owner_avatar'])) ? $feedback['owner_avatar'] : 'upload.png'?>" width="55" height="54"></a>
                                 <div class="feedback-card__reviews-content">

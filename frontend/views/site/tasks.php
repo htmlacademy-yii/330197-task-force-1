@@ -6,7 +6,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\ActiveField;
 use frontend\functions;
-$fun = new Functions();
+use yii\helpers\Url;
 ?>
     <main class="page-main">
         <div class="main-container page-container">
@@ -17,7 +17,7 @@ $fun = new Functions();
                     <?php foreach($tasks as $task): ?>
                     <div class="new-task__card">
                         <div class="new-task__title">
-                            <a href="/tasks/view/<?= $task->id ?>" class="link-regular"><h2><?= $task->title ?></h2></a>
+                            <a href="<?=Url::to(['/tasks/view/', 'id' => $task->id])?>" class="link-regular"><h2><?= $task->title ?></h2></a>                            
                             <a  class="new-task__type link-regular" href="#"><p><?= implode(array_keys($categoryTasks[$task->idcategory])) ?></p></a>
                         </div>
                         <div class="new-task__icon new-task__icon--<?= $categoryTasks[$task->idcategory][implode(array_keys($categoryTasks[$task->idcategory]))] ?>"></div>
@@ -26,7 +26,7 @@ $fun = new Functions();
                         </p>
                         <b class="new-task__price new-task__price--<?= $categoryTasks[$task->idcategory][implode(array_keys($categoryTasks[$task->idcategory]))] ?>"><?= $task->budget ?><b> ₽</b></b>
                         <p class="new-task__place"><?= $task->address ?></p>
-                        <span class="new-task__time"><?= $fun->diff_result($task->dt_add) ?></span>
+                        <span class="new-task__time"><?= Functions::diff_result($task->dt_add) ?></span>
                     </div>
                     <?php endforeach; ?>
                 </div>
