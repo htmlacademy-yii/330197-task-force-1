@@ -22,7 +22,7 @@ class LandingController extends Controller
                     [
                         'allow' => true,
                         'actions' => ['index'],
-                        'roles' => ['?']
+                        'roles' => ['?','@']
                     ]
                 ]
             ]
@@ -36,16 +36,6 @@ class LandingController extends Controller
         $task = new Tasks();
         $tasks = $task->filter(4);
 
-        $this->layout = '/main_landing';
-        return $this->render('/site/landing',[  'categoryTasks' => $categoryTasks,
-                                                'tasks' => $tasks,
-                                            ]);
-    }
-
-    /*
-     * CREATE LOGIN FORM VALIDATION
-     */
-    public function actionLogin() {
         $loginForm = new LoginForm();
 
         if (Yii::$app->request->getIsPost()) {            
@@ -55,12 +45,20 @@ class LandingController extends Controller
                 $user = $loginForm->getUser();
                 \Yii::$app->user->login($user);
 
-                return $this->render('/site/landing');
+                $this->layout = '/main';
+                return $this->render('/site/landing',[  'categoryTasks' => $categoryTasks,
+                                                        'tasks' => $tasks,
+                                                    ]);
             } else {
                 $error = "Неправильный email или пароль";
                 $this->layout = '/main_landing';
                 return $this->render('/site/error',['error' => $error ]);
             }
         }
+
+        $this->layout = '/main_landing';
+        return $this->render('/site/landing',[  'categoryTasks' => $categoryTasks,
+                                                'tasks' => $tasks,
+                                            ]);
     }
 }

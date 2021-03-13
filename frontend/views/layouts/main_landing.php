@@ -122,7 +122,6 @@ $model = new LoginForm();
                                     'validateOnSubmit' => false,
                                     'enableAjaxValidation' => false,
                                     'enableClientValidation' => true,
-                                    'action' => Yii::$app->urlManager->createUrl('/landing/login'),
                                     'options' => ['data-pjax' => 1, 'class' => 'form-modal'],
                                 ]);
         ?>
