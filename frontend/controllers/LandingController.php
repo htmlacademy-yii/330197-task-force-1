@@ -56,7 +56,11 @@ class LandingController extends Controller
             }
         }
 
-        $this->layout = '/main_landing';
+        if (!Yii::$app->user->isGuest) {
+            $this->layout = '/main';
+        } else {
+            $this->layout = '/main_landing';
+        }
         return $this->render('/site/landing',[  'categoryTasks' => $categoryTasks,
                                                 'tasks' => $tasks,
                                             ]);
