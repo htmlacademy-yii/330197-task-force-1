@@ -11,7 +11,7 @@ use frontend\models\Users;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 
-class TasksController extends Controller
+class TasksController extends SecuredController
 {   
     public function actionIndex()
     {
@@ -36,7 +36,7 @@ class TasksController extends Controller
 
         $task = new Tasks();
         $parsed_data = $task->parse_data($form_data['CategoriesFormNew']);
-        $tasks = $task->filter($parsed_data);
+        $tasks = $task->filter(5,$parsed_data);
 
         return $this->render('/site/tasks', ['categories' => $categories,
                                              'categoryTasks' => $categoryTasks,

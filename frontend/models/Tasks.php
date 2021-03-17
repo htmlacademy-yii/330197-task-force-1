@@ -214,7 +214,7 @@ class Tasks extends \yii\db\ActiveRecord
         return $form_data;
     }
 
-    public static function filter ($form_data = null){
+    public static function filter ($limit, $form_data = null){
 
         $query = self::find()
                 ->joinWith('executerResponds er', true, 'LEFT JOIN')
@@ -242,7 +242,7 @@ class Tasks extends \yii\db\ActiveRecord
         $provider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'pageSize' => 5,
+                'pageSize' => $limit,
             ],
         ]);
         $tasks = $provider->getModels();

@@ -2518,7 +2518,7 @@ footer {
   width: 27px;
   height: 27px;
   font-size: 0;
-  background-color: #ffffff;
+  /*background-color: #ffffff;*/
   border: 0;
   cursor: pointer; }
 

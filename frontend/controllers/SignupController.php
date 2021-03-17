@@ -4,12 +4,30 @@ namespace frontend\controllers;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
+use yii\filters\AccessControl;
 use frontend\models\Cities;
 use frontend\models\SignupForm;
 use frontend\models\Users;
 
 class SignupController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['index'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['index'],
+                        'roles' => ['?']
+                    ]
+                ]
+            ]
+        ];
+    }
+
     public function actionIndex()
     {   
         $form_model = new SignupForm();

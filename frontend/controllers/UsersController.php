@@ -14,7 +14,7 @@ use frontend\models\Portfolio;
 use frontend\models\FeedbackAboutExecuter;
 use yii\web\NotFoundHttpException;
 
-class UsersController extends Controller
+class UsersController extends SecuredController
 {
     public function actionIndex($s = null)
     {   
@@ -80,6 +80,11 @@ class UsersController extends Controller
                                             'user_portfolio' => $user_portfolio,
                                             'user_feedbacks' => $user_feedbacks,
                                         ]);
+    }
+
+    public function actionLogout() {
+        \Yii::$app->user->logout();
+        return $this->goHome();
     }
 
 }

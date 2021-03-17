@@ -4,15 +4,13 @@
 /* @var $content string */
 
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
+use yii\widgets\ActiveField;
+use frontend\models\LoginForm;
 use frontend\assets\AppAsset;
-use frontend\models\Users;
-use frontend\models\Cities;
 
 AppAsset::register($this);
-if ($id = \Yii::$app->user->getId()) {
-        $user_profile = Users::findOne($id);
-    }
-$cities = Cities::find()->all();
+$model = new LoginForm();
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -25,14 +23,14 @@ $cities = Cities::find()->all();
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>    
 </head>
-<body>
+<body class="landing">
 <?php $this->beginBody() ?>
 <div class="table-layout">
-    <header class="page-header">
-        <div class="main-container page-header__container">
-            <div class="page-header__logo">
-                <a href="index.php">
-                    <svg class="page-header__logo-image" id="Layer_2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1634 646.35">
+    <header class=" page-header--index">
+        <div class="main-container page-header__container page-header__container--index">
+            <div class="page-header__logo--index">
+                <a href="<?=Yii::$app->urlManager->createUrl('/landing')?>">
+                    <svg class="logo-image--index" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1634 646.35">
                         <title>taskforce_logo2-01</title>
                         <g>
                             <g>
@@ -57,71 +55,16 @@ $cities = Cities::find()->all();
                         </g>
                     </svg>
                 </a>
+               <p>Работа там, где ты!</p>
             </div>
-            <div class="header__nav">
-                <ul class="header-nav__list site-list">
-                    <li class="site-list__item">
-                        <a href="/tasks">Задания</a>
-                    </li>
-                    <li class="site-list__item">
-                        <a href="/users">Исполнители</a>
-                    </li>
-                    <li class="site-list__item">
-                        <a href="create.html">Создать задание</a>
-                    </li>
-                    <? if(Yii::$app->controller->id !== 'signup'):?>
-                    <li class="site-list__item">
-                        <a href="account.html">Мой профиль</a>
-                    </li>
-                    <?endif;?>
-                </ul>
-            </div>
-            <? if(Yii::$app->controller->id !== 'signup'):?>
-            <div class="header__town">
-                <select class="multiple-select input town-select" size="1" name="town[]">
-                <? foreach($cities as $city): ?>
-                    <option <?= ($city->id === $user_profile->city_id) ? 'selected' : '' ?> value="<?=$city->id?>"><?=$city->city?></option>
-                <? endforeach; ?>
-                </select>
-            </div>
-            <div class="header__lightbulb"></div>
-            <div class="lightbulb__pop-up">
-            <h3>Новые события</h3>
-            <p class="lightbulb__new-task lightbulb__new-task--message">
-              Новое сообщение в чате
-                <a href="view.html" class="link-regular">«Помочь с курсовой»</a>
-            </p>
-            <p class="lightbulb__new-task lightbulb__new-task--executor">
-              Выбран исполнитель для
-                <a href="view.html" class="link-regular">«Помочь с курсовой»</a>
-            </p>
-            <p class="lightbulb__new-task lightbulb__new-task--close">
-              Завершено задание
-                <a href="view.html" class="link-regular">«Помочь с курсовой»</a>
-            </p>
-            </div>
-            <div class="header__account">
-                <a class="header__account-photo">
-                    <img src="/img/<?=isset($user_profile->avatar) ? $user_profile->avatar : 'upload.png' ?>"
-                       width="43" height="44"
-                       alt="Аватар пользователя">
+            <div class="header__account--index">
+                <a class="header__account-enter open-modal" data-for="enter-form">
+                    <span  style="text-decoration: underline; cursor: pointer">Вход</span></a>               
+                или
+                <a href="/signup" class="header__account-registration">
+                    Регистрация
                 </a>
-                <span class="header__account-name"><?=$user_profile->fio?></span>
             </div>
-            <div class="account__pop-up">
-                <ul class="account__pop-up-list">
-                    <li>
-                        <a href="mylist.html">Мои задания</a>
-                    </li>
-                    <li>
-                        <a href="account.html">Настройки</a>
-                    </li>
-                    <li>
-                        <a href="/users/logout">Выход</a>
-                    </li>
-                </ul>
-            </div>
-            <?endif;?>
         </div>
     </header>
 
@@ -145,7 +88,7 @@ $cities = Cities::find()->all();
                         <a href="/tasks">Задания</a>
                     </li>
                     <li class="links__item">
-                        <a href="index.php?r=site/login">Мой профиль</a>
+                        <a href="/login">Мой профиль</a>
                     </li>
                     <li class="links__item">
                         <a href="/users">Исполнители</a>
@@ -154,38 +97,60 @@ $cities = Cities::find()->all();
                         <a href="/signup">Регистрация</a>
                     </li>
                     <li class="links__item">
-                        <a href="index.php?r=site/contact">Создать задание</a>
+                        <a href="/contact">Создать задание</a>
                     </li>
                     <li class="links__item">
-                        <a href="index.php?r=site/about">Справка</a>
+                        <a href="/about">Справка</a>
                     </li>
                 </ul>
             </div>
             <div class="page-footer__copyright">
-                <a>
+                <a href="https://htmlacademy.ru">
                     <img class="copyright-logo"
                          src="/img/academy-logo.png"
                          width="185" height="63"
                          alt="Логотип HTML Academy">
                 </a>
             </div>
-            <? if(Yii::$app->controller->id === 'signup'):?>
-            <div class="clipart-woman">
-                <img src="/img/clipart-woman.png" width="238" height="450">
-            </div>
-            <div class="clipart-message">
-                <div class="clipart-message-text">
-                  <h2>Знаете ли вы, что?</h2>
-                  <p>После регистрации вам будет доступно более
-                    двух тысяч заданий из двадцати разных категорий.</p>
-                  <p>В среднем, наши исполнители зарабатывают
-                    от 500 рублей в час.</p>
-                </div>
-            </div>
-            <?endif;?>
         </div>
     </footer>
+    <section class="modal enter-form form-modal" id="enter-form">
+        
+        <?php 
+        $form = ActiveForm::begin([ 'method' => 'post',
+                                    'id' => 'signin-form',
+                                    'validateOnSubmit' => false,
+                                    'enableAjaxValidation' => false,
+                                    'enableClientValidation' => true,
+                                    'options' => ['data-pjax' => 1, 'class' => 'form-modal'],
+                                ]);
+        ?>
+        <h2>Вход на сайт</h2>
+        <p>       
+            <?= $form->field($model, 'email', ['options' => ['tag' => false]])
+                    ->textInput(['maxlength' => true
+                                , 'class' => 'enter-form-email input input-middle'
+                                , 'type' => "email"
+                                , 'id' => "enter-email"])
+                    ->label('Email  ',['class' => 'form-modal-description']) ?>
+        </p>
+        <p>
+            <?= $form->field($model, 'pass', ['options' => ['tag' => false]])
+                    ->textInput(['maxlength' => true
+                                , 'class' => 'enter-form-email input input-middle'
+                                , 'type' => "password"
+                                , 'id' => "enter-password"])
+                    ->label('Пароль',['class' => 'form-modal-description']) ?>
+        </p>
+            <?= $form->errorSummary($model); ?>
+            <?= Html::submitButton('Войти', ['class' => "button",'type' => 'submit','name' => 'submit']) ?>
+        <?php ActiveForm::end(); ?>
+        <button class="form-modal-close" type="button" style="z-index: 100">Закрыть</button>
+    </section>
 </div>
+<div class="overlay"></div>
+<script src="js/main.js"></script>
+
 <?php $this->endBody() ?>
 </body>
 </html>
