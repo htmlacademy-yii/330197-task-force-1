@@ -474,23 +474,38 @@ footer {
 
 .new-task__icon--neo {
   background-image: url("../img/computer.png");
-  background-color: #373cff; }
+  background-color: #373cff;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 35px; }
 
 .new-task__icon--flat {
   background-image: url("../img/roller.png");
-  background-color: #ff2f4d; }
+  background-color: #ff2f4d;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 35px; }
 
 .new-task__icon--repair {
   background-image: url("../img/repair.png");
-  background-color: #232323; }
+  background-color: #232323;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 35px; }
 
 .new-task__icon--beauty {
   background-image: url("../img/hairdryer.png");
-  background-color: #ff4dd1; }
+  background-color: #ff4dd1;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 35px; }
 
 .new-task__icon--photo {
   background-image: url("../img/camera.png");
-  background-color: #ff9245; }
+  background-color: #ff9245;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 35px; }
 
 .new-task__price {
   font-weight: 700;

@@ -105,7 +105,7 @@ use frontend\functions;
                                 <p><?= $customer->fio?></p>
                             </div>
                         </div>
-                        <p class="info-customer"><span>12 заданий</span><span class="last-">
+                        <p class="info-customer"><span><?=$customer_tasks_count?> заданий</span><span class="last-">
                             <?=Functions::diff_result($customer->dt_add,'short');?>
                              на сайте</span></p>
                         <a href="#" class="link-regular">Смотреть профиль</a>

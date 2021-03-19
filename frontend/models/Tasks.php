@@ -250,4 +250,8 @@ class Tasks extends \yii\db\ActiveRecord
         return $tasks;
     }
 
+    public function getLastInsertID(){
+        return self::find()->max('id');
+    }
+
 }
