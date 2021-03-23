@@ -13,14 +13,22 @@ use frontend\models\StoredFiles;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
+use yii\web\Response;
+use yii\helpers\Json;
 
 class CreateController extends SecuredController
 {   
+    public $uploadfiles;
+    public $filesExtension;
 
     public function beforeAction($action) 
     { 
-        $this->enableCsrfValidation = false; 
-        return parent::beforeAction($action); 
+        if ($this->action->id == 'upload') {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            $this->enableCsrfValidation = false;
+        }
+
+        return true;
     }
 
     public function actionIndex()
@@ -35,29 +43,19 @@ class CreateController extends SecuredController
         
         $form_model = new CreateForm();
         $task = new Tasks();
-        $stored_file = new StoredFiles();
 
         if (Yii::$app->request->getIsPost()) {
             $form_model->load(Yii::$app->request->post());
-            $form_model->file = UploadedFile::getInstance($form_model, 'file');
+            $task->attach_id = Yii::$app->session->get('attach_id');
+        } else {
+            $attach_id = uniqid();
+            Yii::$app->session->set('attach_id', $attach_id);
         }
 
-        // $filename = uniqid('upload');
-        // Yii::$app->session->set('filename', $filename);
-
-
-        if ($form_model->file) {
-            $filename = uniqid('upload') . '.' . $form_model->file->getExtension();           
-            $form_model->file->saveAs('@webroot/user_files/' . $filename);
-        }
-
-        // if($form_model->file){
-        //     $filename = uniqid('upload') . '.' . $form_model->file->getExtension();
-        //     Yii::$app->session->set("filename", $filename);
-        // }
-
-        if ($form_model->validate()) {            
-            $city = Cities::findone($form_model->idcity);
+        if ($form_model->validate()) {
+            $idcity = empty($form_model->idcity) ? $user_profile->city_id : $form_model->idcity;
+            $city = Cities::findone($idcity);
+            $attach = $task->attach_id;
 
             $task->idcustomer = $id;
             $task->title = $form_model->title;
@@ -66,18 +64,15 @@ class CreateController extends SecuredController
             $task->budget = $form_model->budget;
             $task->dt_add = date("Y-m-d H:i:s");
             $task->deadline = date("Y-m-d H:i:s",strtotime($form_model->deadline));
-            $task->idcity = $form_model->idcity;
+            $task->idcity = $idcity;
             $task->latitude = $city->latitude;
             $task->longitude = $city->longitude;
             $task->current_status = 'new';
             $task->save();
 
             $id_task = $task->getLastInsertID();
-            if($filename){
-                $stored_file->idtask = $id_task;
-                $stored_file->file_path = $filename;
-                $stored_file->save();
-            }
+            StoredFiles::updateAll(['idtask' => $id_task], ['=','attach_id', $attach]);
+
             Yii::$app->response->redirect(['/tasks']);            
         }
 
@@ -90,11 +85,17 @@ class CreateController extends SecuredController
     }
 
     public function actionUpload() {
+        $cookies = Yii::$app->request->cookies;
+        $file = UploadedFile::getInstanceByname('file');
+        $attach_id = Yii::$app->session->get('attach_id');
+        $filename = uniqid('upload') .'.'. $file->getExtension();
 
-        $file = UploadedFile::getInstance($form_model, 'file');
-        $filename = Yii::$app->session->get('filename');
+        $file->saveAs('@webroot/user_files/' . $filename);
 
-        $file->saveAs('@webroot/user_files/' . $filename .'.'. $file->getExtension());
-        
+        $stored_file = new StoredFiles();
+        $stored_file->idtask = 1;
+        $stored_file->file_path = $filename;
+        $stored_file->attach_id = $attach_id;
+        $stored_file->save();
     }
 }

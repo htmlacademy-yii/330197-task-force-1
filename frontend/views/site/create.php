@@ -19,7 +19,6 @@ use yii\widgets\ActiveField;
                 'enableClientValidation' => true,
                 'fieldConfig' => [
                     'template' => " <div class='field-container'>{label}\n{input}\n<span>{hint}</span>\n</div>",
-                    // 'inputOptions' => [ 'class' => "input textarea", 'rows' => '1'],
                     'labelOptions' => [ 'class' => ''],
                     'hintOptions' => [ 'class' => ''],
                   ],
@@ -48,14 +47,8 @@ use yii\widgets\ActiveField;
 
             <?= $form->field($form_model, 'file', [ 'options' => ['tag' => false]
                                                   , 'template' => "{label}\n<span>{hint}</span>\n<div class='create__file'>{input}\n<span>Добавить новый файл</span>\n</div>"
-                                                  // , 'inputOptions' => [ 'style' => "display:none"]
-                                                  // , 'inputOptions' => [ 'name'=>Yii::$app->request->csrfParam
-                                                  //                     , 'value'=>Yii::$app->request->csrfToken
-                                                  //                     , 'style' => "display:none"]
+                                                  , 'inputOptions' => [ 'style' => "display:none"]
                                                   ])
-                        // ->hiddenInput()
-                        // ->hiddenInput(['value'=> $src->state])                       
-                        ->fileInput()
                         ->hint('Загрузите файлы, которые помогут исполнителю лучше выполнить или оценить работу')
                         ->label('Файлы')?>
 
@@ -107,7 +100,7 @@ use yii\widgets\ActiveField;
                 что всё в фокусе, а фото показывает объект со всех
                 ракурсов.</p>
             </div>
-            <?if(isset($form_model->errors)):?>
+          <?if(isset($form_model->errors)):?>
             <div class="warning-item warning-item--error">
               <h2>Ошибки заполнения формы</h2>
               <?foreach($form_model->errors as $field=>$array_errors):?>
@@ -122,7 +115,7 @@ use yii\widgets\ActiveField;
       </section>
     </div>
   </main>
-<!-- <script src="js/dropzone.js"></script>
+<script src="js/dropzone.js"></script>
 <script>
   var dropzone = new Dropzone("div.create__file", {url: "/create/upload/", paramName: "file"});
-</script> -->
+</script>

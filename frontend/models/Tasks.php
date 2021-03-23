@@ -51,7 +51,7 @@ class Tasks extends \yii\db\ActiveRecord
         return [
             [['idcustomer', 'title', 'idcategory'], 'required'],
             [['idcustomer', 'idexecuter', 'idcategory', 'budget', 'idcity'], 'integer'],
-            [['description'], 'string'],
+            [['description','attach_id'], 'string'],
             [['dt_add', 'deadline'], 'safe'],
             [['latitude', 'longitude'], 'number'],
             [['title', 'address'], 'string', 'max' => 255],
