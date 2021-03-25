@@ -2,13 +2,13 @@
 namespace frontend\models;
 
 use Yii;
-use yii\base\Model;
+use yii\db\ActiveRecord;
 use frontend\models\Users;
 
 /**
  * Login form
  */
-class LoginForm extends Model
+class LoginForm extends ActiveRecord
 {
     public $email;
     public $pass;

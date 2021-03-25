@@ -54,8 +54,7 @@ class TasksController extends SecuredController
         $category = Categories::findOne($task->idcategory);
 
         $customer = Users::findOne($task->idcustomer);
-        $users = new Users();
-        $customer_tasks_count = $users->getCustomerTaskCount();
+        $customer_tasks_count = $customer->getCustomerTaskCount();
 
         $executers = $task->executerResponds;
         $files = $task->storedFiles;

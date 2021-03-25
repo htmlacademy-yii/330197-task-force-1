@@ -97,7 +97,7 @@ $model = new LoginForm();
                         <a href="/signup">Регистрация</a>
                     </li>
                     <li class="links__item">
-                        <a href="/contact">Создать задание</a>
+                        <a href="/create">Создать задание</a>
                     </li>
                     <li class="links__item">
                         <a href="/about">Справка</a>
@@ -120,7 +120,7 @@ $model = new LoginForm();
         $form = ActiveForm::begin([ 'method' => 'post',
                                     'id' => 'signin-form',
                                     'validateOnSubmit' => false,
-                                    'enableAjaxValidation' => false,
+                                    'enableAjaxValidation' => true,
                                     'enableClientValidation' => true,
                                     'options' => ['data-pjax' => 1, 'class' => 'form-modal'],
                                 ]);

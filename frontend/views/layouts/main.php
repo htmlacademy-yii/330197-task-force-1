@@ -7,6 +7,7 @@ use yii\helpers\Html;
 use frontend\assets\AppAsset;
 use frontend\models\Users;
 use frontend\models\Cities;
+use yii\helpers\Url;
 
 AppAsset::register($this);
 if ($id = \Yii::$app->user->getId()) {
@@ -31,7 +32,7 @@ $cities = Cities::find()->all();
     <header class="page-header">
         <div class="main-container page-header__container">
             <div class="page-header__logo">
-                <a href="index.php">
+                <a href="/index.php">
                     <svg class="page-header__logo-image" id="Layer_2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1634 646.35">
                         <title>taskforce_logo2-01</title>
                         <g>
@@ -66,9 +67,11 @@ $cities = Cities::find()->all();
                     <li class="site-list__item">
                         <a href="/users">Исполнители</a>
                     </li>
+                    <? if($user_profile->role === 1): ?>
                     <li class="site-list__item">
-                        <a href="create.html">Создать задание</a>
+                        <a href="/create">Создать задание</a>
                     </li>
+                    <? endif;?>
                     <? if(Yii::$app->controller->id !== 'signup'):?>
                     <li class="site-list__item">
                         <a href="account.html">Мой профиль</a>
@@ -154,7 +157,7 @@ $cities = Cities::find()->all();
                         <a href="/signup">Регистрация</a>
                     </li>
                     <li class="links__item">
-                        <a href="index.php?r=site/contact">Создать задание</a>
+                        <a href="/create">Создать задание</a>
                     </li>
                     <li class="links__item">
                         <a href="index.php?r=site/about">Справка</a>

@@ -11,9 +11,15 @@ use yii\helpers\Url;
                <p>Сломался кран на кухне? Надо отправить документы? Нет времени самому гулять с собакой?
                    У нас вы быстро найдёте исполнителя для любой жизненной ситуации?<br>
                    Быстро, безопасно и с гарантией. Просто, как раз, два, три. </p>
+              <? if($isGuest): ?>
                <form action="/signup">
                <button class="button">Создать аккаунт</button>
                </form>
+              <? else: ?>
+               <form action="/users">
+               <button class="button">смотреть всех исполнителей</button>
+               </form>
+              <? endif; ?>
            </div>
            <div class="landing-center">
                <div class="landing-instruction">
@@ -118,7 +124,7 @@ use yii\helpers\Url;
                    <?endif;?>
                </div>
                <div class="landing-bottom-container">
-                   <button type="button" class="button red-button">смотреть все задания</button>
+                   <a href="/tasks" type="button" class="button red-button">смотреть все задания</a>
                </div>
            </div>
         </div>

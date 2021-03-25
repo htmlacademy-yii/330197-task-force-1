@@ -31,7 +31,7 @@ class StoredFiles extends \yii\db\ActiveRecord
         return [
             [['idtask'], 'required'],
             [['idtask'], 'integer'],
-            [['file_path'], 'string', 'max' => 255],
+            [['file_path','attach_id'], 'string', 'max' => 255],
             [['idtask'], 'exist', 'skipOnError' => true, 'targetClass' => Tasks::className(), 'targetAttribute' => ['idtask' => 'id']],
         ];
     }
@@ -45,6 +45,7 @@ class StoredFiles extends \yii\db\ActiveRecord
             'idtask' => 'Idtask',
             'file_path' => 'File Path',
             'id' => 'ID',
+            'attach_id' => 'Attach Id',
         ];
     }
 
