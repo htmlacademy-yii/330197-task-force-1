@@ -32,8 +32,8 @@ class ExecuterResponds extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['target_task_id'], 'required'],
-            [['target_task_id', 'id_user'], 'integer'],
+            [['bid','notetext'], 'required'],
+            [['target_task_id', 'id_user', 'bid'], 'integer'],
             [['dt_add'], 'safe'],
             [['notetext'], 'string'],
             [['target_task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tasks::className(), 'targetAttribute' => ['target_task_id' => 'id']],
@@ -50,8 +50,9 @@ class ExecuterResponds extends \yii\db\ActiveRecord
             'target_task_id' => 'Target Task ID',
             'id_user' => 'Id User',
             'dt_add' => 'Dt Add',
-            'notetext' => 'Notetext',
+            'notetext' => 'Комментарий',
             'id' => 'ID',
+            'bid' => 'Ваша цена',
         ];
     }
 
@@ -82,5 +83,31 @@ class ExecuterResponds extends \yii\db\ActiveRecord
     public static function find()
     {
         return new ExecuterRespondsQuery(get_called_class());
+    }
+
+    /*Проставляем по указанноу отклику статус "accepted"*/
+    public static function accept($idtask, $idexecuter)
+    {
+        return self::updateAll(['status' => 'accepted'], ['and',
+                                                            ['=','target_task_id', $idtask],
+                                                            ['=','id_user', $idexecuter],
+                                                         ]);
+    }
+
+    /*Проставляем по указанноу отклику статус "rejected"*/
+    public static function reject($idtask, $idexecuter)
+    {
+        return self::updateAll(['status' => 'rejected'], ['and',
+                                                            ['=','target_task_id', $idtask],
+                                                            ['=','id_user', $idexecuter],
+                                                         ]);
+    }
+
+    /*Проверяем наличие оставленых откликов исполниелем на задачу*/
+    public static function checkRespond($idtask, $idexecuter)
+    {
+        return self::find()->where(['and',['=','target_task_id',$idtask]
+                                         ,['=','id_user',$idexecuter]
+                                   ])->all();
     }
 }

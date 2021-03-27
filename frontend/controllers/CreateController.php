@@ -15,12 +15,10 @@ use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 use yii\web\Response;
 use yii\helpers\Json;
+use frontend\src\models\task;
 
 class CreateController extends SecuredController
 {   
-    public $uploadfiles;
-    public $filesExtension;
-
     public function beforeAction($action) 
     { 
         if ($this->action->id == 'upload') {
@@ -37,8 +35,7 @@ class CreateController extends SecuredController
         $user_profile = Users::findOne($id);
 
         if($user_profile->role !== 1){
-            $errors['role'] = 'У Вас нет доступа к этой странице';            
-            return $this->render('/site/error',['errors' => $errors]);
+            throw new NotFoundHttpException("У Вас нет доступа к этой странице");
         }
         
         $form_model = new CreateForm();
@@ -53,9 +50,10 @@ class CreateController extends SecuredController
         }
 
         if ($form_model->validate()) {
-            $idcity = empty($form_model->idcity) ? $user_profile->city_id : $form_model->idcity;
+            $idcity = $form_model->idcity;
             $city = Cities::findone($idcity);
             $attach = $task->attach_id;
+            $deadline = empty($form_model->deadline) ? date("Y-m-d H:i:s",strtotime(date("Y-m-d H:i:s").'+1 month')) : date("Y-m-d H:i:s",strtotime($form_model->deadline));
 
             $task->idcustomer = $id;
             $task->title = $form_model->title;
@@ -63,11 +61,14 @@ class CreateController extends SecuredController
             $task->idcategory = $form_model->idcategory;
             $task->budget = $form_model->budget;
             $task->dt_add = date("Y-m-d H:i:s");
-            $task->deadline = date("Y-m-d H:i:s",strtotime($form_model->deadline));
-            $task->idcity = $idcity;
-            $task->latitude = $city->latitude;
-            $task->longitude = $city->longitude;
-            $task->current_status = 'new';
+            $task->deadline = $deadline;
+
+            if($idcity){
+                $task->idcity = $idcity;
+                $task->latitude = $city->latitude;
+                $task->longitude = $city->longitude;
+            }
+            $task->current_status = Task::STATUS_NEW;
             $task->save();
 
             $id_task = $task->getLastInsertID();

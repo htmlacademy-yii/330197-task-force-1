@@ -37,6 +37,24 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'viewPath' => '@common/mail',
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'hotmail.com',  // e.g. smtp.mandrillapp.com or smtp.gmail.com
+                'username' => 'test12330',
+                'password' => '123abc456',
+                'port' => '587', // Port 25 is a very common port too
+                'encryption' => 'tls', // It is often used, check your provider or mail server specs
+                'plugins' => [
+                    [
+                    'class' => 'Swift_Plugins_ThrottlerPlugin',
+                    'constructArgs' => [20],
+                    ],
+                ],
+            ],
+        ],
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,

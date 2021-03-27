@@ -83,7 +83,7 @@ class UsersController extends SecuredController
     }
 
     public function actionLogout() {
-        \Yii::$app->user->logout();
+        Yii::$app->user->logout();
         return $this->goHome();
     }
 

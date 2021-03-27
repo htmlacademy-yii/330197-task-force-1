@@ -254,4 +254,12 @@ class Tasks extends \yii\db\ActiveRecord
         return self::find()->max('id');
     }
 
+    public function SetStatus($status){
+        return self::updateAll(['current_status' => $status], ['=','id', $this->id]);
+    }
+
+    public function SetExecuter($idexecuter){
+        return self::updateAll(['idexecuter' => $idexecuter], ['=','id', $this->id]);
+    }
+
 }

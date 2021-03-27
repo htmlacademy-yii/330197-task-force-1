@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace task_force\models;
-use task_force\models\act_done;
-use task_force\models\act_execute;
-use task_force\models\act_cancel;
-use task_force\models\act_deny;
-use task_force\ex\CallNameException;
+namespace frontend\src\models;
+use frontend\src\models\act_done;
+use frontend\src\models\act_execute;
+use frontend\src\models\act_cancel;
+use frontend\src\models\act_deny;
+use frontend\src\ex\CallNameException;
 
 error_reporting(E_ALL);
 
@@ -46,9 +46,12 @@ class Task{
 
 	}
 
-public function get_actions(string $status, int $idcustomer, int $idexecuter, int $iduser){
+public function get_actions(string $status, int $idcustomer, int $idexecuter, int $iduser, int $role){
 		$array = [self::STATUS_NEW => [new Act_execute(), new Act_cancel()],
-				  self::STATUS_EXECUTE => [new Act_done(), new Act_deny()]
+				  self::STATUS_EXECUTE => [new Act_done(), new Act_deny()],
+				  self::STATUS_DONE => [],
+				  self::STATUS_FAIL => [],
+				  self::STATUS_CANCEL => [],
 				];
 
 		if(!in_array($status, array_keys($array))) {
@@ -57,7 +60,7 @@ public function get_actions(string $status, int $idcustomer, int $idexecuter, in
 		$actions = $array[$status];
 
 		foreach($actions as $action){
-			if($action->check_user($idcustomer, $idexecuter, $iduser)){
+			if($action->check_user($idcustomer, $idexecuter, $iduser, $role)){
 				return $action;
 			} 
 		}

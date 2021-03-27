@@ -40,6 +40,11 @@ use yii\widgets\ActiveField;
                                     ->hint('Укажите город, чтобы находить подходящие задачи')
                                     ->label('Город проживания')?>
 
+                        <?= $form->field($form_model, 'role', ['options' => ['tag' => false]])
+                                    ->dropDownList($role, ['class' => 'multiple-select input town-select registration-town', 'size' => '1', 'id' => '20'])
+                                    ->hint('Выберите роль, чтобы создавать новые задачи или получать заказы для выполнения')
+                                    ->label('Выберите роль')?>
+
                         <?= $form->field($form_model, 'password', ['options' => ['tag' => false]])
                                     ->passwordInput(['id'=>'19'])
                                     ->hint('Длина пароля от 8 символов')

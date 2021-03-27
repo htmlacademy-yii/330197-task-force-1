@@ -21,6 +21,7 @@ use Yii;
  */
 class FeedbackAboutExecuter extends \yii\db\ActiveRecord
 {
+    public $completion = "Статус завершения задания";
     /**
      * {@inheritdoc}
      */
@@ -35,10 +36,10 @@ class FeedbackAboutExecuter extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['target_task_id'], 'required'],
+            [['completion'], 'required'],
             [['target_task_id', 'target_user_id', 'id_user', 'rate'], 'integer'],
             [['dt_add'], 'safe'],
-            [['description'], 'string'],
+            [['description','completion'], 'string'],
             [['target_task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tasks::className(), 'targetAttribute' => ['target_task_id' => 'id']],
             [['target_user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['target_user_id' => 'id']],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['id_user' => 'id']],
@@ -58,6 +59,7 @@ class FeedbackAboutExecuter extends \yii\db\ActiveRecord
             'dt_add' => 'Dt Add',
             'description' => 'Description',
             'id' => 'ID',
+            'completion' => $this->completion,
         ];
     }
 
@@ -98,5 +100,13 @@ class FeedbackAboutExecuter extends \yii\db\ActiveRecord
     public static function find()
     {
         return new FeedbackAboutExecuterQuery(get_called_class());
+    }
+
+    /*Проверяем наличие оставленых отзывов заказчиком на выполненную или отменённую задачу*/
+    public static function checkFeedback($idtask, $idcustomer)
+    {
+        return self::find()->where(['and',['=','target_task_id',$idtask]
+                                         ,['=','id_user',$idcustomer]
+                                   ])->all();
     }
 }

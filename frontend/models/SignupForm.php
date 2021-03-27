@@ -14,7 +14,7 @@ class SignupForm extends Model
     public $email;
     public $password;
     public $city_id;
-
+    public $role;
 
     /**
      * {@inheritdoc}
@@ -36,7 +36,7 @@ class SignupForm extends Model
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
 
-            [['city_id'],'safe'],
+            [['city_id','role'],'safe'],
         ];
     }
 
@@ -55,6 +55,7 @@ class SignupForm extends Model
         $user->fio = $this->fio;
         $user->email = $this->email;
         $user->setPassword($this->password);
+        $user->role = $this->role;
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
         return $user->save() && $this->sendEmail($user);

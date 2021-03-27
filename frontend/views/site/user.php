@@ -20,7 +20,7 @@ use yii\helpers\Url;
                         <img src="/img/<?= (isset($user->avatar)) ? $user->avatar : 'upload.png'?>" width="120" height="120" alt="Аватар пользователя">
                          <div class="content-view__headline">
                             <h1><?=$user->fio?></h1>
-                             <p><?=$user_country->country?>, <?=$user_city->city?>, <?= Functions::diff_result($user->birthday,'short');?></p>
+                             <p><?=$user_country->country?>, <?=$user_city->city?>, <?= isset($user->birthday) ? Functions::diff_result($user->birthday,'short') : '';?></p>
                             <div class="profile-mini__name five-stars__rate">                                
                                 <? for($i=0; $i<round($user_rate); $i++): ?>
                                 <span></span>
@@ -42,21 +42,25 @@ use yii\helpers\Url;
                     </div>
                     <div class="user__card-general-information">
                         <div class="user__card-info">
+                        <?if($user_categories):?>
                             <h3 class="content-view__h3">Специализации</h3>
                             <div class="link-specialization">
                             <?foreach($user_categories as $category):?>
                              <a href="#" class="link-regular"><?=$category?></a>                             
                              <?endforeach;?>
                             </div>
+                        <? endif;?>
                             <h3 class="content-view__h3">Контакты</h3>
                             <div class="user__card-link">
+                            <?if($user->phone):?>
                                 <a class="user__card-link--tel link-regular" href="#">
-                                    <?$ph = str_split($user->phone);
-                                        if($ph[0] !== 8 or count($ph)<11) {
-                                            array_unshift($ph,8);
-                                        } 
-                                        echo "$ph[0] ($ph[1]$ph[2]$ph[3]) $ph[4]$ph[5]$ph[6] $ph[7]$ph[8] $ph[9]$ph[10]";
-                                    ?></a>
+                                <?$ph = str_split($user->phone);
+                                    if($ph[0] !== 8 or count($ph)<11) {
+                                        array_unshift($ph,8);
+                                    }
+                                    echo "$ph[0] ($ph[1]$ph[2]$ph[3]) $ph[4]$ph[5]$ph[6] $ph[7]$ph[8] $ph[9]$ph[10]";
+                                ?></a>
+                            <?endif;?>
                                 <a class="user__card-link--email link-regular" href="#"><?=$user->email?></a>
                                 <a class="user__card-link--skype link-regular" href="#"><?=$user->skype?></a>
                             </div>

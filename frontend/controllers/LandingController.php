@@ -61,7 +61,8 @@ class LandingController extends Controller
 
             if ($loginForm->validate()) {
                 $user = $loginForm->getUser();
-                \Yii::$app->user->login($user);
+                Yii::$app->session->close();
+                Yii::$app->user->login($user);
 
                 $this->layout = '/main';
                 return $this->render('/site/landing',[  'categoryTasks' => $categoryTasks,

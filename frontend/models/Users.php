@@ -368,12 +368,14 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface
         ]);
 
         $user = $provider->getModels();
-
-        foreach($user[0]->categories as $category){
-            $user_categories[] = $category["category"];
+        if($user[0]->categories){
+            foreach($user[0]->categories as $category){
+                $user_categories[] = $category["category"];
+            }
+            return $user_categories;
+        } else {
+            return false;
         }
-
-        return $user_categories;
     }
 
     //Выводим портфолио исполнителя по его id
