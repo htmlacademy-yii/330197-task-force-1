@@ -105,9 +105,9 @@ class TasksController extends SecuredController
         $userid = Yii::$app->user->getId();
         $task = Tasks::findone($idtask);
 
-        if($task->idexecuter != $userid)
+        if($task->idcustomer != $userid)
         {
-            throw new ForbiddenHttpException("У вас нет доступа для данного действия. Задачу может завершить только заказчик");
+            throw new ForbiddenHttpException("Это действие доступно только заказчику");
         }
 
         if($action === 'accept')
@@ -219,7 +219,7 @@ class TasksController extends SecuredController
         }
     }
 
-    public function actionDeny($idtask, $idexecuter)
+    public function actionDeny($idtask)
     {
         $userid = Yii::$app->user->getId();
         $task = Tasks::findOne($idtask);
