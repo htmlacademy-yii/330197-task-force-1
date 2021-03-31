@@ -67,7 +67,7 @@ $cities = Cities::find()->all();
                     <li class="site-list__item">
                         <a href="/users">Исполнители</a>
                     </li>
-                    <? if($user_profile->role === 1): ?>
+                    <? if(isset($user_profile) and $user_profile->role === 1): ?>
                     <li class="site-list__item">
                         <a href="/create">Создать задание</a>
                     </li>

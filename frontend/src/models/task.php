@@ -21,6 +21,11 @@ class Task{
 	const ACTION_CANCEL = 'cancel';
 	const ACTION_DENY = 'deny';
 
+	const ROLE_CODE_CUSTUMER = 1;
+	const ROLE_CODE_EXECUTER = 2;
+	const ROLE_NAME_CUSTUMER = 'заказчик';
+	const ROLE_NAME_EXECUTER = 'исполнитель';
+
 	private $executer_id;
 	private $customer_id;
 	private $status = self::STATUS_NEW;
@@ -38,6 +43,11 @@ class Task{
 		self::ACTION_DONE => self::STATUS_DONE,
 		self::ACTION_CANCEL => self::STATUS_CANCEL,
 		self::ACTION_DENY => self::STATUS_FAIL
+	];
+
+	public $role_map = [
+		self::ROLE_CODE_CUSTUMER => self::ROLE_NAME_CUSTUMER,
+		self::ROLE_CODE_EXECUTER => self::ROLE_NAME_EXECUTER,
 	];
 
 	public function __construct($customer_id = null, $executer_id = null){

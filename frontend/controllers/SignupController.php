@@ -8,6 +8,7 @@ use yii\filters\AccessControl;
 use frontend\models\Cities;
 use frontend\models\SignupForm;
 use frontend\models\Users;
+use frontend\src\models\task;
 
 class SignupController extends Controller
 {
@@ -46,7 +47,7 @@ class SignupController extends Controller
                 $user->save();
                 Yii::$app->response->redirect(['index.php']);
             } else {
-                $errors = $model->getErrors();
+                $errors = $form_model->getErrors();
                 return $this->render('/site/error',['errors' => $errors]);
             }
         }
@@ -54,8 +55,8 @@ class SignupController extends Controller
         $city = Cities::find()->select(['city', 'id'])->all();
         $cities = (ArrayHelper::map($city, 'id', 'city'));
 
-        $role = array(1 => 'заказчик',
-                      2 => 'исполнитель',);
+        $task = new Task;
+        $role = $task->role_map;
 
         return $this->render('/site/signup',['form_model' => $form_model,
                                             'cities' => $cities,
