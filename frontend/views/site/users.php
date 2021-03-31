@@ -13,59 +13,62 @@ $this->title = 'Исполнители';
     <main class="page-main">
         <div class="main-container page-container">
             <section class="user__search">
-                <? if(isset($users) and !empty($users[0]['id'])): ?>
+                <?php if(isset($users) and !empty($users[0]['id'])): ?>
                 <div class="user__search-link">
                     <p>Сортировать по:</p>
                     <ul class="user__search-list">
-                        <li class="user__search-item <? if(!isset($sortField) or $sortField === 'rate') {echo 'user__search-item--current';} ?>">
+                        <li class="user__search-item 
+                        <?= (!isset($sortField) or $sortField === 'rate') ? 'user__search-item--current' : '' ?>">
                             <a href="<?=Url::to(['/users/', 's'=>'rate'])?>" class="link-regular">Рейтингу</a>
                         </li>
-                        <li class="user__search-item <? if(isset($sortField) and $sortField === 'orders') {echo 'user__search-item--current';} ?>">
+                        <li class="user__search-item 
+                        <?= (isset($sortField) and $sortField === 'orders') ? 'user__search-item--current' : '' ?>">
                             <a href="<?=Url::to(['/users/', 's'=>'orders'])?>" class="link-regular">Числу заказов</a>
                         </li>
-                        <li class="user__search-item <? if(isset($sortField) and $sortField === 'favor') {echo 'user__search-item--current';} ?>">
+                        <li class="user__search-item 
+                        <?= (isset($sortField) and $sortField === 'favor') ? 'user__search-item--current' : '' ?>">
                             <a href="<?=Url::to(['/users/', 's'=>'favor'])?>" class="link-regular">Популярности</a>
                         </li>
                     </ul>
                 </div>
-                <? foreach($users as $user): ?>
+                <?php foreach($users as $user): ?>
                 <div class="content-view__feedback-card user__search-wrapper">
                     <div class="feedback-card__top">
                         <div class="user__search-icon">
                             <a href="<?=Url::to(['/users/view/', 'id'=>$user->id])?>"><img src="./img/<?=isset($user->avatar) ? $user->avatar : 'upload.png'?>" width="65" height="65"></a>
-                            <span><? echo $users_tasks[$user->id]?> заданий</span>
-                            <span><? echo $users_rate['feedbacks'][$user->id]?> отзывов</span>
+                            <span><?= $users_tasks[$user->id]?> заданий</span>
+                            <span><?= $users_rate['feedbacks'][$user->id]?> отзывов</span>
                         </div>
                         <div class="feedback-card__top--name user__search-card">
                             <p class="link-name"><a href="<?=Url::to(['/users/view/', 'id'=>$user->id])?>" class="link-regular"><? echo $user->fio?></a></p>
-                            <? for($i=0; $i<round($users_rate['rate'][$user->id]); $i++): ?>
+                            <?php for($i=0; $i<round($users_rate['rate'][$user->id]); $i++): ?>
                                 <span></span>
-                            <? endfor;?>
-                            <? for($i=0; $i<(5-round($users_rate['rate'][$user->id])); $i++): ?>
+                            <?php endfor;?>
+                            <?php for($i=0; $i<(5-round($users_rate['rate'][$user->id])); $i++): ?>
                                 <span class="star-disabled"></span>
-                            <? endfor;?>
+                            <?php endfor;?>
                             <b><?= $users_rate['rate'][$user->id]?></b>
                             <p class="user__search-content">
                                 <?= $user->about; ?>
                             </p>
                         </div>
-                        <span class="new-task__time">Был на сайте <? echo Functions::diff_result($user->last_update) ?></span>
+                        <span class="new-task__time">Был на сайте <?= Functions::diff_result($user->last_update) ?></span>
                     </div>
                     <div class="link-specialization user__search-link--bottom">
-                        <? foreach($users_categories[$user->id] as $category): ?>
-                        <a href="#" class="link-regular"><? echo $category ?></a>
-                        <? endforeach;?>
+                        <?php foreach($users_categories[$user->id] as $category): ?>
+                        <a href="#" class="link-regular"><?= $category ?></a>
+                        <?php endforeach;?>
                     </div>
                 </div>
-            <? endforeach;?>
-            <? else:?>
+            <?php endforeach;?>
+            <?php else:?>
                 <p></p>
                 <p class="new-task_description">По вашему запросу ничего не найдено.</p>
-            <? endif;?>
+            <?php endif;?>
             </section>
             <section  class="search-task">
                 <div class="search-task__wrapper">
-                    <? $form = ActiveForm::begin([
+                    <?php $form = ActiveForm::begin([
                             'method' => "post",
                             'options' => ['data-pjax' => 1, 'class' => 'search-task__form'],
                             'validateOnSubmit' => false,
@@ -90,7 +93,7 @@ $this->title = 'Исполнители';
                         <div class="form-group">
                         <?= Html::submitButton('Искать', ['class' => "button",'type' => 'submit','name' => 'submit']) ?>
                         </div>
-                    <? ActiveForm::end(); ?>
+                    <?php ActiveForm::end(); ?>
                 </div>
             </section>
         </div>

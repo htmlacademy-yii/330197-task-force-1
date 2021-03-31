@@ -11,15 +11,15 @@ use yii\helpers\Url;
                <p>Сломался кран на кухне? Надо отправить документы? Нет времени самому гулять с собакой?
                    У нас вы быстро найдёте исполнителя для любой жизненной ситуации?<br>
                    Быстро, безопасно и с гарантией. Просто, как раз, два, три. </p>
-              <? if($isGuest): ?>
+              <?php if($isGuest): ?>
                <form action="/signup">
                <button class="button">Создать аккаунт</button>
                </form>
-              <? else: ?>
+              <?php else: ?>
                <form action="/users">
                <button class="button">смотреть всех исполнителей</button>
                </form>
-              <? endif; ?>
+              <?php endif; ?>
            </div>
            <div class="landing-center">
                <div class="landing-instruction">
@@ -104,7 +104,7 @@ use yii\helpers\Url;
            <div class="landing-bottom">
                <div class="landing-bottom-container">
                    <h2>Последние задания на сайте</h2>
-                  <?if(isset($tasks) and !empty($tasks)):?>
+                  <?php if(isset($tasks) and !empty($tasks)):?>
                   <?php foreach($tasks as $task): ?>
                    <div class="landing-task">
                        <div class="landing-task-top task-<?= $categoryTasks[$task->idcategory][implode(array_keys($categoryTasks[$task->idcategory]))] ?>"></div>
@@ -121,8 +121,8 @@ use yii\helpers\Url;
                            <span><?= $task->budget ?> <b>₽</b></span>
                        </div>
                    </div>
-                   <?endforeach;?>
-                   <?endif;?>
+                   <?php endforeach;?>
+                   <?php endif;?>
                </div>
                <div class="landing-bottom-container">
                    <a href="/tasks" type="button" class="button red-button">смотреть все задания</a>

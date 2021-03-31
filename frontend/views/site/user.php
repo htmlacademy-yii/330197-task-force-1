@@ -22,12 +22,12 @@ use yii\helpers\Url;
                             <h1><?=$user->fio?></h1>
                              <p><?=$user_country->country?>, <?=$user_city->city?>, <?= isset($user->birthday) ? Functions::diff_result($user->birthday,'short') : '';?></p>
                             <div class="profile-mini__name five-stars__rate">                                
-                                <? for($i=0; $i<round($user_rate); $i++): ?>
+                                <?php for($i=0; $i<round($user_rate); $i++): ?>
                                 <span></span>
-                                <? endfor;?>
-                                <? for($i=0; $i<(5-round($user_rate)); $i++): ?>
+                                <?php endfor;?>
+                                <?php for($i=0; $i<(5-round($user_rate)); $i++): ?>
                                     <span class="star-disabled"></span>
-                                <? endfor;?>
+                                <?php endfor;?>
                                 <b><?= $user_rate?></b>
                             </div>
                             <b class="done-task">Выполнил <?=$user_tasks?> заказов</b><b class="done-review">Получил <?=count($user_feedbacks)?> отзывов</b>
@@ -42,44 +42,44 @@ use yii\helpers\Url;
                     </div>
                     <div class="user__card-general-information">
                         <div class="user__card-info">
-                        <?if($user_categories):?>
+                        <?php if($user_categories):?>
                             <h3 class="content-view__h3">Специализации</h3>
                             <div class="link-specialization">
-                            <?foreach($user_categories as $category):?>
+                            <?php foreach($user_categories as $category):?>
                              <a href="#" class="link-regular"><?=$category?></a>                             
-                             <?endforeach;?>
+                             <?php endforeach;?>
                             </div>
-                        <? endif;?>
+                        <?php  endif;?>
                             <h3 class="content-view__h3">Контакты</h3>
                             <div class="user__card-link">
-                            <?if($user->phone):?>
+                            <?php if($user->phone):?>
                                 <a class="user__card-link--tel link-regular" href="#">
-                                <?$ph = str_split($user->phone);
+                                <?php $ph = str_split($user->phone);
                                     if($ph[0] !== 8 or count($ph)<11) {
                                         array_unshift($ph,8);
                                     }
                                     echo "$ph[0] ($ph[1]$ph[2]$ph[3]) $ph[4]$ph[5]$ph[6] $ph[7]$ph[8] $ph[9]$ph[10]";
                                 ?></a>
-                            <?endif;?>
+                            <?php endif;?>
                                 <a class="user__card-link--email link-regular" href="#"><?=$user->email?></a>
                                 <a class="user__card-link--skype link-regular" href="#"><?=$user->skype?></a>
                             </div>
                          </div>
-                         <? if(!empty($user_portfolio)): ?>
+                         <?php  if(!empty($user_portfolio)): ?>
                         <div class="user__card-photo">                            
                             <h3 class="content-view__h3">Фото работ</h3>
-                            <? foreach($user_portfolio as $p): ?>
+                            <?php  foreach($user_portfolio as $p): ?>
                             <a href="#"><img src="/user_files/<?=$p->photo?>" width="85" height="86" alt="Фото работы"></a>
-                            <? endforeach; ?>
+                            <?php  endforeach; ?>
                          </div>
-                         <? endif ?>
+                         <?php  endif ?>
                     </div>
                 </div>
-                <?if(!empty($user_feedbacks)):?>
+                <?php if(!empty($user_feedbacks)):?>
                 <div class="content-view__feedback">
                     <h2>Отзывы<span>(<?=count($user_feedbacks)?>)</span></h2>
                     <div class="content-view__feedback-wrapper reviews-wrapper">
-                        <?foreach($user_feedbacks as $feedback):?>
+                        <?php foreach($user_feedbacks as $feedback):?>
                         <div class="feedback-card__reviews">
                             <p class="link-task link">Задание <a href="<?=Url::to(['/tasks/view/', 'id'=>$feedback['task_id']])?>" class="link-regular">«<?=$feedback['task_title']?>»</a></p>
                             <div class="card__review">
@@ -95,10 +95,10 @@ use yii\helpers\Url;
                                 </div>
                             </div>
                         </div>
-                        <?endforeach;?>
+                        <?php endforeach;?>
                     </div>
                 </div>
-                <?endif;?>
+                <?php endif;?>
             </section>
             <section class="connect-desk">
                 <div class="connect-desk__chat">

@@ -100,16 +100,16 @@ use yii\widgets\ActiveField;
                 что всё в фокусе, а фото показывает объект со всех
                 ракурсов.</p>
             </div>
-          <?if(isset($form_model->errors)):?>
+          <?php if(isset($form_model->errors)):?>
             <div class="warning-item warning-item--error">
               <h2>Ошибки заполнения формы</h2>
-              <?foreach($form_model->errors as $field=>$array_errors):?>
-                <?foreach($array_errors as $error):?>
-                <p><?=$error?></p>
-                <?endforeach;?>
-              <?endforeach;?>
+              <?php foreach($form_model->errors as $field=>$array_errors):?>
+                <?php foreach($array_errors as $error):?>
+                <p><?= $error?></p>
+                <?php endforeach;?>
+              <?php endforeach;?>
             </div>
-          <? endif;?>
+          <?php endif;?>
           </div>      
         </div>          
       </section>

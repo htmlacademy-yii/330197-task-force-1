@@ -29,14 +29,14 @@ use yii\widgets\ActiveField;
                                 <?= $task->description?>
                             </p>
                         </div>
-                         <? if(!empty($files)):?>
+                         <?php if(!empty($files)):?>
                         <div class="content-view__attach">
                             <h3 class="content-view__h3">Вложения</h3>
-                            <? foreach($files as $file):?>
+                            <?php foreach($files as $file):?>
                                 <a href="<?=Url::to(['/user_files/'.$file['file_path']])?>"><?=$file['file_path']?></a>
-                            <? endforeach;?>
+                            <?php endforeach;?>
                         </div>
-                        <? endif; ?>
+                        <?php endif; ?>
                         <div class="content-view__location">
                             <h3 class="content-view__h3">Расположение</h3>
                             <div class="content-view__location-wrapper">
@@ -52,33 +52,33 @@ use yii\widgets\ActiveField;
                             </div>
                         </div>
                     </div>
-                    <?if($task_action):?>
+                    <?php if($task_action):?>
                     <div class="content-view__action-buttons">
-                        <?if($task_action->inner_name === 'cancel' or $task_action->inner_name === 'done'):?>
+                        <?php if($task_action->inner_name === 'cancel' or $task_action->inner_name === 'done'):?>
                         <button class="button button__big-color request-button open-modal"
                                     type="button" data-for="complete-form">Завершить</button>
-                        <?endif;?>
-                        <?if($task_action->inner_name === 'execute' and !in_array($user_profile->id,$executers_id)):?>
+                        <?php endif;?>
+                        <?php if($task_action->inner_name === 'execute' and !in_array($user_profile->id,$executers_id)):?>
                         <button class=" button button__big-color response-button open-modal"
                                     type="button" data-for="response-form">Откликнуться</button>
-                        <?endif;?>
-                        <?if($task_action->inner_name === 'deny'):?>
+                        <?php endif;?>
+                        <?php if($task_action->inner_name === 'deny'):?>
                         <button class="button button__big-color refusal-button open-modal"
                                     type="button" data-for="refuse-form">Отказаться</button>
-                        <?endif;?>
+                        <?php endif;?>
                     </div>
-                    <?endif;?>
+                    <?php endif;?>
                 </div>
                 <?php if(count($executers)>0 and ($user_profile->id === $customer->id or in_array($user_profile->id,$executers_id))):?>
                 <div class="content-view__feedback">
                     <h2>Отклики 
                     <?php if($user_profile->id === $customer->id): ?>
                         <span>(<?=count($executers)?>)</span>
-                    <? endif; ?>
+                    <?php endif; ?>
                     </h2>
                     <div class="content-view__feedback-wrapper">
                         <?php foreach($executers as $executer):?>
-                        <?if($user_profile->id === $customer->id or $user_profile->id === $executer->id_user):?>
+                        <?php if($user_profile->id === $customer->id or $user_profile->id === $executer->id_user):?>
                         <div class="content-view__feedback-card">
                             <div class="feedback-card__top">
                                 <a href="<?=Url::to(['/users/view/'.$executer->id_user])?>"><img src="/img/<?= (isset($executer_info[$executer->id_user]->avatar)) ? $executer_info[$executer->id_user]->avatar :  'upload.png'?>" width="55" height="55"></a>
@@ -100,14 +100,14 @@ use yii\widgets\ActiveField;
                                 </p>
                                 <span><?=$executer->bid?> ₽</span>
                             </div>
-                            <?if($user_profile->id === $customer->id and $executer->status !== 'rejected' and $task->current_status === 'new'):?>
+                            <?php if($user_profile->id === $customer->id and $executer->status !== 'rejected' and $task->current_status === 'new'):?>
                             <div class="feedback-card__actions">
                                 <a href="<?=Url::to(['/tasks/responds_action/', 'idtask'=>$task->id, 'idexecuter' => $executer->id_user, 'action' => 'accept'])?>" class="button__small-color request-button button" type="button">Подтвердить</a>
                                 <a href="<?=Url::to(['/tasks/responds_action/', 'idtask'=>$task->id, 'idexecuter' => $executer->id_user, 'action' => 'reject'])?>" class="button__small-color refusal-button button" type="button">Отказать</a>
                             </div>
-                            <?endif;?>
+                            <?php endif;?>
                         </div>
-                        <?endif;?>
+                        <?php endif;?>
                         <?php endforeach; ?>
                     </div>
                 </div>
@@ -169,7 +169,7 @@ use yii\widgets\ActiveField;
 <section class="modal completion-form form-modal" id="complete-form">
     <h2>Завершение задания</h2>
     <p class="form-modal-description">Задание выполнено?</p>
-    <?  $form = ActiveForm::begin([ 'action' => Url::to(['/tasks/feedback/', 'idtask'=>$task->id]),
+    <?php $form = ActiveForm::begin([ 'action' => Url::to(['/tasks/feedback/', 'idtask'=>$task->id]),
                                    'method' => 'post',
                                    'validateOnSubmit' => false,
                                    'enableAjaxValidation' => false,
@@ -209,7 +209,7 @@ use yii\widgets\ActiveField;
              ->label('') ?>
     <?= $form->errorSummary($respond_model); ?>
     <?= Html::submitButton('Отправить', ['class' => "button modal-button",'type' => 'submit','name' => 'submit']) ?>
-    <? ActiveForm::end();?>
+    <?php ActiveForm::end();?>
     <button class="form-modal-close" type="button">Закрыть</button>
 </section>
 
