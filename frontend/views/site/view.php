@@ -3,7 +3,6 @@
 /* @var $categories \frontend\controllers\TasksController*/
 
 use yii\helpers\Url;
-use frontend\functions;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\ActiveField;
@@ -18,7 +17,7 @@ use yii\widgets\ActiveField;
                                 <h1><?= $task->title?></h1>
                                 <span>Размещено в категории
                                     <a href="#" class="link-regular"><?= $category->category?></a>
-                                    <?= Functions::diff_result($task->dt_add) ?></span>
+                                    <?= Yii::$app->formatter->asRelativeTime($task->dt_add) ?></span>
                             </div>
                             <b class="new-task__price new-task__price--<?= $category->icon?> content-view-price"><?= $task->budget?><b> ₽</b></b>
                             <div class="new-task__icon new-task__icon--<?= $category->icon?> content-view-icon"></div>
@@ -92,7 +91,7 @@ use yii\widgets\ActiveField;
                                     <?php endfor;?>                                    
                                    <b><?= $executer_rate[$executer->id_user]?></b>
                                 </div>
-                                <span class="new-task__time"><?=Functions::diff_result($executer->dt_add)?></span>
+                                <span class="new-task__time"><?= Yii::$app->formatter->asRelativeTime($executer->dt_add) ?></span>
                             </div>
                             <div class="feedback-card__content">
                                 <p>
@@ -124,7 +123,7 @@ use yii\widgets\ActiveField;
                             </div>
                         </div>
                         <p class="info-customer"><span><?=$customer_tasks_count?> заданий</span><span class="last-">
-                            <?=Functions::diff_result($customer->dt_add,'short');?>
+                            <?= substr(Yii::$app->formatter->asDuration(time()-strtotime($customer->dt_add)),0,strpos(Yii::$app->formatter->asDuration(time()-strtotime($customer->dt_add)),',')) ?>
                              на сайте</span></p>
                         <a href="#" class="link-regular">Смотреть профиль</a>
                     </div>

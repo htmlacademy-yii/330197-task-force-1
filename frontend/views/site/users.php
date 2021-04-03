@@ -6,7 +6,6 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\ActiveField;
-use frontend\functions;
 use yii\helpers\Url;
 $this->title = 'Исполнители';
 ?>
@@ -52,7 +51,7 @@ $this->title = 'Исполнители';
                                 <?= $user->about; ?>
                             </p>
                         </div>
-                        <span class="new-task__time">Был на сайте <?= Functions::diff_result($user->last_update) ?></span>
+                        <span class="new-task__time">Был на сайте <?= Yii::$app->formatter->asRelativeTime($user->last_update) ?></span>
                     </div>
                     <div class="link-specialization user__search-link--bottom">
                         <?php foreach($users_categories[$user->id] as $category): ?>

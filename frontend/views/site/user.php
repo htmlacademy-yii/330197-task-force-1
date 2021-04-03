@@ -9,8 +9,8 @@
 /* @var $user_portfolio \frontend\controllers\UsersController\actionView */
 /* @var $user_feedbacks \frontend\controllers\UsersController\actionView */
 
-use frontend\functions;
 use yii\helpers\Url;
+use frontend\src\CustomFormatter;
 ?>
     <main class="page-main">
         <div class="main-container page-container">
@@ -20,7 +20,11 @@ use yii\helpers\Url;
                         <img src="/img/<?= (isset($user->avatar)) ? $user->avatar : 'upload.png'?>" width="120" height="120" alt="Аватар пользователя">
                          <div class="content-view__headline">
                             <h1><?=$user->fio?></h1>
-                             <p><?=$user_country->country?>, <?=$user_city->city?>, <?= isset($user->birthday) ? Functions::diff_result($user->birthday,'short') : '';?></p>
+                            <p> <?=$user_country->country?>, <?=$user_city->city?>,
+                                <?php if(isset($user->birthday)): ?>
+                                    <?= substr(Yii::$app->formatter->asDuration(time()-strtotime($user->birthday)), 0, strpos(Yii::$app->formatter->asDuration(time()-strtotime($user->birthday)),','))?>
+                                <?php endif;?>
+                            </p>
                             <div class="profile-mini__name five-stars__rate">                                
                                 <?php for($i=0; $i<round($user_rate); $i++): ?>
                                 <span></span>
@@ -30,10 +34,11 @@ use yii\helpers\Url;
                                 <?php endfor;?>
                                 <b><?= $user_rate?></b>
                             </div>
-                            <b class="done-task">Выполнил <?=$user_tasks?> заказов</b><b class="done-review">Получил <?=count($user_feedbacks)?> отзывов</b>
+                            <b class="done-task">Выполнил <?=$user_tasks?> заказов</b>
+                            <b class="done-review">Получил <?=count($user_feedbacks)?> отзывов</b>
                          </div>
                         <div class="content-view__headline user__card-bookmark user__card-bookmark--current">
-                            <span>Был на сайте <?=Functions::diff_result($user->last_update);?></span>
+                            <span>Был на сайте <?= Yii::$app->formatter->asRelativeTime($user->last_update);?></span>
                              <a href="#"><b></b></a>
                         </div>
                     </div>
@@ -52,17 +57,9 @@ use yii\helpers\Url;
                         <?php  endif;?>
                             <h3 class="content-view__h3">Контакты</h3>
                             <div class="user__card-link">
-                            <?php if($user->phone):?>
-                                <a class="user__card-link--tel link-regular" href="#">
-                                <?php $ph = str_split($user->phone);
-                                    if($ph[0] !== 8 or count($ph)<11) {
-                                        array_unshift($ph,8);
-                                    }
-                                    echo "$ph[0] ($ph[1]$ph[2]$ph[3]) $ph[4]$ph[5]$ph[6] $ph[7]$ph[8] $ph[9]$ph[10]";
-                                ?></a>
-                            <?php endif;?>
-                                <a class="user__card-link--email link-regular" href="#"><?=$user->email?></a>
-                                <a class="user__card-link--skype link-regular" href="#"><?=$user->skype?></a>
+                                <?= CustomFormatter::asPhone($user->phone,['class' => "user__card-link--tel link-regular"]) ?>
+                                <?= Yii::$app->formatter->asEmail($user->email, ['class' => "user__card-link--email link-regular"])?>
+                                <?= CustomFormatter::asSkype($user->skype,['class' => "user__card-link--skype link-regular"]) ?>
                             </div>
                          </div>
                          <?php  if(!empty($user_portfolio)): ?>
