@@ -34,7 +34,7 @@ $this->title = 'Исполнители';
                 <div class="content-view__feedback-card user__search-wrapper">
                     <div class="feedback-card__top">
                         <div class="user__search-icon">
-                            <a href="<?=Url::to(['/users/view/', 'id'=>$user->id])?>"><img src="./img/<?=isset($user->avatar) ? $user->avatar : 'upload.png'?>" width="65" height="65"></a>
+                            <a href="<?=Url::to(['/users/view/', 'id'=>$user->id])?>"><?= Yii::$app->formatter->asImage(isset($user->avatar) ? '/img/'.$user->avatar : '/img/upload.png',['width'=>"65", 'height'=>"65", 'alt'=>"Аватар"]) ?></a>
                             <span><?= $users_tasks[$user->id]?> заданий</span>
                             <span><?= $users_rate['feedbacks'][$user->id]?> отзывов</span>
                         </div>

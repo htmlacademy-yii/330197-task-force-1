@@ -1,6 +1,5 @@
 
 <?php
-use frontend\functions;
 use yii\helpers\Url;
 ?>
     <main>
@@ -116,7 +115,7 @@ use yii\helpers\Url;
                        <div class="landing-task-info">
                            <div class="task-info-left">
                                <p><a href="#" class="link-regular"><?= implode(array_keys($categoryTasks[$task->idcategory])) ?></a></p>
-                               <p><?= Functions::diff_result($task->dt_add) ?></p>
+                               <p><?= Yii::$app->formatter->asRelativeTime($task->dt_add) ?></span></p>
                            </div>
                            <span><?= $task->budget ?> <b>₽</b></span>
                        </div>

@@ -21,9 +21,7 @@ use frontend\src\CustomFormatter;
                          <div class="content-view__headline">
                             <h1><?=$user->fio?></h1>
                             <p> <?=$user_country->country?>, <?=$user_city->city?>,
-                                <?php if(isset($user->birthday)): ?>
-                                    <?= substr(Yii::$app->formatter->asDuration(time()-strtotime($user->birthday)), 0, strpos(Yii::$app->formatter->asDuration(time()-strtotime($user->birthday)),','))?>
-                                <?php endif;?>
+                                <?= isset($user->birthday) ? substr(Yii::$app->formatter->asDuration(time()-strtotime($user->birthday)), 0, strpos(Yii::$app->formatter->asDuration(time()-strtotime($user->birthday)),',')) : ""?>
                             </p>
                             <div class="profile-mini__name five-stars__rate">                                
                                 <?php for($i=0; $i<round($user_rate); $i++): ?>
@@ -66,7 +64,7 @@ use frontend\src\CustomFormatter;
                         <div class="user__card-photo">                            
                             <h3 class="content-view__h3">Фото работ</h3>
                             <?php  foreach($user_portfolio as $p): ?>
-                            <a href="#"><img src="/user_files/<?=$p->photo?>" width="85" height="86" alt="Фото работы"></a>
+                            <?= CustomFormatter::asPhoto($p->photo,['width'=>"85", 'height'=>"86", 'alt'=>"Фото работы"]) ?>
                             <?php  endforeach; ?>
                          </div>
                          <?php  endif ?>
@@ -80,7 +78,7 @@ use frontend\src\CustomFormatter;
                         <div class="feedback-card__reviews">
                             <p class="link-task link">Задание <a href="<?=Url::to(['/tasks/view/', 'id'=>$feedback['task_id']])?>" class="link-regular">«<?=$feedback['task_title']?>»</a></p>
                             <div class="card__review">
-                                <a href="#"><img src="/img/<?= (isset($feedback['owner_avatar'])) ? $feedback['owner_avatar'] : 'upload.png'?>" width="55" height="54"></a>
+                                <a href="#"><?= Yii::$app->formatter->asImage(isset($feedback['owner_avatar']) ? '/img/'.$feedback['owner_avatar'] : '/img/upload.png',['width'=>"55", 'height'=>"54", 'alt'=>"Аватар"]) ?></a>
                                 <div class="feedback-card__reviews-content">
                                     <p class="link-name link"><a href="#" class="link-regular"><?=$feedback['owner_fio']?></a></p>
                                     <p class="review-text">

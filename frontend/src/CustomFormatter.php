@@ -46,4 +46,21 @@ class CustomFormatter extends \yii\i18n\Formatter
 
         return Html::a(Html::encode($value), $url, $options);
     }
+
+    /**
+     * Formats the value as an image tag.
+     * @param mixed $value the value to be formatted.
+     * @param array $img_options the tag options in terms of name-value pairs. See [[Html::img()]].
+     * @param array $a_options the tag options in terms of name-value pairs. See [[Html::a()]].
+     * @return string the formatted result.
+     */
+    public static function asPhoto($value, $img_options = [], $a_options =[])
+    {
+        if ($value === null) {
+            return null;
+        }
+        $url = '/user_files/'.$value;
+
+        return Html::a(Html::img($url, $img_options), $url, $a_options);
+    }
 }

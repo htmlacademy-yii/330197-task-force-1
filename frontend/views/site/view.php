@@ -54,16 +54,15 @@ use yii\widgets\ActiveField;
                     <?php if($task_action):?>
                     <div class="content-view__action-buttons">
                         <?php if($task_action->inner_name === 'cancel' or $task_action->inner_name === 'done'):?>
-                        <button class="button button__big-color request-button open-modal"
-                                    type="button" data-for="complete-form">Завершить</button>
+                        <button class="button button__big-color request-button open-modal" type="button" data-for="complete-form">Завершить</button>
                         <?php endif;?>
+
                         <?php if($task_action->inner_name === 'execute' and !in_array($user_profile->id,$executers_id)):?>
-                        <button class=" button button__big-color response-button open-modal"
-                                    type="button" data-for="response-form">Откликнуться</button>
+                        <button class=" button button__big-color response-button open-modal" type="button" data-for="response-form">Откликнуться</button>
                         <?php endif;?>
+
                         <?php if($task_action->inner_name === 'deny'):?>
-                        <button class="button button__big-color refusal-button open-modal"
-                                    type="button" data-for="refuse-form">Отказаться</button>
+                        <button class="button button__big-color refusal-button open-modal" type="button" data-for="refuse-form">Отказаться</button>
                         <?php endif;?>
                     </div>
                     <?php endif;?>
@@ -80,7 +79,7 @@ use yii\widgets\ActiveField;
                         <?php if($user_profile->id === $customer->id or $user_profile->id === $executer->id_user):?>
                         <div class="content-view__feedback-card">
                             <div class="feedback-card__top">
-                                <a href="<?=Url::to(['/users/view/'.$executer->id_user])?>"><img src="/img/<?= (isset($executer_info[$executer->id_user]->avatar)) ? $executer_info[$executer->id_user]->avatar :  'upload.png'?>" width="55" height="55"></a>
+                                <a href="<?=Url::to(['/users/view/'.$executer->id_user])?>"><?= Yii::$app->formatter->asImage(isset($executer_info[$executer->id_user]->avatar) ? '/img/'.$executer_info[$executer->id_user]->avatar : '/img/upload.png',['width'=>"55", 'height'=>"55", 'alt'=>"Аватар"]) ?></a>
                                 <div class="feedback-card__top--name">
                                     <p><a href="<?=Url::to(['/users/view/'.$executer->id_user])?>" class="link-regular"><?=$executer_info[$executer->id_user]->fio?></a></p>
                                     <?php for($i=0; $i<round($executer_rate[$executer->id_user]); $i++): ?>
@@ -117,7 +116,7 @@ use yii\widgets\ActiveField;
                     <div class="profile-mini__wrapper">
                         <h3>Заказчик</h3>
                         <div class="profile-mini__top">
-                            <img src="/img/<?= (isset($customer->avatar)) ? $customer->avatar :  'upload.png'?>" width="62" height="62" alt="Аватар заказчика">
+                            <?= Yii::$app->formatter->asImage(isset($customer->avatar) ? '/img/'.$customer->avatar : '/img/upload.png',['width'=>"62", 'height'=>"62", 'alt'=>"Аватар заказчика"]) ?>
                             <div class="profile-mini__name five-stars__rate">
                                 <p><?= $customer->fio?></p>
                             </div>
