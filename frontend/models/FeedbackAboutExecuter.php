@@ -21,7 +21,7 @@ use Yii;
  */
 class FeedbackAboutExecuter extends \yii\db\ActiveRecord
 {
-    public $completion = "Статус завершения задания";
+    public $completion = "Задание выполнено?";
     /**
      * {@inheritdoc}
      */

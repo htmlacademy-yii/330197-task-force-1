@@ -48,19 +48,19 @@ class LandingController extends Controller
         $task = new Tasks();
         $tasks = $task->filter(4);
 
-        $loginForm = new LoginForm();
+        $this->view->params['loginForm'] = new LoginForm();
 
         if (Yii::$app->request->getIsPost()) {
 
-            $loginForm->load(Yii::$app->request->post());
+            $this->view->params['loginForm']->load(Yii::$app->request->post());
 
             if (Yii::$app->request->isAjax) {
                 Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                return ActiveForm::validate($loginForm);
+                return ActiveForm::validate($this->view->params['loginForm']);
             }
 
-            if ($loginForm->validate()) {
-                $user = $loginForm->getUser();
+            if ($this->view->params['loginForm']->validate()) {
+                $user = $this->view->params['loginForm']->getUser();
                 Yii::$app->session->close();
                 Yii::$app->user->login($user);
 
@@ -68,10 +68,6 @@ class LandingController extends Controller
                 return $this->render('/site/landing',[  'categoryTasks' => $categoryTasks,
                                                         'tasks' => $tasks,
                                                     ]);
-            } else {
-                $errors = $loginForm->getErrors();
-                $this->layout = '/main_landing';
-                return $this->render('/site/error',['errors' => $errors]);
             }
         }
 

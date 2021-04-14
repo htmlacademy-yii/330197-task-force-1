@@ -44,3 +44,6 @@ phpunit.phar
 
 # ignore frontend runtime
 /frontend/runtime
+
+# ignore user_files
+/frontend/web/user_files

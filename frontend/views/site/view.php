@@ -140,7 +140,7 @@ use yii\widgets\ActiveField;
     <?php $form = ActiveForm::begin([ 'method' => 'post',
                                 'id' => 'execute-form',
                                 'action' => Url::to(["/tasks/execute/", 'idtask'=>$task->id]),
-                                'validateOnSubmit' => false,
+                                'validateOnSubmit' => true,
                                 'enableAjaxValidation' => true,
                                 'enableClientValidation' => true,
                                 'options' => ['data-pjax' => 1],
@@ -169,7 +169,7 @@ use yii\widgets\ActiveField;
     <p class="form-modal-description">Задание выполнено?</p>
     <?php $form = ActiveForm::begin([ 'action' => Url::to(['/tasks/feedback/', 'idtask'=>$task->id]),
                                    'method' => 'post',
-                                   'validateOnSubmit' => false,
+                                   'validateOnSubmit' => true,
                                    'enableAjaxValidation' => false,
                                    'enableClientValidation' => true,
                                 ]);?>

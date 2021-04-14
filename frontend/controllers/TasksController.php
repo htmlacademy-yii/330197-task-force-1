@@ -14,6 +14,7 @@ use yii\web\ForbiddenHttpException;
 use frontend\models\ExecuterResponds;
 use frontend\models\FeedbackAboutExecuter;
 use frontend\src\models\task;
+use yii\widgets\ActiveForm;
 
 class TasksController extends SecuredController
 {   
@@ -140,11 +141,16 @@ class TasksController extends SecuredController
 
         if($user->role !== 2 or !empty($user_respond))
         {
-            throw new ForbiddenHttpException("Это действие доступно только исполнителю, который ещё не оставлял заявку для этой задачи.");            
+            throw new ForbiddenHttpException("Это действие доступно только исполнителю, который ещё не оставлял заявку для этой задачи.");
         }
 
         if (Yii::$app->request->getIsPost()) {
             $model->load(Yii::$app->request->post());
+
+            if (Yii::$app->request->isAjax) {
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
+            }
         }
 
         if($model->validate()){
@@ -156,11 +162,6 @@ class TasksController extends SecuredController
             $respond->dt_add = date("Y-m-d H:i:s");
             $respond->save();
             return Yii::$app->response->redirect(["/tasks/view/$idtask"]);
-        }
-        else
-        {
-            $errors = $model->getErrors();
-            return $this->render('/site/error',['errors' => $errors]);
         }
     }
 
@@ -187,6 +188,11 @@ class TasksController extends SecuredController
         if (Yii::$app->request->getIsPost())
         {
             $model->load(Yii::$app->request->post());
+
+            if (Yii::$app->request->isAjax) {
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
+            }
         }
 
         if($model->validate())
@@ -199,11 +205,6 @@ class TasksController extends SecuredController
             $feedback->dt_add = date("Y-m-d H:i:s");
             $feedback->description = $model->description;
             $feedback->save();
-        }
-        else
-        {
-            $errors = $model->getErrors();
-            return $this->render('/site/error',['errors' => $errors]);
         }
 
         if($model->completion === 'yes' and !empty($task->idexecuter))

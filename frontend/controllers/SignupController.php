@@ -32,8 +32,8 @@ class SignupController extends Controller
     public function actionIndex()
     {   
         $form_model = new SignupForm();
-        $form_data = array();
         $user = new Users();
+        $errors = [];
 
         if (Yii::$app->request->getIsPost()) {
             $form_data = Yii::$app->request->post();
@@ -48,7 +48,6 @@ class SignupController extends Controller
                 Yii::$app->response->redirect(['index.php']);
             } else {
                 $errors = $form_model->getErrors();
-                return $this->render('/site/error',['errors' => $errors]);
             }
         }
         
@@ -60,6 +59,7 @@ class SignupController extends Controller
 
         return $this->render('/site/signup',['form_model' => $form_model,
                                             'cities' => $cities,
-                                            'role' => $role,]);
+                                            'role' => $role,
+                                            'errors' => $errors]);
     }
 }

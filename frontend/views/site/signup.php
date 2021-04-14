@@ -11,7 +11,7 @@ use yii\widgets\ActiveField;
                 <h1>Регистрация аккаунта</h1>
                 <div class="registration-wrapper">
                     <?php $error_class = "";
-                        if(isset($error)){
+                        if(isset($errors)){
                             $error_class = "has-error";
                         }
                         $form = ActiveForm::begin([
@@ -49,7 +49,7 @@ use yii\widgets\ActiveField;
                                     ->passwordInput(['id'=>'19'])
                                     ->hint('Длина пароля от 8 символов')
                                     ->label('Пароль')?>
-
+                        <?= $form->errorSummary($form_model); ?>
                         <?= Html::submitButton('Cоздать аккаунт', ['class' => "button button__registration",'type' => 'submit','name' => 'submit']) ?>
                     <?php ActiveForm::end(); ?>
                 </div>
