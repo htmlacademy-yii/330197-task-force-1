@@ -31,8 +31,8 @@ class SignupController extends Controller
 
     public function actionIndex()
     {   
-        $form_model = new SignupForm();
-        $user = new Users();
+        $form_model = new SignupForm;
+        $user = new Users;
         $errors = [];
 
         if (Yii::$app->request->getIsPost()) {

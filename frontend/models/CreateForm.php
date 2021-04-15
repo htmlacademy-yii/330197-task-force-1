@@ -55,12 +55,12 @@ class CreateForm extends ActiveRecord
             [['title','description','idcategory'], 'required'],
             ['title', 'string', 'min' => 2, 'max' => 255],
             [['description'], 'string'],
-            [['idcategory'], 'exist', 'skipOnError' => true, 'targetClass' => Categories::className(), 'targetAttribute' => ['idcategory' => 'id']],
+            [['idcategory'], 'exist', 'skipOnError' => true, 'targetClass' => Categories::class, 'targetAttribute' => ['idcategory' => 'id']],
             [['file', 'deadline'],'safe'],
             // [['file'], 'file', 'extensions' => 'png, jpg, jpeg, tft, doc, docx, txt, pdf, xsl, xslx, rtf'],
             [['file'], 'file'],
             [['latitude', 'longitude','budget'], 'number'],
-            [['idcity'], 'exist', 'skipOnError' => true, 'targetClass' => Cities::className(), 'targetAttribute' => ['idcity' => 'id']],
+            [['idcity'], 'exist', 'skipOnError' => true, 'targetClass' => Cities::class, 'targetAttribute' => ['idcity' => 'id']],
         ];
     }
 

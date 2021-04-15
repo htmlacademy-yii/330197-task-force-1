@@ -42,7 +42,7 @@ return [
             'viewPath' => '@common/mail',
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
-                'host' => 'hotmail.com',  // e.g. smtp.mandrillapp.com or smtp.gmail.com
+                'host' => 'smtp.office365.com',  // e.g. smtp.mandrillapp.com or smtp.gmail.com
                 'username' => 'test12330',
                 'password' => '123abc456',
                 'port' => '587', // Port 25 is a very common port too

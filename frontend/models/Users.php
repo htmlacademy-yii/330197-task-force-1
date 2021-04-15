@@ -127,7 +127,7 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function getCity()
     {
-        return $this->hasOne(Cities::className(), ['id' => 'city_id']);
+        return $this->hasOne(Cities::class, ['id' => 'city_id']);
     }
 
     /**
@@ -137,7 +137,7 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function getCommentsForTasks()
     {
-        return $this->hasMany(CommentsForTask::className(), ['id_user' => 'id']);
+        return $this->hasMany(CommentsForTask::class, ['id_user' => 'id']);
     }
 
     /**
@@ -147,7 +147,7 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function getExecuterResponds()
     {
-        return $this->hasMany(ExecuterResponds::className(), ['id_user' => 'id']);
+        return $this->hasMany(ExecuterResponds::class, ['id_user' => 'id']);
     }
 
     /**
@@ -157,12 +157,12 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function getExecutersCategories()
     {
-        return $this->hasMany(ExecutersCategory::className(), ['idexecuter' => 'id']);
+        return $this->hasMany(ExecutersCategory::class, ['idexecuter' => 'id']);
     }
 
     public function getCategories()
     {
-        return $this->hasMany(Categories::className(), ['id' => 'idcategory'])
+        return $this->hasMany(Categories::class, ['id' => 'idcategory'])
                     ->viaTable('executers_category', ['idexecuter' => 'id']);
     }
 
@@ -173,13 +173,13 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function getFavorites()
     {
-        return $this->hasMany(Favorite::className(), ['iduser' => 'id']);
+        return $this->hasMany(Favorite::class, ['iduser' => 'id']);
     }
 
     //Выводим список исполнителей, которые находятся в избранном для текущего пользователя
     public function getChoicest(): FavoriteQuery
     {
-        return $this->hasMany(Favorite::className(), ['favorite_user' => 'id']);
+        return $this->hasMany(Favorite::class, ['favorite_user' => 'id']);
     }
 
     /**
@@ -189,7 +189,7 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function getFeedbackAboutExecuters()
     {
-        return $this->hasMany(FeedbackAboutExecuter::className(), ['target_user_id' => 'id']);
+        return $this->hasMany(FeedbackAboutExecuter::class, ['target_user_id' => 'id']);
     }
 
     /**
@@ -199,7 +199,7 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function getPortfolios()
     {
-        return $this->hasMany(Portfolio::className(), ['idexecuter' => 'id']);
+        return $this->hasMany(Portfolio::class, ['idexecuter' => 'id']);
     }
 
     /**
@@ -209,7 +209,7 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function getTasks()
     {
-        return $this->hasMany(Tasks::className(), ['idexecuter' => 'id']);
+        return $this->hasMany(Tasks::class, ['idexecuter' => 'id']);
     }
 
     /**
@@ -219,7 +219,7 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function getUserPersonalities()
     {
-        return $this->hasMany(UserPersonality::className(), ['iduser' => 'id']);
+        return $this->hasMany(UserPersonality::class, ['iduser' => 'id']);
     }
 
     /**

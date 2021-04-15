@@ -20,8 +20,8 @@ class TasksController extends SecuredController
 {   
     public function actionIndex()
     {
-        $task_form = new CategoriesFormNew();
-        $form_data = array();
+        $task_form = new CategoriesFormNew;
+        $form_data = [];
         
         if (Yii::$app->request->getIsPost()) {
             $form_data = Yii::$app->request->post();
@@ -39,7 +39,7 @@ class TasksController extends SecuredController
                     'week' => 'За неделю',
                     'month' => 'За месяц'];
 
-        $task = new Tasks();
+        $task = new Tasks;
         $parsed_data = $task->parse_data($form_data['CategoriesFormNew']);
         $tasks = $task->filter(5,$parsed_data);
 
@@ -55,8 +55,8 @@ class TasksController extends SecuredController
         $userid = Yii::$app->user->getId();
         $user_profile = Users::findOne($userid);
 
-        $respond_model = new ExecuterResponds();
-        $feedback_model = new FeedbackAboutExecuter();
+        $respond_model = new ExecuterResponds;
+        $feedback_model = new FeedbackAboutExecuter;
 
         $task = Tasks::findOne($id);
         if (!$task) {
@@ -80,7 +80,7 @@ class TasksController extends SecuredController
             $executers_id[] = $value->id_user;
         }
 
-        $task_action = new Task();
+        $task_action = new Task;
         $idexecuter = empty($task->idexecuter) ? 0 : $task->idexecuter;
 
         $task_action = $task_action->get_actions($task->current_status, $task->idcustomer, $idexecuter, $userid, $user_profile->role);
@@ -120,7 +120,7 @@ class TasksController extends SecuredController
 
             Yii::$app->mailer->compose()
                     ->setFrom('test12330@hotmail.com')
-                    ->setTo('kaleo@i.ua')
+                    ->setTo('test12330@hotmail.com')
                     ->setSubject("Заявка принята заказчиком")
                     ->setTextBody("Поздавляем! Ваш отклик на задачу \"".$task->title."\" принят заказчиком.")
                     ->send();
@@ -137,7 +137,7 @@ class TasksController extends SecuredController
         $userid = Yii::$app->user->getId();
         $user = Users::findone($userid);
         $user_respond = ExecuterResponds::checkRespond($idtask, $userid);
-        $model = new ExecuterResponds();
+        $model = new ExecuterResponds;
 
         if($user->role !== 2 or !empty($user_respond))
         {
@@ -154,7 +154,7 @@ class TasksController extends SecuredController
         }
 
         if($model->validate()){
-            $respond = new ExecuterResponds();
+            $respond = new ExecuterResponds;
             $respond->target_task_id = $idtask;
             $respond->id_user = $userid;
             $respond->bid = $model->bid;
@@ -183,7 +183,7 @@ class TasksController extends SecuredController
             return Yii::$app->response->redirect(["/tasks/view/$idtask"]);
         }
 
-        $model = new FeedbackAboutExecuter();
+        $model = new FeedbackAboutExecuter;
 
         if (Yii::$app->request->getIsPost())
         {

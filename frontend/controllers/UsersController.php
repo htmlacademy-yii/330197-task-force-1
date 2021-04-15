@@ -18,8 +18,8 @@ class UsersController extends SecuredController
 {
     public function actionIndex($s = null)
     {   
-        $user_form = new UsersForm();
-        $form_data = array();
+        $user_form = new UsersForm;
+        $form_data = [];
         $sortField = isset($s) ? $s : 'date';
         $form_data['UsersForm']['s'] = $sortField;
 
@@ -31,7 +31,7 @@ class UsersController extends SecuredController
         $category = Categories::find()->select(['category', 'id'])->all();
         $categories = (ArrayHelper::map($category, 'id', 'category'));
 
-        $user = new Users();
+        $user = new Users;
         $users = $user->search($form_data['UsersForm']);
 
 

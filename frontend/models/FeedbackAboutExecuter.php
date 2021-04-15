@@ -40,9 +40,9 @@ class FeedbackAboutExecuter extends \yii\db\ActiveRecord
             [['target_task_id', 'target_user_id', 'id_user', 'rate'], 'integer'],
             [['dt_add'], 'safe'],
             [['description','completion'], 'string'],
-            [['target_task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tasks::className(), 'targetAttribute' => ['target_task_id' => 'id']],
-            [['target_user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['target_user_id' => 'id']],
-            [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['id_user' => 'id']],
+            [['target_task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tasks::class, 'targetAttribute' => ['target_task_id' => 'id']],
+            [['target_user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['target_user_id' => 'id']],
+            [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['id_user' => 'id']],
         ];
     }
 
@@ -70,7 +70,7 @@ class FeedbackAboutExecuter extends \yii\db\ActiveRecord
      */
     public function getTargetTask()
     {
-        return $this->hasOne(Tasks::className(), ['id' => 'target_task_id']);
+        return $this->hasOne(Tasks::class, ['id' => 'target_task_id']);
     }
 
     /**
@@ -80,7 +80,7 @@ class FeedbackAboutExecuter extends \yii\db\ActiveRecord
      */
     public function getTargetUser()
     {
-        return $this->hasOne(Users::className(), ['id' => 'target_user_id']);
+        return $this->hasOne(Users::class, ['id' => 'target_user_id']);
     }
 
     /**
@@ -90,7 +90,7 @@ class FeedbackAboutExecuter extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(Users::className(), ['id' => 'id_user']);
+        return $this->hasOne(Users::class, ['id' => 'id_user']);
     }
 
     /**

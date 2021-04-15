@@ -37,7 +37,7 @@ class Cities extends \yii\db\ActiveRecord
             [['latitude', 'longitude'], 'number'],
             [['country_id'], 'integer'],
             [['city'], 'string', 'max' => 255],
-            [['country_id'], 'exist', 'skipOnError' => true, 'targetClass' => Countries::className(), 'targetAttribute' => ['country_id' => 'id']],
+            [['country_id'], 'exist', 'skipOnError' => true, 'targetClass' => Countries::class, 'targetAttribute' => ['country_id' => 'id']],
         ];
     }
 
@@ -62,7 +62,7 @@ class Cities extends \yii\db\ActiveRecord
      */
     public function getCountry()
     {
-        return $this->hasOne(Countries::className(), ['id' => 'country_id']);
+        return $this->hasOne(Countries::class, ['id' => 'country_id']);
     }
 
     /**
@@ -72,7 +72,7 @@ class Cities extends \yii\db\ActiveRecord
      */
     public function getTasks()
     {
-        return $this->hasMany(Tasks::className(), ['idcity' => 'id']);
+        return $this->hasMany(Tasks::class, ['idcity' => 'id']);
     }
 
     /**
@@ -82,7 +82,7 @@ class Cities extends \yii\db\ActiveRecord
      */
     public function getUsers()
     {
-        return $this->hasMany(Users::className(), ['city_id' => 'id']);
+        return $this->hasMany(Users::class, ['city_id' => 'id']);
     }
 
     /**

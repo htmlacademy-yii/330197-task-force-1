@@ -36,8 +36,8 @@ class ExecuterResponds extends \yii\db\ActiveRecord
             [['target_task_id', 'id_user', 'bid'], 'integer'],
             [['dt_add'], 'safe'],
             [['notetext'], 'string'],
-            [['target_task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tasks::className(), 'targetAttribute' => ['target_task_id' => 'id']],
-            [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['id_user' => 'id']],
+            [['target_task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tasks::class, 'targetAttribute' => ['target_task_id' => 'id']],
+            [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['id_user' => 'id']],
         ];
     }
 
@@ -63,7 +63,7 @@ class ExecuterResponds extends \yii\db\ActiveRecord
      */
     public function getTargetTask()
     {
-        return $this->hasOne(Tasks::className(), ['id' => 'target_task_id']);
+        return $this->hasOne(Tasks::class, ['id' => 'target_task_id']);
     }
 
     /**
@@ -73,7 +73,7 @@ class ExecuterResponds extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(Users::className(), ['id' => 'id_user']);
+        return $this->hasOne(Users::class, ['id' => 'id_user']);
     }
 
     /**

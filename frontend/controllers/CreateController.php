@@ -38,8 +38,8 @@ class CreateController extends SecuredController
             throw new NotFoundHttpException("У Вас нет доступа к этой странице");
         }
         
-        $form_model = new CreateForm();
-        $task = new Tasks();
+        $form_model = new CreateForm;
+        $task = new Tasks;
 
         if (Yii::$app->request->getIsPost()) {
             $form_model->load(Yii::$app->request->post());
@@ -93,7 +93,7 @@ class CreateController extends SecuredController
 
         $file->saveAs('@webroot/user_files/' . $filename);
 
-        $stored_file = new StoredFiles();
+        $stored_file = new StoredFiles;
         $stored_file->idtask = 1;
         $stored_file->file_path = $filename;
         $stored_file->attach_id = $attach_id;

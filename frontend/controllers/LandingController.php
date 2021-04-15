@@ -45,7 +45,7 @@ class LandingController extends Controller
 
         $categoryTask = Categories::find()->select(['category', 'id','icon'])->all();
         $categoryTasks = (ArrayHelper::map($categoryTask, 'category','icon', 'id'));
-        $task = new Tasks();
+        $task = new Tasks;
         $tasks = $task->filter(4);
 
         $this->view->params['loginForm'] = new LoginForm();
