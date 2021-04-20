@@ -119,11 +119,12 @@ class TasksController extends SecuredController
             $task->SetExecuter($idexecuter);
 
             Yii::$app->mailer->compose()
-                    ->setFrom('test12330@hotmail.com')
-                    ->setTo('test12330@hotmail.com')
+                    ->setFrom('mailtest12330@gmail.com')
+                    ->setTo('mailtest12330@gmail.com')
                     ->setSubject("Заявка принята заказчиком")
                     ->setTextBody("Поздавляем! Ваш отклик на задачу \"".$task->title."\" принят заказчиком.")
                     ->send();
+            mail('mailtest12330@gmail.com', 'Тема письма - Заявка принята заказчиком', "Текст письма - Поздавляем! Ваш отклик на задачу \"".$task->title."\" принят заказчиком.", 'From: mailtest12330@gmail.com');
         }
         elseif($action === 'reject')
         {
