@@ -40,7 +40,8 @@ class TasksController extends SecuredController
                     'month' => 'За месяц'];
 
         $task = new Tasks;
-        $parsed_data = $task->parse_data($form_data['CategoriesFormNew']);
+        $data = isset($form_data['CategoriesFormNew']) ? $form_data['CategoriesFormNew'] : null;
+        $parsed_data = $task->parse_data($data);
         $tasks = $task->filter(5,$parsed_data);
 
         return $this->render('/site/tasks', ['categories' => $categories,
@@ -117,14 +118,15 @@ class TasksController extends SecuredController
 
             $task->SetStatus(Task::STATUS_EXECUTE);
             $task->SetExecuter($idexecuter);
-
+            
+            set_time_limit(500);
             Yii::$app->mailer->compose()
                     ->setFrom('mailtest12330@gmail.com')
                     ->setTo('mailtest12330@gmail.com')
                     ->setSubject("Заявка принята заказчиком")
                     ->setTextBody("Поздавляем! Ваш отклик на задачу \"".$task->title."\" принят заказчиком.")
                     ->send();
-            mail('mailtest12330@gmail.com', 'Тема письма - Заявка принята заказчиком', "Текст письма - Поздавляем! Ваш отклик на задачу \"".$task->title."\" принят заказчиком.", 'From: mailtest12330@gmail.com');
+            // mail('mailtest12330@gmail.com', 'Тема письма - Заявка принята заказчиком', "Текст письма - Поздавляем! Ваш отклик на задачу \"".$task->title."\" принят заказчиком.", 'From: mailtest12330@gmail.com');
         }
         elseif($action === 'reject')
         {

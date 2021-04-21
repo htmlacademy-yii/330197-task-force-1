@@ -245,7 +245,8 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface
 
     public function search($form_data = null){
 
-        $id_executers = $this->getExequtersByCategory($form_data['category']);
+        $data = isset($form_data['category']) ? $form_data['category'] : null;
+        $id_executers = $this->getExequtersByCategory($data);
 
         $query = self::find();
         $query = $query->joinWith('feedbackAboutExecuters f', true, 'LEFT JOIN' )

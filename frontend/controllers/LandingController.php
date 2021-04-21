@@ -67,6 +67,7 @@ class LandingController extends Controller
                 $this->layout = '/main';
                 return $this->render('/site/landing',[  'categoryTasks' => $categoryTasks,
                                                         'tasks' => $tasks,
+                                                        'isGuest' => $isGuest,
                                                     ]);
             }
         }
