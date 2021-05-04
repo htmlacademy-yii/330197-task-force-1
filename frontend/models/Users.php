@@ -308,7 +308,7 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface
 
     //Возвращает полную информацию всех отзывов о пользователе по его id
     public function getFeedbackFullInfo(){
-        $user = FeedbackAboutExecuter::find()->where(['=','target_user_id',$this->id])->all();
+        $user = FeedbackAboutExecuter::find()->where(['=','target_user_id',$this->id])->orderBy(['dt_add' => SORT_DESC])->all();
         if(!empty($user)){
             foreach($user as $value){
                 $task = Tasks::findOne($value->target_task_id);

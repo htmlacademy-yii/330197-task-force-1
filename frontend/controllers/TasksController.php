@@ -15,6 +15,7 @@ use frontend\models\ExecuterResponds;
 use frontend\models\FeedbackAboutExecuter;
 use frontend\src\models\task;
 use yii\widgets\ActiveForm;
+use frontend\src\MailerJob;
 
 class TasksController extends SecuredController
 {   
@@ -106,6 +107,7 @@ class TasksController extends SecuredController
     {
         $userid = Yii::$app->user->getId();
         $task = Tasks::findone($idtask);
+        $executer = Users::findone($idexecuter);
 
         if($task->idcustomer != $userid)
         {
@@ -119,14 +121,12 @@ class TasksController extends SecuredController
             $task->SetStatus(Task::STATUS_EXECUTE);
             $task->SetExecuter($idexecuter);
             
-            set_time_limit(500);
-            Yii::$app->mailer->compose()
-                    ->setFrom('mailtest12330@gmail.com')
-                    ->setTo('mailtest12330@gmail.com')
-                    ->setSubject("Заявка принята заказчиком")
-                    ->setTextBody("Поздавляем! Ваш отклик на задачу \"".$task->title."\" принят заказчиком.")
-                    ->send();
-            // mail('mailtest12330@gmail.com', 'Тема письма - Заявка принята заказчиком', "Текст письма - Поздавляем! Ваш отклик на задачу \"".$task->title."\" принят заказчиком.", 'From: mailtest12330@gmail.com');
+            Yii::$app->queue->push(new MailerJob(
+                $mailfrom = 'mailtest12330@gmail.com',
+                $mailto = $executer->email,
+                $title = "Заявка принята заказчиком",
+                $body = "Поздавляем, ".$executer->fio."! Ваш отклик на задачу \"".$task->title."\" принят заказчиком. Перейти на страницу задачи можно по ссылке http://yii-taskforce/tasks/view/$task->id",
+            ));
         }
         elseif($action === 'reject')
         {
@@ -141,6 +141,8 @@ class TasksController extends SecuredController
         $user = Users::findone($userid);
         $user_respond = ExecuterResponds::checkRespond($idtask, $userid);
         $model = new ExecuterResponds;
+        $task = Tasks::findone($idtask);
+        $customer = Users::findone($task->idcustomer);
 
         if($user->role !== 2 or !empty($user_respond))
         {
@@ -164,6 +166,14 @@ class TasksController extends SecuredController
             $respond->notetext = $model->notetext;
             $respond->dt_add = date("Y-m-d H:i:s");
             $respond->save();
+
+            Yii::$app->queue->push(new MailerJob(
+                $mailfrom = 'mailtest12330@gmail.com',
+                $mailto = $customer->email,
+                $title = "Получен новый отклик на задачу",
+                $body = "На Вашу задачу \"".$task->title."\" получен новый отклик от исполнителя. Перейти на страницу задачи можно по ссылке http://yii-taskforce/tasks/view/$task->id",
+            ));
+
             return Yii::$app->response->redirect(["/tasks/view/$idtask"]);
         }
     }
@@ -208,6 +218,15 @@ class TasksController extends SecuredController
             $feedback->dt_add = date("Y-m-d H:i:s");
             $feedback->description = $model->description;
             $feedback->save();
+
+            $executer = Users::findone($task->idexecuter);
+
+            Yii::$app->queue->push(new MailerJob(
+                $mailfrom = 'mailtest12330@gmail.com',
+                $mailto = $executer->email,
+                $title = "Задача завершена заказчиком",
+                $body = "Задача \"".$task->title."\" была завершена заказчиком. Посмотреть отзыв и оценку заказчика можно по ссылке http://yii-taskforce/users/view/$executer->id",
+            ));
         }
 
         if($model->completion === 'yes' and !empty($task->idexecuter))
@@ -235,6 +254,16 @@ class TasksController extends SecuredController
         else
         {
             $task->SetStatus(Task::STATUS_FAIL);
+            $customer = Users::findone($task->idcustomer);
+            $executer = Users::findone($task->idexecuter);
+
+            Yii::$app->queue->push(new MailerJob(
+                $mailfrom = 'mailtest12330@gmail.com',
+                $mailto = $customer->email,
+                $title = "Исполнитель отказался от задачи",
+                $body = "Исполнитель ".$executer->fio." отказался от выполнения задачи \"".$task->title."\". Перейти на страницу задачи можно по ссылке http://yii-taskforce/tasks/view/$task->id",
+            ));
+
             return Yii::$app->response->redirect(["/tasks/view/$idtask"]);
         }
     }
