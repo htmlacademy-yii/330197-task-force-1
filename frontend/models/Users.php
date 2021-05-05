@@ -253,24 +253,24 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface
                         ->where(['=','users.role',2])
                         ->andWhere(['in','users.id',$id_executers]);
 
-        if($form_data['search']){
+        if(!empty($form_data['search'])){
             $query = $query->andWhere(['like', 'users.fio', $form_data['search']]);
         } else {
-            if($form_data['free']){
+            if(!empty($form_data['free'])){
                 $query = $query->joinWith('tasks')
                                 ->andWhere(['not in','tasks.current_status', ['new','in_progress']]);
             }
-            if($form_data['online']){
+            if(!empty($form_data['online'])){
                 $date = date_create(date('Y-m-d H:i:s'));
                 date_sub($date,date_interval_create_from_date_string('30 minute'));
                 $date = date_format($date,'Y-m-d H:i:s');
 
                 $query = $query->andWhere(['>=','users.last_update',$date]);
             }
-            if($form_data['feedback']){
+            if(!empty($form_data['feedback'])){
                 $query = $query->andWhere(['is not','f.target_user_id',null]);
             }
-            if($form_data['favorite']){
+            if(!empty($form_data['favorite'])){
                 $current_user_id = 1;
                 $query = $query->joinWith('choicest')
                                 ->andWhere(['=','iduser',$current_user_id]);
@@ -359,24 +359,8 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     //Формируем массив с названием категорий для исполнителя по его id
-    public function getArrayCaterories(){
-        $query = self::find()
-                ->joinWith('executersCategories ec', true, 'INNER JOIN')
-                ->joinWith('categories c', true, 'INNER JOIN')
-                ->where(['=','ec.idexecuter', $this->id]);
-        $provider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
-
-        $user = $provider->getModels();
-        if($user[0]->categories){
-            foreach($user[0]->categories as $category){
-                $user_categories[] = $category["category"];
-            }
-            return $user_categories;
-        } else {
-            return false;
-        }
+    public function getExecutersCaterories(){
+       return ExecutersCategory::find()->where(['=','idexecuter', $this->id])->all();
     }
 
     //Выводим портфолио исполнителя по его id

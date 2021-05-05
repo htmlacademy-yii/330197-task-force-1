@@ -54,8 +54,8 @@ $this->title = 'Исполнители';
                         <span class="new-task__time">Был на сайте <?= Yii::$app->formatter->asRelativeTime($user->last_update) ?></span>
                     </div>
                     <div class="link-specialization user__search-link--bottom">
-                        <?php foreach($users_categories[$user->id] as $category): ?>
-                        <a href="#" class="link-regular"><?= $category ?></a>
+                        <?php foreach($users_categories[$user->id] as $c): ?>
+                        <a href="#" class="link-regular"><?= $categories[$c['idcategory']] ?></a>
                         <?php endforeach;?>
                     </div>
                 </div>

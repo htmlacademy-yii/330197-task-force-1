@@ -52,7 +52,7 @@ class ExecutersCategory extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery|ExecutersCategoryQuery
      */
-    public function getIdcategory0()
+    public function getIdcategory()
     {
         return $this->hasOne(Categories::class, ['id' => 'idcategory']);
     }
@@ -62,7 +62,7 @@ class ExecutersCategory extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery|ExecutersCategoryQuery
      */
-    public function getIdexecuter0()
+    public function getIdexecuter()
     {
         return $this->hasOne(Users::class, ['id' => 'idexecuter']);
     }

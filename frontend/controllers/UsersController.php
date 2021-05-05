@@ -40,7 +40,7 @@ class UsersController extends SecuredController
             $users_rate['rate'][$u->id] = $executer->getAvgRate();
             $users_rate['feedbacks'][$u->id] = $executer->getExecutersFeedbackCount();
             $users_tasks[$u->id] = $executer->getExecuterTaskCount();
-            $users_categories[$u->id] = $executer->getArrayCaterories();
+            $users_categories[$u->id] = $executer->getExecutersCaterories();
         }
 
         return $this->render('/site/users',['sortField' => $sortField,
@@ -67,7 +67,7 @@ class UsersController extends SecuredController
         $user_tasks = $user->getExecuterTaskCount();
         $user_city = Cities::findOne($user->city_id);
         $user_country = Countries::findOne($user_city->country_id);
-        $user_categories = $user->getArrayCaterories();
+        $user_categories = $user->getExecutersCaterories();
         $user_portfolio = $user->getPortfolio($id);
 
         return $this->render('/site/user', ['user' => $user,

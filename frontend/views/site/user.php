@@ -11,6 +11,7 @@
 
 use yii\helpers\Url;
 use frontend\src\CustomFormatter;
+use yii\widgets\MaskedInput;
 ?>
     <main class="page-main">
         <div class="main-container page-container">
@@ -48,14 +49,22 @@ use frontend\src\CustomFormatter;
                         <?php if($user_categories):?>
                             <h3 class="content-view__h3">Специализации</h3>
                             <div class="link-specialization">
-                            <?php foreach($user_categories as $category):?>
-                             <a href="#" class="link-regular"><?=$category?></a>                             
+                            <?php foreach($user_categories as $c):?>
+                             <a href="#" class="link-regular"><?=$categories[$c['idcategory']]?></a>
                              <?php endforeach;?>
                             </div>
                         <?php  endif;?>
                             <h3 class="content-view__h3">Контакты</h3>
                             <div class="user__card-link">
                                 <?= CustomFormatter::asPhone($user->phone,['class' => "user__card-link--tel link-regular"]) ?>
+                                <?/*= MaskedInput::widget([
+                                                        'name' => 'phone',
+                                                        'mask' => '9 (999) 999 99 99',
+                                                        'value' => $user->phone,
+                                                        'type' => 'tel',
+                                                        'options' => ['class' => "user__card-link--tel link-regular",
+                                                                      'tag' => 'a']
+                                                        ])*/ ?>
                                 <?= Yii::$app->formatter->asEmail($user->email, ['class' => "user__card-link--email link-regular"])?>
                                 <?= CustomFormatter::asSkype($user->skype,['class' => "user__card-link--skype link-regular"]) ?>
                             </div>

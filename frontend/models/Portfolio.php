@@ -53,7 +53,7 @@ class Portfolio extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery|UsersQuery
      */
-    public function getIdexecuter0()
+    public function getIdexecuter()
     {
         return $this->hasOne(Users::class, ['id' => 'idexecuter']);
     }

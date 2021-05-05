@@ -78,7 +78,7 @@ class Favorite extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery|UsersQuery
      */
-    public function getIduser0()
+    public function getIduser()
     {
         return $this->hasOne(Users::class, ['id' => 'iduser']);
     }

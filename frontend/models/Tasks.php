@@ -188,13 +188,13 @@ class Tasks extends \yii\db\ActiveRecord
     public function parse_data($form_data = null)
     {
         // Представляем, данные полученные из формы в удобном виде
-        if($form_data['no_executers']){
+        if(!empty($form_data['no_executers'])){
             $form_data['no_executers'] = true;
         }
-        if($form_data['no_address']){
+        if(!empty($form_data['no_address'])){
             $form_data['no_address'] = true;
         }
-        if($form_data['period']){
+        if(!empty($form_data['period'])){
             switch ($form_data['period']) {
                 case 'day':
                     $form_data['period'] = date('Y-m-d',time()-86400);
@@ -216,24 +216,25 @@ class Tasks extends \yii\db\ActiveRecord
 
     public static function filter ($limit, $form_data = null){
 
+
         $query = self::find()
                 ->joinWith('executerResponds er', true, 'LEFT JOIN')
                 ->where(['in','current_status', ['new']]);
 
         //Подключаем переданные фильтры через форму
-        if($form_data['category']){
+        if(!empty($form_data['category'])){
             $query = $query->andWhere(['in','idcategory',$form_data['category']]);
         }
-        if($form_data['no_executers']){
+        if(!empty($form_data['no_executers'])){
             $query = $query->andWhere(['is','er.target_task_id', null]);
         }
-        if($form_data['no_address']){
+        if(!empty($form_data['no_address'])){
             $query = $query->andWhere(['or',['is','tasks.latitude', null],['is','tasks.longitude', null]]);
         }
-        if($form_data['period']){
+        if(!empty($form_data['period'])){
             $query = $query->andWhere(['>=','tasks.dt_add',$form_data['period']]);
         }
-        if($form_data['search']){
+        if(!empty($form_data['search'])){
             $query = $query->andWhere(['like', 'title', $form_data['search']]);
         }
 
@@ -242,7 +243,7 @@ class Tasks extends \yii\db\ActiveRecord
         $provider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'pageSize' => $limit,
+                'pageSize' => $limit+1,
             ],
         ]);
         $tasks = $provider->getModels();

@@ -1,6 +1,7 @@
 
 <?php
 use yii\helpers\Url;
+use frontend\src\Functions;
 ?>
     <main>
         <div class="landing-container">
@@ -109,8 +110,8 @@ use yii\helpers\Url;
                        <div class="landing-task-top task-<?= $categoryTasks[$task->idcategory][implode(array_keys($categoryTasks[$task->idcategory]))] ?>"></div>
                        <div class="landing-task-description">
                            <h3><a href="<?=Url::to(['/tasks/view/', 'id' => $task->id])?>" class="link-regular">
-                           <?= substr($task->title, 0, (strlen($task->title) <= 60) ? strlen($task->title) : strpos($task->title,' ',50))?></a></h3>
-                           <p><?= substr($task->description, 0, (strlen($task->description) <= 90) ? strlen($task->description) : strpos($task->description,' ',70))?></p>
+                           <?= Functions::cut_string($task->title, 60)?></a></h3>
+                           <p><?= Functions::cut_string($task->description, 90)?></p>
                        </div>
                        <div class="landing-task-info">
                            <div class="task-info-left">
