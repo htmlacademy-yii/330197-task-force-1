@@ -11,7 +11,7 @@ use yii\widgets\ActiveField;
                 <h1>Регистрация аккаунта</h1>
                 <div class="registration-wrapper">
                     <?php $error_class = "";
-                        if(isset($error)){
+                        if(isset($errors)){
                             $error_class = "has-error";
                         }
                         $form = ActiveForm::begin([
@@ -40,11 +40,16 @@ use yii\widgets\ActiveField;
                                     ->hint('Укажите город, чтобы находить подходящие задачи')
                                     ->label('Город проживания')?>
 
+                        <?= $form->field($form_model, 'role', ['options' => ['tag' => false]])
+                                    ->dropDownList($role, ['class' => 'multiple-select input town-select registration-town', 'size' => '1', 'id' => '20'])
+                                    ->hint('Выберите роль, чтобы создавать новые задачи или получать заказы для выполнения')
+                                    ->label('Выберите роль')?>
+
                         <?= $form->field($form_model, 'password', ['options' => ['tag' => false]])
                                     ->passwordInput(['id'=>'19'])
                                     ->hint('Длина пароля от 8 символов')
                                     ->label('Пароль')?>
-
+                        <?= $form->errorSummary($form_model); ?>
                         <?= Html::submitButton('Cоздать аккаунт', ['class' => "button button__registration",'type' => 'submit','name' => 'submit']) ?>
                     <?php ActiveForm::end(); ?>
                 </div>

@@ -34,9 +34,9 @@ class Favorite extends \yii\db\ActiveRecord
         return [
             [['iduser'], 'required'],
             [['iduser', 'favorite_task', 'favorite_user'], 'integer'],
-            [['iduser'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['iduser' => 'id']],
-            [['favorite_task'], 'exist', 'skipOnError' => true, 'targetClass' => Tasks::className(), 'targetAttribute' => ['favorite_task' => 'id']],
-            [['favorite_user'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['favorite_user' => 'id']],
+            [['iduser'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['iduser' => 'id']],
+            [['favorite_task'], 'exist', 'skipOnError' => true, 'targetClass' => Tasks::class, 'targetAttribute' => ['favorite_task' => 'id']],
+            [['favorite_user'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['favorite_user' => 'id']],
         ];
     }
 
@@ -60,7 +60,7 @@ class Favorite extends \yii\db\ActiveRecord
      */
     public function getFavoriteTask()
     {
-        return $this->hasOne(Tasks::className(), ['id' => 'favorite_task']);
+        return $this->hasOne(Tasks::class, ['id' => 'favorite_task']);
     }
 
     /**
@@ -70,7 +70,7 @@ class Favorite extends \yii\db\ActiveRecord
      */
     public function getFavoriteUser()
     {
-        return $this->hasOne(Users::className(), ['id' => 'favorite_user']);
+        return $this->hasOne(Users::class, ['id' => 'favorite_user']);
     }
 
     /**
@@ -78,9 +78,9 @@ class Favorite extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery|UsersQuery
      */
-    public function getIduser0()
+    public function getIduser()
     {
-        return $this->hasOne(Users::className(), ['id' => 'iduser']);
+        return $this->hasOne(Users::class, ['id' => 'iduser']);
     }
 
     /**

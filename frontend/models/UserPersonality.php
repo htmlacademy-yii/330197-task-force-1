@@ -31,8 +31,8 @@ class UserPersonality extends \yii\db\ActiveRecord
         return [
             [['iduser', 'idnotice'], 'required'],
             [['iduser', 'idnotice'], 'integer'],
-            [['iduser'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['iduser' => 'id']],
-            [['idnotice'], 'exist', 'skipOnError' => true, 'targetClass' => PersonNotice::className(), 'targetAttribute' => ['idnotice' => 'id']],
+            [['iduser'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['iduser' => 'id']],
+            [['idnotice'], 'exist', 'skipOnError' => true, 'targetClass' => PersonNotice::class, 'targetAttribute' => ['idnotice' => 'id']],
         ];
     }
 
@@ -54,7 +54,7 @@ class UserPersonality extends \yii\db\ActiveRecord
      */
     public function getIdnotice0()
     {
-        return $this->hasOne(PersonNotice::className(), ['id' => 'idnotice']);
+        return $this->hasOne(PersonNotice::class, ['id' => 'idnotice']);
     }
 
     /**
@@ -64,7 +64,7 @@ class UserPersonality extends \yii\db\ActiveRecord
      */
     public function getIduser0()
     {
-        return $this->hasOne(Users::className(), ['id' => 'iduser']);
+        return $this->hasOne(Users::class, ['id' => 'iduser']);
     }
 
     /**

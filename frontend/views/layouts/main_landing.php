@@ -10,7 +10,7 @@ use frontend\models\LoginForm;
 use frontend\assets\AppAsset;
 
 AppAsset::register($this);
-$model = new LoginForm();
+$model = $this->params['loginForm'];
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -119,7 +119,7 @@ $model = new LoginForm();
         <?php 
         $form = ActiveForm::begin([ 'method' => 'post',
                                     'id' => 'signin-form',
-                                    'validateOnSubmit' => false,
+                                    'validateOnSubmit' => true,
                                     'enableAjaxValidation' => true,
                                     'enableClientValidation' => true,
                                     'options' => ['data-pjax' => 1, 'class' => 'form-modal'],

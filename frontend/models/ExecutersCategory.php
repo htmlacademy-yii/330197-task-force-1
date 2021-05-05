@@ -31,8 +31,8 @@ class ExecutersCategory extends \yii\db\ActiveRecord
         return [
             [['idexecuter', 'idcategory'], 'required'],
             [['idexecuter', 'idcategory'], 'integer'],
-            [['idexecuter'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['idexecuter' => 'id']],
-            [['idcategory'], 'exist', 'skipOnError' => true, 'targetClass' => Categories::className(), 'targetAttribute' => ['idcategory' => 'id']],
+            [['idexecuter'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['idexecuter' => 'id']],
+            [['idcategory'], 'exist', 'skipOnError' => true, 'targetClass' => Categories::class, 'targetAttribute' => ['idcategory' => 'id']],
         ];
     }
 
@@ -52,9 +52,9 @@ class ExecutersCategory extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery|ExecutersCategoryQuery
      */
-    public function getIdcategory0()
+    public function getIdcategory()
     {
-        return $this->hasOne(Categories::className(), ['id' => 'idcategory']);
+        return $this->hasOne(Categories::class, ['id' => 'idcategory']);
     }
 
     /**
@@ -62,9 +62,9 @@ class ExecutersCategory extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery|ExecutersCategoryQuery
      */
-    public function getIdexecuter0()
+    public function getIdexecuter()
     {
-        return $this->hasOne(Users::className(), ['id' => 'idexecuter']);
+        return $this->hasOne(Users::class, ['id' => 'idexecuter']);
     }
 
     /**

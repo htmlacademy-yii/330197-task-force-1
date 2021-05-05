@@ -67,24 +67,24 @@ $cities = Cities::find()->all();
                     <li class="site-list__item">
                         <a href="/users">Исполнители</a>
                     </li>
-                    <? if($user_profile->role === 1): ?>
+                    <?php if(isset($user_profile) and $user_profile->role === 1): ?>
                     <li class="site-list__item">
                         <a href="/create">Создать задание</a>
                     </li>
-                    <? endif;?>
-                    <? if(Yii::$app->controller->id !== 'signup'):?>
+                    <?php endif;?>
+                    <?php if(Yii::$app->controller->id !== 'signup'):?>
                     <li class="site-list__item">
                         <a href="account.html">Мой профиль</a>
                     </li>
-                    <?endif;?>
+                    <?php endif;?>
                 </ul>
             </div>
-            <? if(Yii::$app->controller->id !== 'signup'):?>
+            <?php if(Yii::$app->controller->id !== 'signup'):?>
             <div class="header__town">
                 <select class="multiple-select input town-select" size="1" name="town[]">
-                <? foreach($cities as $city): ?>
+                <?php foreach($cities as $city): ?>
                     <option <?= ($city->id === $user_profile->city_id) ? 'selected' : '' ?> value="<?=$city->id?>"><?=$city->city?></option>
-                <? endforeach; ?>
+                <?php endforeach; ?>
                 </select>
             </div>
             <div class="header__lightbulb"></div>
@@ -124,7 +124,7 @@ $cities = Cities::find()->all();
                     </li>
                 </ul>
             </div>
-            <?endif;?>
+            <?php endif;?>
         </div>
     </header>
 
@@ -172,7 +172,7 @@ $cities = Cities::find()->all();
                          alt="Логотип HTML Academy">
                 </a>
             </div>
-            <? if(Yii::$app->controller->id === 'signup'):?>
+            <?php if(Yii::$app->controller->id === 'signup'):?>
             <div class="clipart-woman">
                 <img src="/img/clipart-woman.png" width="238" height="450">
             </div>
@@ -185,7 +185,7 @@ $cities = Cities::find()->all();
                     от 500 рублей в час.</p>
                 </div>
             </div>
-            <?endif;?>
+            <?php endif;?>
         </div>
     </footer>
 </div>

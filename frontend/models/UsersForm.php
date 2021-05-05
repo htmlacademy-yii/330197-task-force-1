@@ -65,7 +65,7 @@ class UsersForm extends \yii\db\ActiveRecord
      */
     public function getExecutersCategories()
     {
-        return $this->hasMany(ExecutersCategory::className(), ['idcategory' => 'id']);
+        return $this->hasMany(ExecutersCategory::class, ['idcategory' => 'id']);
     }
 
     /**
@@ -75,7 +75,7 @@ class UsersForm extends \yii\db\ActiveRecord
      */
     public function getTasks()
     {
-        return $this->hasMany(Tasks::className(), ['idcategory' => 'id']);
+        return $this->hasMany(Tasks::class, ['idcategory' => 'id']);
     }
 
     /**

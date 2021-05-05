@@ -18,8 +18,8 @@ class UsersController extends SecuredController
 {
     public function actionIndex($s = null)
     {   
-        $user_form = new UsersForm();
-        $form_data = array();
+        $user_form = new UsersForm;
+        $form_data = [];
         $sortField = isset($s) ? $s : 'date';
         $form_data['UsersForm']['s'] = $sortField;
 
@@ -31,7 +31,7 @@ class UsersController extends SecuredController
         $category = Categories::find()->select(['category', 'id'])->all();
         $categories = (ArrayHelper::map($category, 'id', 'category'));
 
-        $user = new Users();
+        $user = new Users;
         $users = $user->search($form_data['UsersForm']);
 
 
@@ -40,7 +40,7 @@ class UsersController extends SecuredController
             $users_rate['rate'][$u->id] = $executer->getAvgRate();
             $users_rate['feedbacks'][$u->id] = $executer->getExecutersFeedbackCount();
             $users_tasks[$u->id] = $executer->getExecuterTaskCount();
-            $users_categories[$u->id] = $executer->getArrayCaterories();
+            $users_categories[$u->id] = $executer->getExecutersCaterories();
         }
 
         return $this->render('/site/users',['sortField' => $sortField,
@@ -67,7 +67,7 @@ class UsersController extends SecuredController
         $user_tasks = $user->getExecuterTaskCount();
         $user_city = Cities::findOne($user->city_id);
         $user_country = Countries::findOne($user_city->country_id);
-        $user_categories = $user->getArrayCaterories();
+        $user_categories = $user->getExecutersCaterories();
         $user_portfolio = $user->getPortfolio($id);
 
         return $this->render('/site/user', ['user' => $user,
@@ -83,7 +83,7 @@ class UsersController extends SecuredController
     }
 
     public function actionLogout() {
-        \Yii::$app->user->logout();
+        Yii::$app->user->logout();
         return $this->goHome();
     }
 

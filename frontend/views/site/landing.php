@@ -1,7 +1,7 @@
 
 <?php
-use frontend\functions;
 use yii\helpers\Url;
+use frontend\src\Functions;
 ?>
     <main>
         <div class="landing-container">
@@ -11,15 +11,15 @@ use yii\helpers\Url;
                <p>Сломался кран на кухне? Надо отправить документы? Нет времени самому гулять с собакой?
                    У нас вы быстро найдёте исполнителя для любой жизненной ситуации?<br>
                    Быстро, безопасно и с гарантией. Просто, как раз, два, три. </p>
-              <? if($isGuest): ?>
+              <?php if($isGuest): ?>
                <form action="/signup">
                <button class="button">Создать аккаунт</button>
                </form>
-              <? else: ?>
+              <?php else: ?>
                <form action="/users">
                <button class="button">смотреть всех исполнителей</button>
                </form>
-              <? endif; ?>
+              <?php endif; ?>
            </div>
            <div class="landing-center">
                <div class="landing-instruction">
@@ -104,24 +104,25 @@ use yii\helpers\Url;
            <div class="landing-bottom">
                <div class="landing-bottom-container">
                    <h2>Последние задания на сайте</h2>
-                  <?if(isset($tasks) and !empty($tasks)):?>
+                  <?php if(isset($tasks) and !empty($tasks)):?>
                   <?php foreach($tasks as $task): ?>
                    <div class="landing-task">
                        <div class="landing-task-top task-<?= $categoryTasks[$task->idcategory][implode(array_keys($categoryTasks[$task->idcategory]))] ?>"></div>
                        <div class="landing-task-description">
-                           <h3><a href="<?=Url::to(['/tasks/view/', 'id' => $task->id])?>" class="link-regular"><?= $task->title ?></a></h3>
-                           <p><?= substr($task->description, 0, 101); ?></p>
+                           <h3><a href="<?=Url::to(['/tasks/view/', 'id' => $task->id])?>" class="link-regular">
+                           <?= Functions::cut_string($task->title, 60)?></a></h3>
+                           <p><?= Functions::cut_string($task->description, 90)?></p>
                        </div>
                        <div class="landing-task-info">
                            <div class="task-info-left">
                                <p><a href="#" class="link-regular"><?= implode(array_keys($categoryTasks[$task->idcategory])) ?></a></p>
-                               <p><?= Functions::diff_result($task->dt_add) ?></p>
+                               <p><?= Yii::$app->formatter->asRelativeTime($task->dt_add) ?></span></p>
                            </div>
                            <span><?= $task->budget ?> <b>₽</b></span>
                        </div>
                    </div>
-                   <?endforeach;?>
-                   <?endif;?>
+                   <?php endforeach;?>
+                   <?php endif;?>
                </div>
                <div class="landing-bottom-container">
                    <a href="/tasks" type="button" class="button red-button">смотреть все задания</a>

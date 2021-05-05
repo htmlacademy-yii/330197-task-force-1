@@ -37,13 +37,13 @@ $this->title = 'Task Force';
 
                 <?php foreach($rows as $row):?>
                     <tr style='border: solid 1px lightgrey;'>
-                        <td><?php echo $catgory[$row['id']]['category']?></td>
-                        <td><?php echo $row['title']?></td>
-                        <td><?php echo $row['description']?></td>
-                        <td><?php echo $row['budget']?></td>
-                        <td><?php echo $row['dt_add']?></td>
-                        <td><?php echo $row['deadline']?></td>
-                        <td><?php echo $row['current_status']?></td>
+                        <td><?= $catgory[$row['id']]['category']?></td>
+                        <td><?= $row['title']?></td>
+                        <td><?= $row['description']?></td>
+                        <td><?= $row['budget']?></td>
+                        <td><?= $row['dt_add']?></td>
+                        <td><?= $row['deadline']?></td>
+                        <td><?= $row['current_status']?></td>
                     </tr>
                 <?php endforeach; ?>
                 </table>

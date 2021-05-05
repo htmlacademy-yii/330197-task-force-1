@@ -45,32 +45,30 @@ class LandingController extends Controller
 
         $categoryTask = Categories::find()->select(['category', 'id','icon'])->all();
         $categoryTasks = (ArrayHelper::map($categoryTask, 'category','icon', 'id'));
-        $task = new Tasks();
+        $task = new Tasks;
         $tasks = $task->filter(4);
 
-        $loginForm = new LoginForm();
+        $this->view->params['loginForm'] = new LoginForm();
 
         if (Yii::$app->request->getIsPost()) {
 
-            $loginForm->load(Yii::$app->request->post());
+            $this->view->params['loginForm']->load(Yii::$app->request->post());
 
             if (Yii::$app->request->isAjax) {
                 Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                return ActiveForm::validate($loginForm);
+                return ActiveForm::validate($this->view->params['loginForm']);
             }
 
-            if ($loginForm->validate()) {
-                $user = $loginForm->getUser();
-                \Yii::$app->user->login($user);
+            if ($this->view->params['loginForm']->validate()) {
+                $user = $this->view->params['loginForm']->getUser();
+                Yii::$app->session->close();
+                Yii::$app->user->login($user);
 
                 $this->layout = '/main';
                 return $this->render('/site/landing',[  'categoryTasks' => $categoryTasks,
                                                         'tasks' => $tasks,
+                                                        'isGuest' => $isGuest,
                                                     ]);
-            } else {
-                $errors = $loginForm->getErrors();
-                $this->layout = '/main_landing';
-                return $this->render('/site/error',['errors' => $errors]);
             }
         }
 

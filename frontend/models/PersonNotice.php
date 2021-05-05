@@ -52,7 +52,7 @@ class PersonNotice extends \yii\db\ActiveRecord
      */
     public function getUserPersonalities()
     {
-        return $this->hasMany(UserPersonality::className(), ['idnotice' => 'id']);
+        return $this->hasMany(UserPersonality::class, ['idnotice' => 'id']);
     }
 
     /**

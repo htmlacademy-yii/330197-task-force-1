@@ -56,10 +56,10 @@ class Tasks extends \yii\db\ActiveRecord
             [['latitude', 'longitude'], 'number'],
             [['title', 'address'], 'string', 'max' => 255],
             [['current_status'], 'string', 'max' => 100],
-            [['idcustomer'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['idcustomer' => 'id']],
-            [['idexecuter'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['idexecuter' => 'id']],
-            [['idcategory'], 'exist', 'skipOnError' => true, 'targetClass' => Categories::className(), 'targetAttribute' => ['idcategory' => 'id']],
-            [['idcity'], 'exist', 'skipOnError' => true, 'targetClass' => Cities::className(), 'targetAttribute' => ['idcity' => 'id']],
+            [['idcustomer'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['idcustomer' => 'id']],
+            [['idexecuter'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['idexecuter' => 'id']],
+            [['idcategory'], 'exist', 'skipOnError' => true, 'targetClass' => Categories::class, 'targetAttribute' => ['idcategory' => 'id']],
+            [['idcity'], 'exist', 'skipOnError' => true, 'targetClass' => Cities::class, 'targetAttribute' => ['idcity' => 'id']],
         ];
     }
 
@@ -93,7 +93,7 @@ class Tasks extends \yii\db\ActiveRecord
      */
     public function getCommentsForTasks()
     {
-        return $this->hasMany(CommentsForTask::className(), ['target_task_id' => 'id']);
+        return $this->hasMany(CommentsForTask::class, ['target_task_id' => 'id']);
     }
 
     /**
@@ -103,7 +103,7 @@ class Tasks extends \yii\db\ActiveRecord
      */
     public function getExecuterResponds()
     {
-        return $this->hasMany(ExecuterResponds::className(), ['target_task_id' => 'id']);
+        return $this->hasMany(ExecuterResponds::class, ['target_task_id' => 'id']);
     }
 
     /**
@@ -113,7 +113,7 @@ class Tasks extends \yii\db\ActiveRecord
      */
     public function getFavorites()
     {
-        return $this->hasMany(Favorite::className(), ['favorite_task' => 'id']);
+        return $this->hasMany(Favorite::class, ['favorite_task' => 'id']);
     }
 
     /**
@@ -123,7 +123,7 @@ class Tasks extends \yii\db\ActiveRecord
      */
     public function getFeedbackAboutExecuters()
     {
-        return $this->hasMany(FeedbackAboutExecuter::className(), ['target_task_id' => 'id']);
+        return $this->hasMany(FeedbackAboutExecuter::class, ['target_task_id' => 'id']);
     }
 
     /**
@@ -133,7 +133,7 @@ class Tasks extends \yii\db\ActiveRecord
      */
     public function getIdcategory()
     {
-        return $this->hasOne(Categories::className(), ['id' => 'idcategory']);
+        return $this->hasOne(Categories::class, ['id' => 'idcategory']);
     }
 
     /**
@@ -143,7 +143,7 @@ class Tasks extends \yii\db\ActiveRecord
      */
     public function getIdcity()
     {
-        return $this->hasOne(Cities::className(), ['id' => 'idcity']);
+        return $this->hasOne(Cities::class, ['id' => 'idcity']);
     }
 
     /**
@@ -153,7 +153,7 @@ class Tasks extends \yii\db\ActiveRecord
      */
     public function getUsersIdcustomer()
     {
-        return $this->hasOne(Users::className(), ['id' => 'idcustomer']);
+        return $this->hasOne(Users::class, ['id' => 'idcustomer']);
     }
 
     /**
@@ -163,7 +163,7 @@ class Tasks extends \yii\db\ActiveRecord
      */
     public function getUsersIdexecuter()
     {
-        return $this->hasOne(Users::className(), ['id' => 'idexecuter']);
+        return $this->hasOne(Users::class, ['id' => 'idexecuter']);
     }
 
     /**
@@ -173,7 +173,7 @@ class Tasks extends \yii\db\ActiveRecord
      */
     public function getStoredFiles()
     {
-        return $this->hasMany(StoredFiles::className(), ['idtask' => 'id']);
+        return $this->hasMany(StoredFiles::class, ['idtask' => 'id']);
     }
 
     /**
@@ -188,13 +188,13 @@ class Tasks extends \yii\db\ActiveRecord
     public function parse_data($form_data = null)
     {
         // Представляем, данные полученные из формы в удобном виде
-        if($form_data['no_executers']){
+        if(!empty($form_data['no_executers'])){
             $form_data['no_executers'] = true;
         }
-        if($form_data['no_address']){
+        if(!empty($form_data['no_address'])){
             $form_data['no_address'] = true;
         }
-        if($form_data['period']){
+        if(!empty($form_data['period'])){
             switch ($form_data['period']) {
                 case 'day':
                     $form_data['period'] = date('Y-m-d',time()-86400);
@@ -216,24 +216,25 @@ class Tasks extends \yii\db\ActiveRecord
 
     public static function filter ($limit, $form_data = null){
 
+
         $query = self::find()
                 ->joinWith('executerResponds er', true, 'LEFT JOIN')
                 ->where(['in','current_status', ['new']]);
 
         //Подключаем переданные фильтры через форму
-        if($form_data['category']){
+        if(!empty($form_data['category'])){
             $query = $query->andWhere(['in','idcategory',$form_data['category']]);
         }
-        if($form_data['no_executers']){
+        if(!empty($form_data['no_executers'])){
             $query = $query->andWhere(['is','er.target_task_id', null]);
         }
-        if($form_data['no_address']){
+        if(!empty($form_data['no_address'])){
             $query = $query->andWhere(['or',['is','tasks.latitude', null],['is','tasks.longitude', null]]);
         }
-        if($form_data['period']){
+        if(!empty($form_data['period'])){
             $query = $query->andWhere(['>=','tasks.dt_add',$form_data['period']]);
         }
-        if($form_data['search']){
+        if(!empty($form_data['search'])){
             $query = $query->andWhere(['like', 'title', $form_data['search']]);
         }
 
@@ -242,7 +243,7 @@ class Tasks extends \yii\db\ActiveRecord
         $provider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'pageSize' => $limit,
+                'pageSize' => $limit+1,
             ],
         ]);
         $tasks = $provider->getModels();
@@ -252,6 +253,14 @@ class Tasks extends \yii\db\ActiveRecord
 
     public function getLastInsertID(){
         return self::find()->max('id');
+    }
+
+    public function SetStatus($status){
+        return self::updateAll(['current_status' => $status], ['=','id', $this->id]);
+    }
+
+    public function SetExecuter($idexecuter){
+        return self::updateAll(['idexecuter' => $idexecuter], ['=','id', $this->id]);
     }
 
 }

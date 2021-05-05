@@ -32,7 +32,7 @@ class Portfolio extends \yii\db\ActiveRecord
             [['idexecuter', 'photo'], 'required'],
             [['idexecuter'], 'integer'],
             [['photo'], 'string', 'max' => 255],
-            [['idexecuter'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['idexecuter' => 'id']],
+            [['idexecuter'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['idexecuter' => 'id']],
         ];
     }
 
@@ -53,9 +53,9 @@ class Portfolio extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery|UsersQuery
      */
-    public function getIdexecuter0()
+    public function getIdexecuter()
     {
-        return $this->hasOne(Users::className(), ['id' => 'idexecuter']);
+        return $this->hasOne(Users::class, ['id' => 'idexecuter']);
     }
 
     /**

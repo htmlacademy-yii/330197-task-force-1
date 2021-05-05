@@ -127,7 +127,7 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function getCity()
     {
-        return $this->hasOne(Cities::className(), ['id' => 'city_id']);
+        return $this->hasOne(Cities::class, ['id' => 'city_id']);
     }
 
     /**
@@ -137,7 +137,7 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function getCommentsForTasks()
     {
-        return $this->hasMany(CommentsForTask::className(), ['id_user' => 'id']);
+        return $this->hasMany(CommentsForTask::class, ['id_user' => 'id']);
     }
 
     /**
@@ -147,7 +147,7 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function getExecuterResponds()
     {
-        return $this->hasMany(ExecuterResponds::className(), ['id_user' => 'id']);
+        return $this->hasMany(ExecuterResponds::class, ['id_user' => 'id']);
     }
 
     /**
@@ -157,12 +157,12 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function getExecutersCategories()
     {
-        return $this->hasMany(ExecutersCategory::className(), ['idexecuter' => 'id']);
+        return $this->hasMany(ExecutersCategory::class, ['idexecuter' => 'id']);
     }
 
     public function getCategories()
     {
-        return $this->hasMany(Categories::className(), ['id' => 'idcategory'])
+        return $this->hasMany(Categories::class, ['id' => 'idcategory'])
                     ->viaTable('executers_category', ['idexecuter' => 'id']);
     }
 
@@ -173,13 +173,13 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function getFavorites()
     {
-        return $this->hasMany(Favorite::className(), ['iduser' => 'id']);
+        return $this->hasMany(Favorite::class, ['iduser' => 'id']);
     }
 
     //Выводим список исполнителей, которые находятся в избранном для текущего пользователя
     public function getChoicest(): FavoriteQuery
     {
-        return $this->hasMany(Favorite::className(), ['favorite_user' => 'id']);
+        return $this->hasMany(Favorite::class, ['favorite_user' => 'id']);
     }
 
     /**
@@ -189,7 +189,7 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function getFeedbackAboutExecuters()
     {
-        return $this->hasMany(FeedbackAboutExecuter::className(), ['target_user_id' => 'id']);
+        return $this->hasMany(FeedbackAboutExecuter::class, ['target_user_id' => 'id']);
     }
 
     /**
@@ -199,7 +199,7 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function getPortfolios()
     {
-        return $this->hasMany(Portfolio::className(), ['idexecuter' => 'id']);
+        return $this->hasMany(Portfolio::class, ['idexecuter' => 'id']);
     }
 
     /**
@@ -209,7 +209,7 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function getTasks()
     {
-        return $this->hasMany(Tasks::className(), ['idexecuter' => 'id']);
+        return $this->hasMany(Tasks::class, ['idexecuter' => 'id']);
     }
 
     /**
@@ -219,7 +219,7 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function getUserPersonalities()
     {
-        return $this->hasMany(UserPersonality::className(), ['iduser' => 'id']);
+        return $this->hasMany(UserPersonality::class, ['iduser' => 'id']);
     }
 
     /**
@@ -245,31 +245,32 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface
 
     public function search($form_data = null){
 
-        $id_executers = $this->getExequtersByCategory($form_data['category']);
+        $data = isset($form_data['category']) ? $form_data['category'] : null;
+        $id_executers = $this->getExequtersByCategory($data);
 
         $query = self::find();
         $query = $query->joinWith('feedbackAboutExecuters f', true, 'LEFT JOIN' )
                         ->where(['=','users.role',2])
                         ->andWhere(['in','users.id',$id_executers]);
 
-        if($form_data['search']){
+        if(!empty($form_data['search'])){
             $query = $query->andWhere(['like', 'users.fio', $form_data['search']]);
         } else {
-            if($form_data['free']){
+            if(!empty($form_data['free'])){
                 $query = $query->joinWith('tasks')
                                 ->andWhere(['not in','tasks.current_status', ['new','in_progress']]);
             }
-            if($form_data['online']){
+            if(!empty($form_data['online'])){
                 $date = date_create(date('Y-m-d H:i:s'));
                 date_sub($date,date_interval_create_from_date_string('30 minute'));
                 $date = date_format($date,'Y-m-d H:i:s');
 
                 $query = $query->andWhere(['>=','users.last_update',$date]);
             }
-            if($form_data['feedback']){
+            if(!empty($form_data['feedback'])){
                 $query = $query->andWhere(['is not','f.target_user_id',null]);
             }
-            if($form_data['favorite']){
+            if(!empty($form_data['favorite'])){
                 $current_user_id = 1;
                 $query = $query->joinWith('choicest')
                                 ->andWhere(['=','iduser',$current_user_id]);
@@ -307,7 +308,7 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface
 
     //Возвращает полную информацию всех отзывов о пользователе по его id
     public function getFeedbackFullInfo(){
-        $user = FeedbackAboutExecuter::find()->where(['=','target_user_id',$this->id])->all();
+        $user = FeedbackAboutExecuter::find()->where(['=','target_user_id',$this->id])->orderBy(['dt_add' => SORT_DESC])->all();
         if(!empty($user)){
             foreach($user as $value){
                 $task = Tasks::findOne($value->target_task_id);
@@ -358,22 +359,8 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     //Формируем массив с названием категорий для исполнителя по его id
-    public function getArrayCaterories(){
-        $query = self::find()
-                ->joinWith('executersCategories ec', true, 'INNER JOIN')
-                ->joinWith('categories c', true, 'INNER JOIN')
-                ->where(['=','ec.idexecuter', $this->id]);
-        $provider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
-
-        $user = $provider->getModels();
-
-        foreach($user[0]->categories as $category){
-            $user_categories[] = $category["category"];
-        }
-
-        return $user_categories;
+    public function getExecutersCaterories(){
+       return ExecutersCategory::find()->where(['=','idexecuter', $this->id])->all();
     }
 
     //Выводим портфолио исполнителя по его id

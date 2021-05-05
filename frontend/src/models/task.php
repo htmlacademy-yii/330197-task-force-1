@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace task_force\models;
-use task_force\models\act_done;
-use task_force\models\act_execute;
-use task_force\models\act_cancel;
-use task_force\models\act_deny;
-use task_force\ex\CallNameException;
+namespace frontend\src\models;
+use frontend\src\models\act_done;
+use frontend\src\models\act_execute;
+use frontend\src\models\act_cancel;
+use frontend\src\models\act_deny;
+use frontend\src\ex\CallNameException;
 
 error_reporting(E_ALL);
 
@@ -20,6 +20,11 @@ class Task{
 	const ACTION_DONE = 'done';
 	const ACTION_CANCEL = 'cancel';
 	const ACTION_DENY = 'deny';
+
+	const ROLE_CODE_CUSTUMER = 1;
+	const ROLE_CODE_EXECUTER = 2;
+	const ROLE_NAME_CUSTUMER = 'заказчик';
+	const ROLE_NAME_EXECUTER = 'исполнитель';
 
 	private $executer_id;
 	private $customer_id;
@@ -40,15 +45,23 @@ class Task{
 		self::ACTION_DENY => self::STATUS_FAIL
 	];
 
+	public $role_map = [
+		self::ROLE_CODE_CUSTUMER => self::ROLE_NAME_CUSTUMER,
+		self::ROLE_CODE_EXECUTER => self::ROLE_NAME_EXECUTER,
+	];
+
 	public function __construct($customer_id = null, $executer_id = null){
 		$this->customer_id = $customer_id;
 		$this->executer_id = $executer_id;
 
 	}
 
-public function get_actions(string $status, int $idcustomer, int $idexecuter, int $iduser){
+public function get_actions(string $status, int $idcustomer, int $idexecuter, int $iduser, int $role){
 		$array = [self::STATUS_NEW => [new Act_execute(), new Act_cancel()],
-				  self::STATUS_EXECUTE => [new Act_done(), new Act_deny()]
+				  self::STATUS_EXECUTE => [new Act_done(), new Act_deny()],
+				  self::STATUS_DONE => [],
+				  self::STATUS_FAIL => [],
+				  self::STATUS_CANCEL => [],
 				];
 
 		if(!in_array($status, array_keys($array))) {
@@ -57,7 +70,7 @@ public function get_actions(string $status, int $idcustomer, int $idexecuter, in
 		$actions = $array[$status];
 
 		foreach($actions as $action){
-			if($action->check_user($idcustomer, $idexecuter, $iduser)){
+			if($action->check_user($idcustomer, $idexecuter, $iduser, $role)){
 				return $action;
 			} 
 		}
